@@ -10,9 +10,9 @@ Its license is preserved in [third-party notices](../THIRD_PARTY_NOTICES.md).
 | Stage | Artifact | State |
 | --- | --- | --- |
 | `1-start` | `learner-profile.md`, excluded from Git | Complete |
-| `2-scope` | `scope.md` | Draft awaiting learner review |
-| `3-prd` | `prd.md` | Awaits approved scope |
-| `4-spec` | `spec.md` | Awaits approved scope and PRD |
+| `2-scope` | `scope.md` | Approved by the learner |
+| `3-prd` | `prd.md` | Complete draft awaiting learner review; initial edit proposal open |
+| `4-spec` | `spec.md` | Awaits approved PRD |
 | `5-build` | `checklist.md`, application, `app-map.html` | Awaits approved planning; fast mode selected |
 | `6-ship` | Working demo video, public repository, learner-authored submission | Awaits verified build and required reviews |
 
@@ -21,8 +21,12 @@ Its license is preserved in [third-party notices](../THIRD_PARTY_NOTICES.md).
 On 2026-10-23, the submission workspace was initialized with a new Git repository
 and the official curriculum. The learner supplied their product requirements and
 technical/planning background. Onboarding was completed and the scope draft was
-written before application implementation. No PRD, specification, or build
-checklist is represented as approved or complete.
+written before application implementation. The learner explicitly approved the
+scope on 2026-10-23 and requested the full product definition. The PRD was saved
+as a draft defining screens, navigation, interactions, themes, mobile behavior,
+functional requirements, error states, and acceptance criteria. The proposed first
+supported engineering edit is explicit and awaits learner agreement. PRD review
+is the next approval gate; specification and implementation have not started.
 
 ## Review and verification
 
