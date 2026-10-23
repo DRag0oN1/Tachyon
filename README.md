@@ -10,8 +10,10 @@ two mechanical visual identities over the same design data.
 ## Current status
 
 Planning is in progress. `1-start` is complete and [scope](devpost/scope.md) is
-approved. The [product requirements](devpost/prd.md) are a complete draft awaiting
-learner review, including an explicit proposal for the first supported CAD edit.
+approved. The [product requirements](devpost/prd.md) are approved, including
+scoring reach/height as the first supported CAD edit. The [technical specification](devpost/spec.md)
+is a draft with staged acceptance, architecture, data contracts, and milestones.
+Final spec readiness depends on resolving [CAD source qualification](docs/cad-source-status.md).
 Application implementation has not started.
 No robot generation, model integration, or CAD asset loading is claimed working.
 Installation and run instructions will accompany the first verified application
@@ -36,7 +38,9 @@ are part of the planned product.
 - [Established product vision](docs/product-vision.md)
 - [Devpost progress and required order](devpost/README.md)
 - [Approved scope](devpost/scope.md)
-- [Product requirements draft](devpost/prd.md)
+- [Approved product requirements](devpost/prd.md)
+- [Technical specification draft](devpost/spec.md)
+- [CAD source qualification status](docs/cad-source-status.md)
 - [Third-party materials](THIRD_PARTY_NOTICES.md)
 
 Use the official Devpost Learn sequence: `1-start` → `2-scope` → `3-prd` →

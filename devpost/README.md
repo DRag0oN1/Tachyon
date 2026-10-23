@@ -11,8 +11,8 @@ Its license is preserved in [third-party notices](../THIRD_PARTY_NOTICES.md).
 | --- | --- | --- |
 | `1-start` | `learner-profile.md`, excluded from Git | Complete |
 | `2-scope` | `scope.md` | Approved by the learner |
-| `3-prd` | `prd.md` | Complete draft awaiting learner review; initial edit proposal open |
-| `4-spec` | `spec.md` | Awaits approved PRD |
+| `3-prd` | `prd.md` | Approved by the learner; initial scoring reach/height edit confirmed |
+| `4-spec` | `spec.md` | Technical draft; CAD source/configuration qualification unresolved; learner review required |
 | `5-build` | `checklist.md`, application, `app-map.html` | Awaits approved planning; fast mode selected |
 | `6-ship` | Working demo video, public repository, learner-authored submission | Awaits verified build and required reviews |
 
@@ -25,8 +25,12 @@ written before application implementation. The learner explicitly approved the
 scope on 2026-10-23 and requested the full product definition. The PRD was saved
 as a draft defining screens, navigation, interactions, themes, mobile behavior,
 functional requirements, error states, and acceptance criteria. The proposed first
-supported engineering edit is explicit and awaits learner agreement. PRD review
-is the next approval gate; specification and implementation have not started.
+supported engineering edit was approved with the PRD on 2026-10-23. The learner
+authorized technical planning with staged acceptance priorities. Specification
+review is the next approval gate; implementation has not started. The draft
+technical plan defines P0/P1/P2 acceptance, the local browser/Python architecture,
+real assembly revision edits and post-edit links, contracts, tests, and milestones.
+It explicitly records the unresolved CAD source/recipe qualification dependency.
 
 ## Review and verification
 

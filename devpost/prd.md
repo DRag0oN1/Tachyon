@@ -1,6 +1,6 @@
 ---
 doc: prd
-status: draft
+status: approved
 ---
 
 # Tachyon — Product Requirements
@@ -15,7 +15,7 @@ Boundary**; [established product vision](../docs/product-vision.md); and the
 learner's request to prioritize visual identity, intuitive navigation, mobile
 interaction, and genuine functionality. This document defines product behavior,
 not implementation architecture. All acceptance criteria describe required future
-behavior; no feature is represented as implemented or verified by this draft.
+behavior; this planning document does not establish implementation or verification.
 
 ## The Core Journey
 
@@ -180,8 +180,8 @@ animation as the sole indication that an operation is working or complete.
 ## Features and Behavior
 
 Acceptance identifiers below provide stable references for later planning and
-verification. All criteria are required outcomes unless explicitly marked as a
-proposal awaiting review; they are not a completed-test record.
+verification. All criteria describe required POC outcomes; the technical
+specification stages their verification. They are not a completed-test record.
 
 ### F1 — Competition Selection and Rulebook Review
 
@@ -398,13 +398,12 @@ assistant retains its command draft and pending preview with a visible Preview
 indicator and a route back to Apply/Discard. Candidate switching retains proposals
 with their owning design and never applies them to another candidate.
 
-**Initial edit boundary — proposed for review:** the POC must guarantee at least
+**Initial edit boundary — approved:** the POC must guarantee at least
 one geometry-affecting change to the selected scoring mechanism, using supported
 real-component configurations to change its reach/height and the necessary
-supports/connections. This follows the learner's earlier scoring-height example,
-but is not yet a learner-selected initial edit. A focused question is pending.
-Until answered or explicitly accepted in PRD review, the exact first edit remains
-open. Other drivetrain/module replacements are supported only if their full
+supports/connections. The learner approved this initial edit and required Preview,
+Apply, Discard, and Undo to operate on actual assembly data. Other
+drivetrain/module replacements are supported only if their full
 geometry and connections are genuinely implemented; they are not implied by
 accepting arbitrary natural-language input.
 
@@ -499,9 +498,9 @@ to the same workspace. Show saving/unsaved/failure state when persistence is
 unavailable rather than promising a successful save. Editing a design creates
 a revision rather than overwriting the other candidate or rulebook context.
 
-**Proposed POC default:** one person's workspace without a mandatory account or
-cross-device synchronization. This formalizes the focused experience; it is
-not a learner-requested account/sync feature. A reviewer can change this default.
+**Approved POC default:** one person's workspace without a mandatory account or
+cross-device synchronization. This formalizes the focused experience accepted
+in PRD review; it does not imply an account or sync feature.
 Do not promise cloud backup, collaboration, share links, offline AI, or recovery
 of an interrupted generation job. Keep any pending proposals clearly distinct
 from accepted engineering revisions.
@@ -565,7 +564,7 @@ Source: `scope.md > What "Working" Looks Like`, `The POC Boundary`, and `Explici
 - Fast mode retains planning approvals, verification, useful reviews, and honest
   project documentation. PRD approval is required before `4-spec` begins.
 
-### Product Refinements Proposed for PRD Review
+### Product Refinements Accepted in PRD Review
 
 - Use a single shared selection context, one expanded phone sheet at a time,
   and the same Strategy content before/after robot creation to minimize duplicate
@@ -576,11 +575,12 @@ Source: `scope.md > What "Working" Looks Like`, `The POC Boundary`, and `Explici
   accepted revisions distinct from temporary views or illustrative motion.
 - Start without mandatory accounts or cross-device synchronization; retain the
   supported workspace in the same environment and report save failures honestly.
-- Guarantee a supported geometry-affecting scoring reach/height change unless
-  the learner chooses another initial edit. This specific proposal remains open.
+- Guarantee a supported geometry-affecting scoring reach/height change using
+  authentic VEX component configurations and actual assembly revisions.
 
-These refinements are draft product behavior, not claims that the learner already
-made every detailed interaction choice. Changes can be resolved in this review.
+The learner approved this PRD on 2026-10-23. The technical specification must
+stage the 44 acceptance criteria so they do not all block the first working
+version; this sequencing preserves the product requirements.
 
 ## What We're Building
 
@@ -631,7 +631,7 @@ Source: `scope.md > Later` and `Explicitly Cut`.
 - A large mechanism catalog, broad competition coverage, and arbitrary design
   edits: expand after the small supported catalog proves genuine generation.
 - Mandatory accounts, collaboration, cross-device sync, or cloud sharing: not
-  part of the proposed single-person workspace default and not implied by Save.
+  part of the approved single-person workspace default and not implied by Save.
 - Free-form professional docking: Custom means practical visibility, resizing,
   maximize/restore, and reset within available supported arrangements.
 
@@ -661,11 +661,12 @@ Source: `scope.md > Explicitly Cut`.
 
 | Item | Why it matters | Resolution point |
 | --- | --- | --- |
-| **Guaranteed first CAD modification** | The learner requires a small genuine edit set but has not selected the first operation. F7 proposes scoring reach/height using supported real configurations; a focused question is pending. | **Resolve in PRD review before approving this PRD and starting `4-spec`.** Accepting the explicit proposal or selecting another demonstrated engineering change resolves it. |
+| **Guaranteed first CAD modification — resolved** | Scoring reach/height changes use supported authentic VEX configurations; Preview, Apply, Discard, and Undo affect actual assembly data. | Approved by the learner in PRD review; define the discrete configurations and validation in `4-spec`. |
 | **Detailed source parts and supported mechanism families** | Both complete designs need authentic usable geometry for acquisition/retention/scoring and their supporting connections. Product functions are required; sources and engineering feasibility remain unverified. | Investigate only public/authorized sources during `4-spec`; resolve the catalog and two viable assemblies before specification approval. If unavailable, return to the affected product decision explicitly. |
 | **Additional supported rulebook/competition** | COMP-2 needs a genuine second document through the same pipeline. No second game has been named; do not claim universal VEX support. | Select and verify a suitable public/authorized test document during `4-spec`, before specification approval. |
 | **Concrete visual implementation and operating environment** | The themes and interactions are established; exact fonts, responsive cutoffs, persistence guarantees, and run environment are not final technical choices. | Define in `4-spec` without reopening the approved visual identity or implying cloud/offline capabilities. |
 
-Review format is Markdown for this displayed draft; an optional HTML companion
-has not been selected. The PRD remains `status: draft` until the learner reviews
-and approves it. `4-spec`, implementation, and publication have not started.
+Review format is Markdown; an optional HTML companion has not been selected.
+The learner explicitly approved this PRD and authorized `4-spec`. Specification
+approval is required before `5-build`; implementation and publication have not
+started.
