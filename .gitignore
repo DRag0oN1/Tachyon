@@ -36,3 +36,10 @@ coverage/
 *.stl
 *.glb
 *.gltf
+
+# Python package metadata and local browser verification artifacts
+*.egg-info/
+/test-results/
+/playwright-report/
+/web/test-results/
+/web/playwright-report/

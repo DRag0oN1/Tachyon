@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tachyon-studio"
+version = "0.1.0"
+description = "Local-first robotics design studio"
+requires-python = ">=3.12,<3.13"
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.35,<1", "pydantic>=2.10,<3", "cadquery>=2.6,<3", "httpx>=0.28,<1", "pypdf>=6,<7", "python-multipart>=0.0.20"]
+
+[project.scripts]
+tachyon = "tachyon.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tachyon*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,50 @@
+{
+  "stage": "5-build slice 1, partial; authentic VEX qualification blocked",
+  "backend": {
+    "passed": 148,
+    "failed": 0,
+    "seconds": 10.092
+  },
+  "frontend": {
+    "passed": 24,
+    "testFiles": 7,
+    "failed": 0
+  },
+  "productionBuild": "passed",
+  "sourceProfileBrowser": {
+    "expected": 6,
+    "skipped": 2,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "emptyProfileBrowser": {
+    "passed": 2,
+    "failed": 0,
+    "projects": [
+      "desktop Chromium",
+      "mobile WebKit"
+    ]
+  },
+  "testGeometry": "Original Tachyon calibration test_fixture, non-VEX; no authentic-VEX or complete-robot acceptance",
+  "runtime": {
+    "python": "3.12",
+    "cadquery": "2.8.0",
+    "ocp": "7.9.3.1.1",
+    "node": "24.6.0"
+  },
+  "missingInputs": [
+    "Asset-specific rights evidence for authentic VEX conversion/display",
+    "Qualified complete component set",
+    "AI provider credentials/model configuration"
+  ],
+  "unimplemented": [
+    "Complete robot builders",
+    "Competition PDF/AI strategy generation",
+    "Two-design live AI generation",
+    "Strategy-to-mechanism actions/sketches/playbooks",
+    "Actual scoring-height revision lifecycle",
+    "Mechanism operation",
+    "Additional rulebooks and full project recovery/layouts"
+  ],
+  "physicalPhoneTested": false
+}

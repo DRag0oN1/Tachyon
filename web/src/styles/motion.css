@@ -1,0 +1,17 @@
+.ai-core .core-module { transform-box: fill-box; transform-origin: center; transition: transform 280ms cubic-bezier(.2,.7,.3,1); }
+.ai-core:hover .module-a, .ai-expanded .module-a { transform: translate(2px, 2px); }
+.ai-core:hover .module-b, .ai-expanded .module-b { transform: translate(-2px, 2px); }
+.ai-core:hover .module-c, .ai-expanded .module-c { transform: translate(2px, -2px); }
+.ai-core:hover .module-d, .ai-expanded .module-d { transform: translate(-2px, -2px); }
+[data-theme="shift"] .ai-core:hover .module-a, [data-theme="shift"] .ai-expanded .module-a { transform: translate(-3px, -2px) rotate(-8deg); }
+[data-theme="shift"] .ai-core:hover .module-b, [data-theme="shift"] .ai-expanded .module-b { transform: translate(3px, -2px) rotate(8deg); }
+[data-theme="shift"] .ai-core:hover .module-c, [data-theme="shift"] .ai-expanded .module-c { transform: translate(-3px, 2px) rotate(8deg); }
+[data-theme="shift"] .ai-core:hover .module-d, [data-theme="shift"] .ai-expanded .module-d { transform: translate(3px, 2px) rotate(-8deg); }
+.is-connecting .core-center { animation: connecting-core 1.2s ease-in-out infinite alternate; }
+.workspace-panel, .assistant-body { animation: reveal-surface 180ms ease-out; }
+@keyframes connecting-core { from { opacity: .35; } to { opacity: 1; } }
+@keyframes reveal-surface { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .core-module { transform: none !important; }
+}

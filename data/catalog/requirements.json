@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "profile": "user_provided_local",
+  "geometryBundled": false,
+  "requiredSharedRoles": ["structure", "bracing", "wheels", "drive_motors", "motor_mounts", "shafts", "drive_transmission", "bearings", "retention", "fasteners", "brain", "battery", "control_power_mounts"],
+  "recipes": {
+    "four_bar_gripper": {
+      "requiredRoles": ["parallel_links", "pivots", "powered_lift_transmission", "carrier", "gripper", "gripper_actuator"],
+      "status": "not_qualified"
+    },
+    "elevator_gripper": {
+      "requiredRoles": ["tower", "guides", "carriage", "lift_transmission", "anchors", "gripper", "gripper_actuator"],
+      "status": "not_qualified"
+    }
+  },
+  "note": "Role requirements are not a component library. Actual identities, rights, geometry, mounting ports, joints and task support must be qualified locally."
+}

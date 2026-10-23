@@ -159,8 +159,9 @@ in [third-party notices](../THIRD_PARTY_NOTICES.md).
 2. Accept user-supplied STEP plus a private operation-specific rights manifest.
    Validate bytes, units, selected bodies/hierarchy, and ports locally. Do not
    accept `.f3d` as STEP or add a Fusion service dependency.
-3. Convert only after local conversion/display/assembly rights are qualified.
-   Cache sources/meshes locally by hash. Default to loopback; qualify LAN access
+3. Convert only after acquisition/storage and conversion rights are qualified.
+   Cache sources/meshes locally by hash. Check assembly placement before building
+   assemblies and local display before serving meshes. Default to loopback; qualify LAN access
    separately for the required phone demonstration.
 4. In M0/M1 qualify remaining geometry for both complete four-bar and elevator
    baselines: chassis/drive/transmissions; bearings/shafts; acquisition/retention;
@@ -177,3 +178,13 @@ in [third-party notices](../THIRD_PARTY_NOTICES.md).
 This path needs no private robotics implementation or internal artifact. Complete
 component-set and end-to-end evidence remain explicit delivery risks, not hidden
 planning successes.
+
+
+## Build-stage update
+
+The local registration/conversion/inspection pipeline is implemented. Its
+[software verification](verification/slice-1.md) uses only original Tachyon-authored
+non-VEX calibration fixtures. No manufacturer research CAD was converted or
+assigned invented permission. Authentic-VEX and whole-robot acceptance remain
+blocked/unimplemented as recorded in the criterion report. The pre-build static
+mount remains separate from actual application mechanism/revision verification.

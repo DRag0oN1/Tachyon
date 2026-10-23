@@ -13,7 +13,7 @@ Its license is preserved in [third-party notices](../THIRD_PARTY_NOTICES.md).
 | `2-scope` | `scope.md` | Approved by the learner |
 | `3-prd` | `prd.md` | Approved by the learner; initial scoring reach/height edit confirmed |
 | `4-spec` | `spec.md` | Approved by the learner; local supplied-CAD path and architecture accepted; asset/complete-recipe qualification remains a build gate |
-| `5-build` | `checklist.md`, application, `app-map.html` | Active; first build-order checklist saved as draft for the skill's required review; fast mode selected |
+| `5-build` | `checklist.md`, application, `app-map.html` | Active; implementation order approved with the first complete robot before live two-design generation; fast mode selected |
 | `6-ship` | Working demo video, public repository, learner-authored submission | Awaits verified build and required reviews |
 
 ## Actual project sequence
@@ -43,8 +43,8 @@ required build gates. The learner then explicitly approved `4-spec` and its
 architecture on 2026-10-23 and requested `5-build`. The spec is marked approved;
 the first build checklist proposes five usable increments and retains the
 required early/final hands-on reviews. Execution-order approval is pending,
-as required by the official skill. Application implementation has not started,
-and no application acceptance criterion is recorded as passed.
+as required by the official skill. At that build-order checkpoint application implementation had not started. Subsequent
+implementation and actual acceptance evidence are recorded below.
 
 ## Review and verification
 
@@ -61,3 +61,19 @@ before marking build steps complete.
 Shipping requires a working video and public repository. Submission answers and
 reflections remain learner-authored. Do not publish or submit without explicit
 authorization.
+
+The learner approved the build checklist and execution refinements on 2026-10-23. Application implementation begins from slice 1. Actual permissions, model access, complete robot acceptance and test evidence remain separate from planning approval.
+
+
+## First implementation increment
+
+The local source pipeline and mobile full-window inspection application are now
+implemented. Actual tests pass: 148 backend, 24 frontend, production build,
+6 source-profile browser cases and 2 default empty-source browser cases. Geometry
+used for conversion/render verification is an original non-VEX test fixture;
+authentic-VEX rights and the full component set remain unresolved. First-slice
+completion is therefore still unchecked. Complete robot builders, live AI,
+strategy actions and actual assembly revisions are not implemented. See
+[verification](../docs/verification/slice-1.md) and
+[criterion status](../docs/verification/acceptance-status.md). No hands-on review
+or learner sign-off has been inferred.
