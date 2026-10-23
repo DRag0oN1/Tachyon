@@ -1,0 +1,38 @@
+# Personal learning context and local credentials
+/devpost/learner-profile.md
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Duplicate local skill installations; .agents/skills is the canonical copy
+/.claude/
+/agent/
+
+# Dependencies and generated files
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+coverage/
+.DS_Store
+
+# Local user data and CAD assets pending individual license review
+/.local/
+/uploads/
+/cad-cache/
+/artifacts/
+*.f3d
+*.step
+*.stp
+*.brep
+*.stl
+*.glb
+*.gltf
