@@ -15,7 +15,16 @@ Duplicate local agent installations are excluded from commits.
 
 ## Application dependencies and CAD assets
 
-None have been incorporated at this planning stage. Record each selected library
+No third-party application implementation or CAD geometry has been incorporated
+or bundled. The pre-build verification script imports `cadquery-ocp==8.0.1.1.0`
+in a separate temporary Python 3.12 environment for native BRep inspection;
+the [binding package declares Apache-2.0](https://pypi.org/project/cadquery-ocp/8.0.1.1.0/).
+Its upstream software and transitive dependency notices remain distinct from
+manufacturer asset rights. No package binaries are vendored here. See
+[CAD source status](docs/cad-source-status.md) for inspected original hashes,
+operation restrictions, and the no-redistribution decision.
+
+Record each selected application library
 and CAD source, applicable version or content identity, license, distribution
 conditions, and required attribution here or in a linked asset manifest before
 incorporation. Public availability alone does not establish reuse permission.

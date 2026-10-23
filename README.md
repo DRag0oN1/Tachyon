@@ -12,9 +12,13 @@ two mechanical visual identities over the same design data.
 Planning is in progress. `1-start` is complete and [scope](devpost/scope.md) is
 approved. The [product requirements](devpost/prd.md) are approved, including
 scoring reach/height as the first supported CAD edit. The [technical specification](devpost/spec.md)
-is a draft with staged acceptance, architecture, data contracts, and milestones.
-Final spec readiness depends on resolving [CAD source qualification](docs/cad-source-status.md).
-Application implementation has not started.
+is a final draft awaiting your approval, with staged acceptance, architecture,
+data contracts, and milestones. [CAD source findings](docs/cad-source-status.md)
+select user-provided STEP and local processing under applicable rights; no
+manufacturer/community geometry will be bundled or publicly hosted.
+Application implementation has not started. A narrow, user-requested native CAD
+mount/reference-lifecycle probe was written during source qualification; it is
+not the application or a complete robot demonstration.
 No robot generation, model integration, or CAD asset loading is claimed working.
 Installation and run instructions will accompany the first verified application
 increment.
@@ -41,6 +45,7 @@ are part of the planned product.
 - [Approved product requirements](devpost/prd.md)
 - [Technical specification draft](devpost/spec.md)
 - [CAD source qualification status](docs/cad-source-status.md)
+- [Bounded source/mount verification](docs/verification/scoring-mount-feasibility.json)
 - [Third-party materials](THIRD_PARTY_NOTICES.md)
 
 Use the official Devpost Learn sequence: `1-start` → `2-scope` → `3-prd` →
@@ -52,8 +57,15 @@ must be approved in order before implementation.
 
 Application code will be newly implemented for Tachyon. Third-party libraries
 and assets require recorded origins, licenses, and attribution. No CAD assets
-have been incorporated yet. Actual source geometry, display meshes, conceptual
-geometry, and verification levels will be identified accurately.
+have been incorporated into the application. Actual source geometry, display
+meshes, conceptual geometry, and verification levels will be identified accurately.
 
 The learner profile and credentials are excluded from commits. Publication,
 deployment, and challenge submission have not occurred.
+
+The planned public deliverable is code and import instructions without a CAD library.
+Users must supply appropriately authorized authentic STEP locally. Conversion,
+assembly placement, local/LAN display, demo publication and redistribution have
+separate rights checks; an upload or public download link establishes none of
+these automatically. Rulebook/strategy services will operate without local CAD;
+robot creation will report missing geometry or permissions honestly.

@@ -1,0 +1,82 @@
+{
+  "probe": "Tachyon pre-build static scoring-mount feasibility",
+  "date": "2026-10-23",
+  "probeScriptSha256": "31e35f4656c9e22b165e028e683727da9daa0097da96b898bcf6e4d2f188c6a6",
+  "tool": "cadquery-ocp==8.0.1.1.0; Python 3.12",
+  "units": "mm; right-handed Z-up fixture; planned app conversion to metre Y-up is untested",
+  "nativeDefinitions": {
+    "screw": "_8-32_x_1_5000_Star_Drive_Screw_276-4998_No Threads",
+    "nut": "_8-32_Hex_Nut_275-1028"
+  },
+  "intersectionVolumeToleranceMm3": 0.001,
+  "sourceHashes": {
+    "channel": "b47702c2710611256b80b3efadd53b3c6a502602d3d0c3151f45c5bf5ad07d56",
+    "claw": "76ddd073429280482a4538c4750d2234d0ed173d6a8649d013c6669e96f39213"
+  },
+  "sourceValidSolids": {
+    "channel": 1,
+    "claw": 83,
+    "nut": 1,
+    "screw": 1
+  },
+  "channelLengthMm": 444.5,
+  "channelCenterlineHoleCount": 34,
+  "holePitchMm": 12.7,
+  "clawMountSpacingMm": 12.7,
+  "clawMountBoreMm": 4.2,
+  "nativeScrewLengthMm": 38.1,
+  "clawThroughStackMm": 30.525,
+  "hexNutThicknessMm": 3.150057830587846,
+  "nominalAxialTipProjectionBeyondNutMm": 2.8501421694121536,
+  "configurations": {
+    "standard": {
+      "engineeringHash": "1f76c2d73c6fdca705e13a360debf7f47c0043b1d00e66376d268f3fd0dc22f9",
+      "bindingsHash": "a57937055159d3b565d468ac95d2b11fd408d95092613c7772ab8be326364209",
+      "componentInstances": 6,
+      "mountReferenceHeightMm": 209.55,
+      "channelHoleIndices": [
+        15,
+        16
+      ],
+      "checkedAllPairsExceptThreadedMates": true,
+      "excludedThreadedPairs": 2,
+      "checkedNonMatingPairs": 13,
+      "maxIntersectionMm3": 0.00043040597303390434
+    },
+    "raised": {
+      "engineeringHash": "4468900cea26247c9e985ff2b0c6b2d690bcbe8d130bfeb515e52be11ac55e0f",
+      "bindingsHash": "90d81fda9017d8197443fe06ced3e8782987a2f8a91f2d50792d9e39dfd2d457",
+      "componentInstances": 6,
+      "mountReferenceHeightMm": 260.35,
+      "channelHoleIndices": [
+        19,
+        20
+      ],
+      "checkedAllPairsExceptThreadedMates": true,
+      "excludedThreadedPairs": 2,
+      "checkedNonMatingPairs": 13,
+      "maxIntersectionMm3": 0.00043040597303404485
+    }
+  },
+  "heightDeltaMm": 50.8,
+  "referenceLifecycle": {
+    "previewKeepsAccepted": true,
+    "discardKeepsAccepted": true,
+    "applyUsesExactCandidate": true,
+    "applyChangesPortsAndTransforms": true,
+    "linksAndSketchAnchorUpdated": true,
+    "serializationRoundTrip": true,
+    "undoRestoresEngineeringAndBindings": true
+  },
+  "geometryExported": false,
+  "sourceFilesChanged": false,
+  "rightsStatus": "conversion/modification/redistribution/hosting unverified",
+  "limits": [
+    "static cassette only, no complete robot",
+    "no motor, powered lift, load or physical tests",
+    "no Override object-handling/scoring/legality qualification",
+    "no browser/app/AI lifecycle tested",
+    "numerical fit tolerance is not a manufacturing tolerance",
+    "hex nuts require assembly tightening; no locking claim"
+  ]
+}

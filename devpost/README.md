@@ -12,7 +12,7 @@ Its license is preserved in [third-party notices](../THIRD_PARTY_NOTICES.md).
 | `1-start` | `learner-profile.md`, excluded from Git | Complete |
 | `2-scope` | `scope.md` | Approved by the learner |
 | `3-prd` | `prd.md` | Approved by the learner; initial scoring reach/height edit confirmed |
-| `4-spec` | `spec.md` | Technical draft; CAD source/configuration qualification unresolved; learner review required |
+| `4-spec` | `spec.md` | Final draft for approval; user-provided local CAD path specified, asset/complete-recipe qualification retained as build gates |
 | `5-build` | `checklist.md`, application, `app-map.html` | Awaits approved planning; fast mode selected |
 | `6-ship` | Working demo video, public repository, learner-authored submission | Awaits verified build and required reviews |
 
@@ -30,7 +30,16 @@ authorized technical planning with staged acceptance priorities. Specification
 review is the next approval gate; implementation has not started. The draft
 technical plan defines P0/P1/P2 acceptance, the local browser/Python architecture,
 real assembly revision edits and post-edit links, contracts, tests, and milestones.
-It explicitly records the unresolved CAD source/recipe qualification dependency.
+The learner then requested investigation of official manufacturer and community
+CAD, explicit rights separation, and an authorized local supplied-CAD fallback.
+Public source/terms research and a newly authored bounded native BRep mount and
+reference revision probe were performed before spec approval. The probe is not
+application implementation, a complete robot, or production lifecycle evidence.
+The source report records failed hardware placements as well as the final checks.
+No geometry was converted to meshes, committed, deployed, or redistributed.
+The finalized draft selects local supplied STEP with scoped permission checks;
+complete powered recipes, game-task support and actual app verification remain
+required build gates. Specification approval has not been inferred.
 
 ## Review and verification
 

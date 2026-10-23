@@ -11,11 +11,14 @@ staged acceptance rather than making all 44 criteria prerequisites for the first
 working version. Fast build mode remains selected. This is a proposed technical
 blueprint, not an implementation or verification record.
 
-**Approval readiness:** the architecture, contracts, edit behavior, and build
-sequence are defined below. A complete permission-qualified CAD component set
-has not yet been established; the source/recipe qualification item in **Decisions
-and Open Issues** is an explicit blocker to finalizing this spec. Do not infer
-that a public download, a software license, or a source URL resolves asset rights.
+**Final draft for approval:** use the learner-authorized fallback of user-provided
+STEP with local conversion/assembly/display only where the specific rights are
+established. Bundle and publicly host **no manufacturer or community geometry**.
+The [source report](../docs/cad-source-status.md) separates every operation's
+rights and records a measured two-height mount feasibility check. Complete robot
+assets, task compatibility, and actual application behavior are still M0/M1/P0
+build gates, not completed planning claims. Spec approval authorizes building
+this conditional local pipeline; it grants no CAD rights or readiness status.
 
 ## How This Works, In Plain Language
 
@@ -25,6 +28,14 @@ two robot architecture proposals. The AI chooses from the mechanisms Tachyon
 actually supports. New deterministic assembly code places real imported parts
 using their mounting interfaces; the model does not invent arbitrary meshes or
 execute CAD code.
+
+The public project contains the new application and recipes, without a CAD asset
+bundle. The user supplies authentic STEP files locally. A private source record
+must establish the needed conversion, assembly, and display rights before those
+files are processed. Public hosting/redistribution is disabled; a phone and a
+published demo require their own applicable display/publication rights. Without
+qualified CAD, rulebook and strategy functions remain useful, while robot
+creation reports the exact missing parts or permissions.
 
 The browser receives a complete assembly description plus reusable component
 meshes. That same description names the mechanisms used by each strategy step.
@@ -64,6 +75,11 @@ Demonstration`, and the learner's post-approval staging clarification.
 This is a real application milestone. A UI shell, static robot, recorded model
 response, placeholder geometry, or partial drivetrain does not count as V1.
 It is also not a claim that all PRD acceptance checks have passed.
+
+Demo setup requires a locally supplied, rights-qualified complete component set
+for both recipes; phone transmission/display must be covered too. Releasing the
+video later needs separately qualified depiction/publication rights. A source
+inspection or reference lifecycle probe is not the application's P0 evidence.
 
 ### P0, P1, and P2 Gates
 
@@ -135,6 +151,8 @@ flowchart LR
   PDF[PDF and source pages] --> C[Competition snapshot]
   C --> AI[Schema-constrained AI proposals]
   CAP[Qualified component and recipe catalog] --> AI
+  U[User-supplied STEP] --> Q[Local rights and geometry qualification]
+  Q --> CAP
   AI --> S[Strategies and architecture choices]
   S --> B[Deterministic assembly builder]
   CAP --> B
@@ -183,7 +201,9 @@ to an earlier user choice of exact package versions.
 | Verification | pytest, Vitest/Testing Library, Playwright | Engineering/revision checks, component behavior, and actual browser CAD journeys. [pytest](https://docs.pytest.org/), [Vitest](https://vitest.dev/guide/), [Testing Library](https://testing-library.com/docs/react-testing-library/intro/), [Playwright](https://playwright.dev/docs/test-projects) |
 
 Pin resolved exact packages and CAD converter versions in lockfiles during the
-approved build; do not claim dependency compatibility has been tested now. The
+approved build. A separate pre-build probe used Python 3.12 and
+`cadquery-ocp==8.0.1.1.0` for native BRep inspection; it did not test the app's
+CadQuery/GLB pipeline or establish full dependency compatibility. The
 workspace currently exposes Node 24.6.0 and an explicit Python 3.12 interpreter;
 default `python3` is 3.14.3. Create Tachyon's own 3.12 environment for CAD packages
 rather than assuming the default interpreter is appropriate or using another
@@ -207,7 +227,8 @@ source .venv/bin/activate
 python -m pip install -r server/requirements.lock
 python -m pip install --no-deps -e ./server
 npm ci --prefix web
-python -m tachyon.cli assets-prepare --manifest data/catalog/manifest.json
+python -m tachyon.cli assets-register --manifest .local/catalog/manifest.json --rights .local/catalog/rights.json
+python -m tachyon.cli assets-prepare --manifest .local/catalog/manifest.json
 TACHYON_UI_ORIGIN=http://127.0.0.1:5173 python -m uvicorn tachyon.app:app --host 127.0.0.1 --port 8000
 ```
 
@@ -219,6 +240,8 @@ and asset requests to Python. For a recording or phone test, build with
 the server serves `web/dist`. Set `TACHYON_UI_ORIGIN` to the laptop's actual LAN
 origin at port 8000 and open the serving process's printed authorized launch URL
 on the phone. Same-origin serving avoids a second exposed phone-facing API port.
+LAN asset access is allowed only if the local rights profile covers it; otherwise
+startup refuses LAN CAD serving and explains the missing permission.
 
 LAN mode uses a process-local owner session token and Origin checks; the server
 remains loopback-only by default. The serving app's startup/lifespan creates the
@@ -236,9 +259,11 @@ the owner session. No account or pairing service is introduced. Store no model-
 provider credential in a frontend variable, bundle, URL, or browser storage.
 Put a secret-free `.env.example` in the repository and keep actual values local.
 Only relevant competition excerpts and command context go to the AI provider.
+Exclude source CAD, meshes, CAD screenshots, raw permission documents, and local
+asset paths. Use symbolic recipe IDs and permitted non-geometric capabilities.
 
 Planned server configuration names: `TACHYON_AI_PROVIDER=openai`,
-`TACHYON_AI_MODEL=gpt-6-astra`, `OPENAI_API_KEY` (private server credential), and
+`TACHYON_AI_MODEL=<verified-structured-output-model>`, `OPENAI_API_KEY` (private server credential), and
 `TACHYON_DATA_DIR=.local`, and `TACHYON_UI_ORIGIN` (the permitted UI origin).
 Configuration resolves data paths within this project's workspace. Only the
 serving process owns the ephemeral session token, and restarting it invalidates
@@ -246,11 +271,15 @@ old session tokens; the client preserves local input and requests a new launch
 URL instead of claiming a successful mutation. Explicit
 changes to provider/model remain visible and are not a silent fallback.
 
-Setup must identify permitted asset acquisition, source hashes, conversion, and
-license/attribution conditions. If rights do not permit bundling, document the
-authorized acquisition route and keep assets excluded. That does not itself
-resolve usage/conversion/demo rights. An unavailable qualified catalog produces
-an honest missing-assets startup state; it is not a successful CAD demo.
+Setup uses `TACHYON_CAD_PROFILE=user_provided_local`. No bundled CAD, auto-download,
+public geometry hosting, or geometry-export mode is provided. The private local
+manifest identifies source files, content hashes, component roles, rights basis
+per required operation, and attribution. A public example contains schema and
+instructions only; unverified permissions cannot be promoted by a checkbox.
+`assets-register` validates that record without converting anything; preparation
+fails closed for a missing required permission or source. An unavailable catalog
+produces a specific missing-assets state while competition/strategy stay usable.
+The supplied file alone does not establish use/conversion/demo rights.
 
 Shipping still requires a public code repository and working demonstration
 video. Deployment and publishing require separate authorization; no public
@@ -325,11 +354,49 @@ the AI's grounded requirements choose the recipe/configuration and the new
 builder resolves and assembles its actual parts. Record this generation method
 truthfully in the interface and README.
 
+Without local CAD, standalone strategy generation can use the public symbolic
+recipe requirements, labeled as mechanism requirements rather than existing
+hardware. It cannot claim assembled designs or enabled edits. The builder and
+robot-readiness checks always require the actual qualified local catalog.
+
+### Local CAD Registration and Rights Policy
+
+Implements F4/CAD-4 and the learner's source-specific clarification. Manufacturer
+CAD has first preference for geometry identity, subject to actual usable rights.
+Do not import the community Fusion library automatically or infer an asset license
+from a tooling MIT license. The public report is
+[docs/cad-source-status.md](../docs/cad-source-status.md).
+
+`cad/rights.py` reads a private, small JSON record per source hash. Separate
+operations are acquisition/storage, conversion, assembly placement, source-part
+modification, loopback display, LAN transmission/display, public depiction,
+redistribution of originals, redistribution of meshes, and public hosting.
+Each has `qualified | unverified | disallowed`, with applicable terms or written
+permission, subject/rightsholder, evidence reference, date/expiry and attribution.
+Runtime checks required operations, not a single license string or upload consent.
+Keep user assertions distinct from reviewed evidence; unresolved required scope
+disables the affected operation. Do not turn a local qualification into public
+distribution or demo permission.
+
+`assets-register` accepts local STEP paths and role bindings; verifies signature,
+hash, source identity and required rights; and produces a private import report.
+It performs no network fetch or conversion. Native `.f3d` requires a separately
+permitted user export to STEP; there is no Fusion integration. Detailed source
+hierarchy/parts/ports live in the local manifest after inspection, not in a
+committed manufacturer-geometry bundle. Public recipe code and required-role
+schemas contain no BReps, meshes, raw asset archives, or private permission files.
+
+The API serves CAD only to the owner session, from the qualified local cache,
+with `Cache-Control: private, no-store`; do not use service-worker/offline caches
+or external CDNs for it. LAN access checks the extra permission. No geometry
+export/share/public upload/hosting route is implemented. Public demonstration
+publication is checked separately during `6-ship`, including visible imagery.
+
 ### Authentic Component Catalog and Mesh Preparation
 
 Implements F4 and CAD-1–4. This is a **P0 qualification gate**.
 
-`cad/catalog.py` reads a versioned manifest of actual source CAD, rights evidence,
+`cad/catalog.py` reads a versioned **private local** manifest of source CAD, rights evidence,
 component identity, units, dimensions, and manually verified connection ports.
 `cad/prepare.py` imports qualified STEP with CadQuery, checks solids/bounds, and
 exports each component's source-derived GLB with named child geometry and a
@@ -349,6 +416,8 @@ unit conversion, source selection, and verified interfaces. A label saying
 authentic is insufficient: check bytes, component identity/dimensions, geometry,
 and rights evidence. Shared meshes may be reused across many instances without
 duplicating triangles. No entire unreviewed library needs to be bundled.
+There is no manufacturer/community CAD in the frontend bundle or repository;
+all source-derived assets are generated locally only after qualification.
 
 ### Assembly Recipes, Connections, and Validation
 
@@ -435,9 +504,21 @@ height outside the registered range is unsupported or needs clarification.
 The raised configuration must change engineering assembly data and demonstrate
 a corresponding geometry/reach difference. Changing a camera, display explode
 offset, material, mesh scale, joint pose alone, or text description cannot pass.
-Do not invent numeric heights before source parts/ports are measured. Both
-demonstration-recipe configurations need source identities and a known delta in
-supported scoring reach/height before the edit can be declared available.
+The selected edit is a discrete re-mount of a supported scoring cassette on real
+ports, with its hardware and actuator interfaces accounted for. Pre-build native
+inspection verified a **50.8 mm / four-pitch mounting-height delta** using genuine
+276-2289 channel, 276-6010 claw, source 276-4998 screws and 275-1028 nuts. The
+fixture's standard/raised mounting references are 209.55/260.35 mm above its own
+lower channel endpoint, not floor-relative scoring reach. See the
+[probe and limitations](../docs/cad-source-status.md#two-scoring-mount-configurations-bounded-verification).
+
+M0/M1 must integrate that supported remount into one complete recipe's carrier,
+actuation path and bracing, and recompute its actual task envelope. Move dependent
+actuators/supports as required by the real interfaces. The static mount probe
+does not qualify either complete lift, target reach, object handling, or game
+legality. If those integration checks fail, keep the edit unavailable and resolve
+the actual support issue; do not assert the fixture proves scoring capability.
+The second complete recipe still needs only its baseline for V1.
 
 `revisions/service.py` owns the transaction:
 
@@ -579,6 +660,7 @@ fixtures catch drift between TypeScript and server validation.
 | `StrategySet` | Competition snapshot ID/hash, provider receipt, two strategies with objectives/actions, citations, requirements, recipe choices, tradeoffs | Workspace JSON; never relabeled for another competition |
 | `ActionRequirement` / `MechanismCapability` | Revision/action/mechanism identity, sourced object interface, acquisition/retention needs, scoring target frames, reach/pose envelope, hardware and clearance evidence, support/unknown status | Candidate/accepted revision; compatibility required for every required action |
 | `ComponentDefinition` | Source/mesh identity, SKU or qualified identity, geometry class, unit/frame conversion, dimensions, solids, material display data, interfaces, rights evidence | Versioned catalog plus qualified local asset cache |
+| `AssetRightsRecord` | Source hash/subject/rightsholder; reviewed terms/permission reference; operation-specific status/scope; evidence date/expiry; attribution; separate unverified user assertion | Private `.local/catalog/rights.json`; checked at registration, preparation, serving and demo review; not in public Git |
 | `InterfacePort` | Component-local frame, kind, size/shaft/mount properties, allowed mating types, tolerance and evidence | Catalog definition; manually verified from actual source |
 | `AssemblySnapshot` | Catalog/recipe/configuration versions; component instances; subsystems; connections; joints; actuation paths; completeness/evidence report | Immutable `revisions` JSON; instances reference shared definitions |
 | `ComponentInstance` | Stable ID, definition ID, subsystem, rigid translation/quaternion, parent/joint group, provenance reference | Inside its assembly revision; no arbitrary per-instance scaling |
@@ -604,6 +686,10 @@ Required fields are separate, not a single ambiguous `authentic` boolean:
 originKind: manufacturer_cad | community_component_model | tachyon_authored
 geometryClass: verified_imported_component | conceptual | placeholder | test_fixture
 rightsStatus: qualified_for_declared_use | unverified | disallowed
+declaredUse: user_provided_local
+rightsByOperation: acquisition_storage, conversion, assembly_placement,
+  part_modification, loopback_display, lan_display, public_depiction,
+  original_redistribution, mesh_redistribution, public_hosting
 sourceIdentity: source URL/revision + SHA-256 + actual component identity
 conversionIdentity: tool/version/settings + output SHA-256 + units/frames
 ```
@@ -618,6 +704,11 @@ A complete authentic-CAD acceptance run requires zero placeholder/test/conceptua
 instances in required robot hardware, all required source assets present, rights
 qualified for the declared use, and connected inspectable assemblies. Pure unit
 tests may use named synthetic fixtures, but they never count as CAD/demo evidence.
+`rightsStatus` summarizes only the named declared use and is derived from required
+operation records. `part_modification` and public distribution/hosting are not
+enabled by this build. A local qualified asset remains unverified for public
+depiction until separate evidence establishes that scope. Rights records and
+source bytes are rechecked when a local catalog changes or permission expires.
 
 ## Interfaces Between Components
 
@@ -662,7 +753,7 @@ that candidate; an older attempt cannot overwrite a newer result.
 | `POST /api/operations/{id}/cancel` | Idempotent cancellation request/result |
 | `GET /api/designs/{id}` | Accepted revision, strategy, supported configurations, readiness |
 | `GET /api/revisions/{id}` | Immutable snapshot, bindings, illustrations, evidence |
-| `GET /api/assets/{hash}.glb` | Qualified source-derived mesh; no arbitrary filesystem access |
+| `GET /api/assets/{hash}.glb` | Owner-authorized qualified local mesh; loopback/LAN rights scope checked, no public cache or arbitrary filesystem access |
 | `POST /api/assistant` | `{designId, baseRevisionId, selection, text}` → operation returning explanation/view command/clarification/unsupported/proposal |
 | `GET /api/proposals/{id}` | Base + exact candidate/diff/report/status for preview |
 | `POST /api/proposals/{id}/apply` | `{expectedRevisionId, idempotencyKey}` → accepted revision or `409` conflict/validation blocker |
@@ -698,10 +789,13 @@ Tachyon/
 │   └── learner-profile.md            # Local, ignored
 ├── docs/
 │   ├── product-vision.md
-│   └── cad-source-status.md          # Public source/permission qualification status
+│   ├── cad-source-status.md          # Public source/permission qualification status
+│   └── verification/                # Numeric probe report only; no geometry
+├── tools/verification/              # Existing bounded pre-build feasibility probe
 ├── data/
 │   ├── competitions/                 # Versioned facts/source identities and notices
-│   ├── catalog/manifest.json         # Qualified part/port/rights identities
+│   ├── catalog/requirements.json     # Public role/schema requirements, no assets
+│   ├── catalog/manifest.example.json # Empty user-fillable import schema, no grant
 │   └── recipes/                      # Four-bar/elevator definitions and configurations
 ├── server/
 │   ├── pyproject.toml                # Tachyon package and locked dependency inputs
@@ -716,7 +810,7 @@ Tachyon/
 │   │   ├── competition/{ingest,grounding}.py
 │   │   ├── ai/{provider,openai_provider}.py
 │   │   ├── strategy/{generate,bindings}.py
-│   │   ├── cad/{catalog,prepare}.py
+│   │   ├── cad/{catalog,prepare,rights}.py
 │   │   ├── assembly/{builders,validate}.py
 │   │   ├── revisions/service.py
 │   │   └── illustrations/derive.py
@@ -741,6 +835,7 @@ Tachyon/
 │       └── styles/{tokens,themes,workspace,motion}.css
 ├── tests/e2e/                        # Real browser CAD and lifecycle journeys
 └── .local/                           # Ignored PDFs/assets/database/proposals/evidence
+    └── catalog/{manifest,rights}.json # User-supplied paths/ports and scoped rights
 ```
 
 ## External Services and Dependencies
@@ -749,10 +844,10 @@ Tachyon/
 
 Recommend a single OpenAI adapter, pending the learner's provider preference.
 Use `POST https://api.openai.com/v1/responses`, Bearer authentication from the
-server, and a model named by `TACHYON_AI_MODEL`. The current official structured
-output guide recommends `gpt-6-astra` for new projects; this is a proposed default,
-not a claim about this account's access. Allow explicit configuration of another
-verified compatible model, never a silent substitute.
+server, and an explicitly configured model named by `TACHYON_AI_MODEL`. Verify
+structured-output support and this account's access during M0 before selecting
+the concrete model. No default model/access/cost claim is made in this spec;
+never silently substitute a different provider or model.
 
 Payload: `model`, `store: false`, developer instructions, supplied competition/
 catalog/selection context as user data, and strict `text.format` JSON schema.
@@ -785,18 +880,21 @@ extraction, and applicable source handling before treating the pipeline as teste
 
 ### CAD Sources and Rights
 
-Only public source research has been used in this technical plan. Findings and
-links are recorded in [CAD source status](../docs/cad-source-status.md).
-Manufacturer download access exists, but that alone is not a redistribution or
-conversion permission. A public Fusion add-in repository has an MIT software
-license; the complete required geometry's coverage has not been established.
+The requested official and community sources were investigated; findings, exact
+source hashes, rights restrictions and native inspection evidence are in
+[CAD source status](../docs/cad-source-status.md). Neither source is approved for
+bundling or public mesh hosting. The current community library contains Fusion
+files without a verified asset license; a separate tooling MIT license does not
+cover those models by inference.
 
-No full CAD library has been imported or declared qualified. Final spec approval
-requires an identified component set whose rights cover the planned acquisition,
-conversion, local use/display, demonstration, and any intended distribution.
-Record asset-specific restrictions/attributions separately from application
-licensing. Do not ask the AI to invent a substitute or use a placeholder as the
-solution to this dependency.
+The selected path is the learner-authorized **user-provided local STEP** fallback.
+Its public deliverable is the new application/recipes with import instructions,
+not manufacturer geometry. Every locally used asset still needs an applicable
+conversion/assembly/display basis; unresolved operations fail closed. LAN display
+and demo publication are qualified separately. Source-part modification, CAD
+redistribution and public mesh hosting remain disabled. This is a specified
+conditional implementation path, not a legal conclusion or a qualified full
+runtime catalog. No private predecessor implementation is involved.
 
 ## Testing Strategy
 
@@ -805,6 +903,10 @@ all-at-once first-version suite.
 
 ### P0 Engineering and Revision Tests
 
+- Reject conversion/display/assembly without the relevant evidence; local rights
+  cannot authorize LAN/public depiction/distribution by implication. Verify no
+  CAD bytes/renders leave through model requests, bundles, public static routes,
+  caches or exports. These are targeted source-policy acceptance checks.
 - Load actual qualified source bytes and compare component identity, units,
   dimensions, mesh/source hashes, and required geometry classes. Inspect the
   full assembly and close-up source detail; a boolean authenticity tag is not
@@ -863,7 +965,7 @@ checklist and not authorization to start implementation now.
 
 | Milestone | Deliverable and verification | Gate |
 | --- | --- | --- |
-| **M0 — Qualify inputs and bounded recipes** | Resolve CAD rights, actual component/port coverage for both complete baselines, and standard/raised configurations for the demonstration recipe. Map required tasks to sourced object interfaces/poses/reach/clearance evidence; record configuration differences, default source, and provider plan. | Required for final spec readiness; no claim of qualified CAD yet |
+| **M0 — Register local inputs and qualify recipes** | Implement the scoped local import gate; qualify user-supplied component/port coverage for both complete baselines and supported remount on the demonstration recipe. Map actions to actual object interfaces/poses/reach/clearance evidence. Verify default rules and provider access. | First approved-build dependency gate, before authentic/complete/working labels; not a claim that source distribution rights passed |
 | **M1 — Runnable CAD foundation** | Own frontend/backend environment, typed snapshots, real qualified meshes, both connected builders, primitive rejection, full-screen mobile CAD, basic SNAP/SHIFT/core shell. Inspect actual geometry and run source/assembly regressions. | Verified internal increment; not yet the end-to-end V1 |
 | **M2 — Competition and live generation** | Default cited competition, live grounded strategies, independent entry services, two distinctly generated recipe assemblies, real loading/errors. | P0 generation portion |
 | **M3 — Linked inspection and supported edit** | Action/mechanism/sketch/playbook linkage; contextual core in three states; exact candidate Preview/Apply/Discard/Undo and rederived links; run live browser and phone path. | **V1** when every P0 obligation and invariant passes |
@@ -879,7 +981,7 @@ do not relabel a narrower fake result as completion.
 
 | Failure | Required behavior |
 | --- | --- |
-| No qualified component set or conversion permission | Asset/recipe unavailable with exact missing evidence; no authentic/complete label and no primitive substitution |
+| No qualified component set or conversion permission | Asset/recipe unavailable with missing evidence; strategy/source functions stay usable; no authentic/complete label or primitive substitution |
 | Invalid essential rule fact, model refusal, or unsupported recipe | Reject the affected proposal, retain useful source review and accepted designs; show a real failed/unsupported state |
 | Invalid or stale candidate/link during Apply | Reject transaction; accepted pointer and visible accepted geometry remain unchanged |
 | Provider delay/rate limit/restart/cancel | Actual operation status; bounded retry or interrupted state; late results cannot change a different context |
@@ -893,6 +995,9 @@ do not relabel a narrower fake result as completion.
   weaken authenticity or completeness requirements.
 - One discrete engineering edit family proves the complete revision lifecycle;
   arbitrary natural-language CAD programming is outside the first build.
+- User-provided local geometry removes the need for a bundled redistributable
+  library. It preserves the authenticity/assembly gate and still requires valid
+  local conversion/display rights; it is not a way around missing permission.
 - Page-level source extraction and explicit unknowns avoid an OCR/retrieval
   service. More complex documents remain visibly unsupported initially.
 - SVG sketches/field annotations derive from the same assembly/action data;
@@ -910,12 +1015,14 @@ edits with real Preview/Apply/Discard/Undo, required correct post-edit strategy
 bindings, preserved core UI/theme/mobile requirements, and explicitly allowed
 staging the 44 criteria. No private engineering project, implementation, or
 development artifact is a dependency of this application.
+The learner also preferred official geometry, forbade unlicensed distribution,
+and authorized a local user-provided CAD path when distribution remains unresolved.
 
 ### Recommendations Awaiting Technical Approval
 
 React/TypeScript/R3F plus a new small Python/FastAPI service; local-first running;
-SQLite immutable revisions; one model-provider adapter; curated imported STEP
-assets; deterministic four-bar/gripper and elevator/gripper recipes; discrete
+SQLite immutable revisions; one model-provider adapter; user-provided, locally
+qualified STEP assets; deterministic four-bar/gripper and elevator/gripper recipes; discrete
 standard/raised configurations; and the P0/P1/P2 gate assignments are proposed
 here for review, not silently recorded as earlier learner-selected technologies.
 
@@ -925,20 +1032,26 @@ The learner specifically raised whether the height edit changes authentic
 hardware and whether the 44 criteria would block the first runnable path. The
 technical resolution is a whole candidate assembly revision from a registered
 real-part configuration, with bindings/artifacts rederived before acceptance,
-and an explicit staged criteria table. The source permission/geometry feasibility
-part of that answer remains open; no learner uncertainty or learning accomplishment
-is invented.
+and an explicit staged criteria table. Native inspection and a headless static
+mount/reference-lifecycle probe address the geometric edit feasibility; the
+source review led to the authorized local-input fallback. Permission for actual
+runtime operations and complete powered/task assemblies remains a build gate.
+No learner learning accomplishment is invented.
 
 ### Remaining Resolution Items
 
 | Item | Current evidence/status | Required resolution |
 | --- | --- | --- |
-| **CAD permissions and complete component set** | Official/public candidate sources found; a full set with permission covering declared use and conversion is not established. A source question is pending. | **Blocks final spec approval/readiness.** Identify permitted source assets, rights coverage, actual ports/geometry, and configuration/component manifests for both complete recipes. No silent downgrade to primitives or incomplete CAD. |
-| **Exact recipe configurations and task feasibility** | Four-bar/gripper and elevator/gripper are bounded proposals. Baseline task support and the demonstration recipe's standard/raised heights have not been qualified. | **Blocks final engineering specification readiness** with the CAD source item. Map actions to actual object interfaces/target poses/reach/clearance evidence; record native variants/ports and a supported edit delta. The second recipe does not need the height edit for V1. |
-| **AI provider/account** | A provider-preference question is pending; OpenAI Responses is the documented recommendation. No key/access or rate/cost limits verified. | Agree on provider/model in technical review; configure credentials privately and verify access in the approved build before the live P0 demonstration. |
-| **Pinned PDF/package/platform bytes** | Primary documentation checked; default and historical second rulebook identified; proposed dependency compatibility not installed/tested. | Record source hashes, resolved versions, and environment smoke checks before dependent build slices; do not claim these are already tested. |
+| **Source path / distribution** | Requested sources investigated; redistribution, conversion and public hosting grants not established. Local supplied-input path selected with scoped rights checks. | Technical path ready for review. Keep distribution/hosting disabled; never mark unknown rights approved. |
+| **Actual local catalog and full recipes** | Exact native channel/claw/hardware inspected; not a complete powered robot set. Four-bar/elevator remain bounded recipes to implement. | M0/M1: qualify each actual local permission, missing component, port, task interface, target pose, clearance, actuator and support before ready labels. Both complete baselines remain P0. |
+| **Supported configuration integration** | Two native-grid static mounts and reference lifecycle checked; measured delta 50.8 mm. No complete lift/game target or browser edit proven. | Integrate remount into a qualified whole-robot recipe and verify post-edit capabilities, actual revision API, browser and phone before enabling AI-5. Second recipe needs only baseline for V1. |
+| **AI provider/account** | OpenAI Responses is the documented configurable recommendation; no key/access or account limits verified. | Technical approval may accept this recommendation; verify private credentials/model access during the approved build before live P0. |
+| **Pinned PDF/package/platform bytes** | Primary docs/default/second rulebook identified; isolated Python 3.12/OCP native probe run. Full application dependency/converter compatibility not tested. | Resolve lockfiles, source hashes, and full environment/conversion smoke checks during dependent build slices. |
+| **Public demonstration rights** | Permission to publish depictions of supplied geometry is not established by local use. | Qualify imagery/video publication before releasing the required demo. Keep shipping incomplete while this is unresolved. |
 | **Optional deployment** | Local-first recording recommended; no hosting selected or required. | Can remain deferred to shipping; do not add hosting scope or treat a live URL as a substitute for the video/repository. |
 
-The learner must review the technical choices, and source/recipe blockers must
-be resolved before this document is marked approved. `5-build`, a build checklist,
-application implementation, publication, and submission have not started.
+The learner must approve this displayed technical plan before `5-build`. Actual
+source/task qualification still gates dependent build slices and the P0 demo.
+The only code written before approval is the narrow user-requested source/mount
+feasibility probe; it is documented as such. No build checklist, application
+implementation, publication, deployment or submission has started.
