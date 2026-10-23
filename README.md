@@ -12,8 +12,9 @@ two mechanical visual identities over the same design data.
 Planning is in progress. `1-start` is complete and [scope](devpost/scope.md) is
 approved. The [product requirements](devpost/prd.md) are approved, including
 scoring reach/height as the first supported CAD edit. The [technical specification](devpost/spec.md)
-is a final draft awaiting your approval, with staged acceptance, architecture,
-data contracts, and milestones. [CAD source findings](docs/cad-source-status.md)
+and architecture are approved. The official `5-build` workflow is active, with a
+[draft build checklist](devpost/checklist.md) awaiting its required execution-order
+review. [CAD source findings](docs/cad-source-status.md)
 select user-provided STEP and local processing under applicable rights; no
 manufacturer/community geometry will be bundled or publicly hosted.
 Application implementation has not started. A narrow, user-requested native CAD
@@ -43,7 +44,8 @@ are part of the planned product.
 - [Devpost progress and required order](devpost/README.md)
 - [Approved scope](devpost/scope.md)
 - [Approved product requirements](devpost/prd.md)
-- [Technical specification draft](devpost/spec.md)
+- [Approved technical specification](devpost/spec.md)
+- [Build checklist and progress](devpost/checklist.md)
 - [CAD source qualification status](docs/cad-source-status.md)
 - [Bounded source/mount verification](docs/verification/scoring-mount-feasibility.json)
 - [Third-party materials](THIRD_PARTY_NOTICES.md)

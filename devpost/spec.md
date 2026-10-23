@@ -1,6 +1,6 @@
 ---
 doc: spec
-status: draft
+status: approved
 ---
 
 # Tachyon — Technical Specification
@@ -8,10 +8,11 @@ status: draft
 Implements the [approved PRD](prd.md) and [approved scope](scope.md). The learner
 approved scoring reach/height as the first genuine assembly edit and requested
 staged acceptance rather than making all 44 criteria prerequisites for the first
-working version. Fast build mode remains selected. This is a proposed technical
-blueprint, not an implementation or verification record.
+working version. Fast build mode remains selected. The learner explicitly
+approved this technical blueprint and its architecture on 2026-10-23. Approval
+does not establish implementation or acceptance-test success.
 
-**Final draft for approval:** use the learner-authorized fallback of user-provided
+**Approved implementation path:** use the learner-authorized fallback of user-provided
 STEP with local conversion/assembly/display only where the specific rights are
 established. Bundle and publicly host **no manufacturer or community geometry**.
 The [source report](../docs/cad-source-status.md) separates every operation's
@@ -51,8 +52,8 @@ distributed job system, Fusion dependency, or physics service in the critical pa
 
 ## Essential Demo and Acceptance Priorities
 
-Implements `prd.md > The Core Journey`, `What We're Building > Acceptance
-Demonstration`, and the learner's post-approval staging clarification.
+Implements `prd.md > The Core Journey`, the acceptance criteria under `Features
+and Behavior`, and the learner's post-approval staging clarification.
 
 ### V1 — First Working End-to-End Version
 
@@ -184,11 +185,11 @@ flowchart LR
 
 ## Stack
 
-These are recommendations for learner approval, grounded in the stated
-React/TypeScript/Three.js direction and Python experience. They are not attributed
-to an earlier user choice of exact package versions.
+The learner accepted these technical choices in the specification approval.
+They follow the React/TypeScript/Three.js direction and Python experience.
+Resolve exact compatible package versions during the approved build.
 
-| Layer | Proposed choice | Reason and documentation |
+| Layer | Accepted choice | Reason and documentation |
 | --- | --- | --- |
 | Browser | React 19, TypeScript, stable React Three Fiber 9, Three.js, Drei controls | Product UI and semantic CAD scene in one application; R3F 9 pairs with React 19. Avoid R3F 10 alpha. [R3F](https://r3f.docs.pmnd.rs/getting-started/introduction), [React](https://react.dev/), [Three](https://threejs.org/docs/), [Drei](https://drei.docs.pmnd.rs/) |
 | Frontend tooling | Vite, npm lockfile; plain CSS custom properties and component styles | Small build, no separate design-system/framework dependency. [Vite](https://vite.dev/guide/), [TypeScript](https://www.typescriptlang.org/docs/) |
@@ -219,7 +220,7 @@ and not required to record the demonstration. No accounts, payments, cloud CAD
 API, or cross-device synchronization service are required.
 
 **Planned commands — not executable project instructions yet.** These files and
-entry points will be created only after `4-spec` approval:
+entry points will be created through the approved `5-build` checklist:
 
 ```sh
 python3.12 -m venv .venv
@@ -429,8 +430,8 @@ engineering qualification are:
 | `four_bar_gripper` | Parallel-link lifting/scoring geometry with a supported retaining end effector | Chassis/drive, braced four-bar with pivots/bearings, powered transmission, retention/gripper, control/power mounting |
 | `elevator_gripper` | Vertically guided carriage and retention/scoring stage, mechanically distinct from the four-bar | Chassis/drive, tower/guides/carriage, complete supported lift transmission, retention/gripper, control/power mounting |
 
-These are proposals, not qualified robots or claims that the necessary CAD has
-been found. Source/port/clearance feasibility must qualify both, or the affected
+These are approved recipe families, not qualified robots or claims that all the
+necessary CAD has been found. Source/port/clearance feasibility must qualify both, or the affected
 recipe choice must return to review. Do not replace a missing elevator with
 floating geometry or count two copies of the four-bar as two architectures.
 The drivetrain follows each recipe's requirements; use supported transmissions
@@ -785,7 +786,8 @@ Tachyon/
 ├── devpost/
 │   ├── scope.md                      # Approved
 │   ├── prd.md                        # Approved, with staged technical acceptance
-│   ├── spec.md                       # This draft; approval required
+│   ├── spec.md                       # Approved technical plan
+│   ├── checklist.md                  # Build order/progress; approval separate
 │   └── learner-profile.md            # Local, ignored
 ├── docs/
 │   ├── product-vision.md
@@ -842,7 +844,7 @@ Tachyon/
 
 ### Model Provider
 
-Recommend a single OpenAI adapter, pending the learner's provider preference.
+Use the single OpenAI adapter accepted in the technical specification review.
 Use `POST https://api.openai.com/v1/responses`, Bearer authentication from the
 server, and an explicitly configured model named by `TACHYON_AI_MODEL`. Verify
 structured-output support and this account's access during M0 before selecting
@@ -960,8 +962,8 @@ reported passed by writing this spec.
 
 ## Implementation Milestones
 
-These milestones are the input to the future `5-build` checklist, not an approved
-checklist and not authorization to start implementation now.
+These approved milestones feed the `5-build` checklist. The skill's separate
+build-order review remains required before application implementation begins.
 
 | Milestone | Deliverable and verification | Gate |
 | --- | --- | --- |
@@ -1018,13 +1020,14 @@ development artifact is a dependency of this application.
 The learner also preferred official geometry, forbade unlicensed distribution,
 and authorized a local user-provided CAD path when distribution remains unresolved.
 
-### Recommendations Awaiting Technical Approval
+### Technical Choices Accepted in Specification Review
 
 React/TypeScript/R3F plus a new small Python/FastAPI service; local-first running;
 SQLite immutable revisions; one model-provider adapter; user-provided, locally
 qualified STEP assets; deterministic four-bar/gripper and elevator/gripper recipes; discrete
-standard/raised configurations; and the P0/P1/P2 gate assignments are proposed
-here for review, not silently recorded as earlier learner-selected technologies.
+standard/raised configurations; and the P0/P1/P2 gate assignments were accepted
+by the learner's explicit `4-spec` approval. Exact runtime assets, permissions,
+model access and compatible dependency versions still need build verification.
 
 ### Useful Unknown Investigated
 
@@ -1042,16 +1045,17 @@ No learner learning accomplishment is invented.
 
 | Item | Current evidence/status | Required resolution |
 | --- | --- | --- |
-| **Source path / distribution** | Requested sources investigated; redistribution, conversion and public hosting grants not established. Local supplied-input path selected with scoped rights checks. | Technical path ready for review. Keep distribution/hosting disabled; never mark unknown rights approved. |
+| **Source path / distribution** | Requested sources investigated; redistribution, conversion and public hosting grants not established. Local supplied-input path accepted with scoped rights checks. | Technical path approved. Keep distribution/hosting disabled; never mark unknown rights approved. |
 | **Actual local catalog and full recipes** | Exact native channel/claw/hardware inspected; not a complete powered robot set. Four-bar/elevator remain bounded recipes to implement. | M0/M1: qualify each actual local permission, missing component, port, task interface, target pose, clearance, actuator and support before ready labels. Both complete baselines remain P0. |
 | **Supported configuration integration** | Two native-grid static mounts and reference lifecycle checked; measured delta 50.8 mm. No complete lift/game target or browser edit proven. | Integrate remount into a qualified whole-robot recipe and verify post-edit capabilities, actual revision API, browser and phone before enabling AI-5. Second recipe needs only baseline for V1. |
-| **AI provider/account** | OpenAI Responses is the documented configurable recommendation; no key/access or account limits verified. | Technical approval may accept this recommendation; verify private credentials/model access during the approved build before live P0. |
+| **AI provider/account** | OpenAI Responses is accepted as the configurable adapter; no key/access or account limits verified. | Verify private credentials/model access during the approved build before live P0. |
 | **Pinned PDF/package/platform bytes** | Primary docs/default/second rulebook identified; isolated Python 3.12/OCP native probe run. Full application dependency/converter compatibility not tested. | Resolve lockfiles, source hashes, and full environment/conversion smoke checks during dependent build slices. |
 | **Public demonstration rights** | Permission to publish depictions of supplied geometry is not established by local use. | Qualify imagery/video publication before releasing the required demo. Keep shipping incomplete while this is unresolved. |
 | **Optional deployment** | Local-first recording recommended; no hosting selected or required. | Can remain deferred to shipping; do not add hosting scope or treat a live URL as a substitute for the video/repository. |
 
-The learner must approve this displayed technical plan before `5-build`. Actual
+The learner approved this technical plan and requested `5-build`. Actual
 source/task qualification still gates dependent build slices and the P0 demo.
-The only code written before approval is the narrow user-requested source/mount
-feasibility probe; it is documented as such. No build checklist, application
-implementation, publication, deployment or submission has started.
+The only code written before approval was the narrow user-requested source/mount
+feasibility probe, documented as such. The build checklist records subsequent
+ordering approval, implementation, tests and required hands-on review separately.
+Publication, deployment and submission have not occurred.

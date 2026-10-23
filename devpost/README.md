@@ -12,8 +12,8 @@ Its license is preserved in [third-party notices](../THIRD_PARTY_NOTICES.md).
 | `1-start` | `learner-profile.md`, excluded from Git | Complete |
 | `2-scope` | `scope.md` | Approved by the learner |
 | `3-prd` | `prd.md` | Approved by the learner; initial scoring reach/height edit confirmed |
-| `4-spec` | `spec.md` | Final draft for approval; user-provided local CAD path specified, asset/complete-recipe qualification retained as build gates |
-| `5-build` | `checklist.md`, application, `app-map.html` | Awaits approved planning; fast mode selected |
+| `4-spec` | `spec.md` | Approved by the learner; local supplied-CAD path and architecture accepted; asset/complete-recipe qualification remains a build gate |
+| `5-build` | `checklist.md`, application, `app-map.html` | Active; first build-order checklist saved as draft for the skill's required review; fast mode selected |
 | `6-ship` | Working demo video, public repository, learner-authored submission | Awaits verified build and required reviews |
 
 ## Actual project sequence
@@ -27,7 +27,7 @@ as a draft defining screens, navigation, interactions, themes, mobile behavior,
 functional requirements, error states, and acceptance criteria. The proposed first
 supported engineering edit was approved with the PRD on 2026-10-23. The learner
 authorized technical planning with staged acceptance priorities. Specification
-review is the next approval gate; implementation has not started. The draft
+review became the next approval gate before implementation. The draft
 technical plan defines P0/P1/P2 acceptance, the local browser/Python architecture,
 real assembly revision edits and post-edit links, contracts, tests, and milestones.
 The learner then requested investigation of official manufacturer and community
@@ -39,7 +39,12 @@ The source report records failed hardware placements as well as the final checks
 No geometry was converted to meshes, committed, deployed, or redistributed.
 The finalized draft selects local supplied STEP with scoped permission checks;
 complete powered recipes, game-task support and actual app verification remain
-required build gates. Specification approval has not been inferred.
+required build gates. The learner then explicitly approved `4-spec` and its
+architecture on 2026-10-23 and requested `5-build`. The spec is marked approved;
+the first build checklist proposes five usable increments and retains the
+required early/final hands-on reviews. Execution-order approval is pending,
+as required by the official skill. Application implementation has not started,
+and no application acceptance criterion is recorded as passed.
 
 ## Review and verification
 

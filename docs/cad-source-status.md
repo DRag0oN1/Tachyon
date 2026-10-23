@@ -9,7 +9,7 @@ public project, and no geometry was deployed. No permission request was sent.
 operation-specific rights qualification.** This resolves the distribution
 dependency in the architecture; it does not grant permission to convert a
 particular uploaded file or establish that complete robot recipes already work.
-The technical specification is ready for review on this basis, with asset,
+The learner approved the technical specification on this basis, with asset,
 recipe, task-compatibility, and browser checks retained as build gates.
 
 ## Findings from the requested sources
