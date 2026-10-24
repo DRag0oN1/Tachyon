@@ -20,7 +20,7 @@ where = ["."]
 include = ["tachyon_strategy_rl*"]
 
 [tool.setuptools.package-data]
-tachyon_strategy_rl = ["scenario.json", "strategy.schema.json"]
+tachyon_strategy_rl = ["scenario.json", "strategy.schema.json", "strategy-v2.schema.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

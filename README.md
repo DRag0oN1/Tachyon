@@ -37,8 +37,10 @@ discovers abstract strategies before planning robot architecture. Three training
 seeds completed 786,432 simulated decisions and 12,288 gradient updates. The
 [preserved report](research/strategy_rl/results/override-ppo-v1/REPORT.md) includes
 checkpoints, held-out random/heuristic controls, reproducible traces and a
-strategy-driven architecture proposal. One learned family is supported; no second
-design or generated CAD is claimed. All results are abstract simulated strategy
+strategy-driven architecture proposal. The new
+[strategy-to-design interface](docs/strategy-design-interface.md) also emits two
+engineering alternatives for the same learned family. Generated CAD and a second
+learned family are not claimed. All results are abstract simulated strategy
 performance. This subsystem is separate from the app and its Python environment;
 production integration remains disabled.
 

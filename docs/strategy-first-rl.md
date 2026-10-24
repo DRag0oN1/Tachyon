@@ -60,3 +60,13 @@ verification. Inference and isolated strategy-to-designer checks are verified;
 production integration, generated authentic robot assemblies, a second learned
 architecture and physical performance remain unimplemented or unverified. No
 existing Devpost application acceptance box is passed by this research evidence.
+
+## Frozen-policy design handoff extension
+
+The learner subsequently requested the missing structured interface. The
+[new handoff](strategy-design-interface.md) adds capability sweeps, a conditional
+StrategySpec v2, a standalone designer producing two engineering alternatives
+for the same learned family, and one-shot capability feedback. It reuses the
+original checkpoints without training or replacement. Its results and integration
+checks are recorded separately from the original experiment. A second learned
+strategy and authentic generated CAD remain unestablished.

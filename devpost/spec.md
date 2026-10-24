@@ -36,6 +36,15 @@ requirement remains unmet rather than being demonstrated with invented results.
 The earlier LLM-oriented application contracts below describe the existing
 integration plan, not a completed implementation or the RL strategy source.
 
+**Learner-directed handoff extension (2026-10-24):** preserve the trained policy;
+perform frozen capability experiments, export a conditional StrategySpec v2 and
+pass its structured requirements into a standalone designer. Two engineering
+alternatives may implement the same learned family without claiming two learned
+strategies. Evaluate supplied capability feedback diagnostically with provenance,
+uncertainty and inherited assumptions. See the [interface and evidence](../docs/strategy-design-interface.md).
+This adds no diffusion, automatic co-optimization, production UI integration or
+CAD realization claim. Existing authentic-assembly and P0 gates remain intact.
+
 The browser is the design workspace. A small Python application reads the
 competition PDF, keeps page references, and asks an AI model for strategies and
 two robot architecture proposals. The AI chooses from the mechanisms Tachyon

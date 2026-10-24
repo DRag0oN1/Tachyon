@@ -1,0 +1,12 @@
+{
+  "performanceDomain": "abstract_simulation_only",
+  "trainingPerformed": false,
+  "checkpointsReplaced": false,
+  "uniqueStudyEpisodes": 6144,
+  "independentFrozenReplayEpisodes": 6144,
+  "rolloutArchivesExactlyMatch": true,
+  "rolloutArchiveSha256": "ac73c00f06862aeebcde65cd9828c96a2c87a514dfa1610789af8049052921ff",
+  "method": "Repeat the same frozen cases after strengthening provenance and coverage metadata; zero model updates",
+  "uniqueFixedProfileCapabilitiesPerProfile": 1,
+  "episodeSeedBlocksPerProfilePerStage": 16
+}

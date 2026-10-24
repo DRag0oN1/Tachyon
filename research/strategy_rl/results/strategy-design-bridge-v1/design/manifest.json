@@ -1,0 +1,24 @@
+{
+  "architectureIDs": [
+    "strategy-spec-4c5452f1550499ebcd54cab6:architecture-a:f5bff3b56bf1b3549372d7ae",
+    "strategy-spec-4c5452f1550499ebcd54cab6:architecture-b:213d5164d5b6ff3a239e0bdd"
+  ],
+  "artifacts": {
+    "architecture-proposals.json": {
+      "sha256": "8511965910088befe213b1ac503254f84f397bd7dc5d1e65a4a47ca2de128b1b"
+    },
+    "design-requirements.json": {
+      "sha256": "1c94f34c503d9af60eae9eec3a48ea2577651c54eb71e3a3eff571c4c3e014b5"
+    }
+  },
+  "cadGenerated": false,
+  "completeRobot": false,
+  "kind": "tachyon.design_export",
+  "newLearnedPoliciesCreated": 0,
+  "newStrategyFamiliesClaimed": 0,
+  "performanceDomain": "abstract_simulation_only",
+  "schemaVersion": 1,
+  "strategyFamily": "low_quadrant_cycles",
+  "strategyId": "strategy-spec-4c5452f1550499ebcd54cab6",
+  "strategySpecSha256": "217f28b3d50a80959d9a177535551c9eb7eea56fc32b5f3326fbd1f0672a5b43"
+}

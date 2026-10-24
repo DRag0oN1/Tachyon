@@ -1,0 +1,18 @@
+{
+  "performanceDomain": "abstract_simulation_only",
+  "sourceExperimentFilesUnchanged": 34,
+  "artifactHashesVerified": 13,
+  "frozenCheckpointsVerified": 3,
+  "storedStudyEpisodes": 6144,
+  "pairedSummaryCellsRecomputed": 64,
+  "representativeInterventionReplaysMatched": 192,
+  "fullStudyRepeatedArchiveMatches": true,
+  "strategyExportReproduced": true,
+  "standaloneDesignCliReproduced": true,
+  "sameLearnedFamilyArchitectureAlternatives": 2,
+  "feedbackEpisodesReplayed": 64,
+  "capabilityChangeAltersPolicyBehaviorAndRecommendations": true,
+  "trainingPerformed": false,
+  "cadGenerated": false,
+  "appRoutesEnabled": false
+}

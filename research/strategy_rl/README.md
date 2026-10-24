@@ -146,6 +146,27 @@ and architecture, and optionally replays all 1,536 held-out episodes exactly.
 plotting is independent of training dependencies. The manifest hashes the
 preserved files. These are local build artifacts, not a published submission.
 
+## Structured design handoff v2
+
+The [frozen-policy interface report](results/strategy-design-bridge-v1/REPORT.md)
+extends the original experiment without replacing any checkpoint or training
+again. `handoff` provides `analyze`, `export` and `feedback` commands. Its v2
+schema is [strategy-v2.schema.json](tachyon_strategy_rl/strategy-v2.schema.json).
+The original v1 exporter/results remain reproducible and unchanged.
+
+The Torch-free designer runs separately:
+
+```sh
+PYTHONPATH=server .venv/bin/python -m tachyon.design \
+  --strategy research/strategy_rl/results/strategy-design-bridge-v1/strategy-spec-v2.json \
+  --output .local/strategy-rl/my-design-export
+```
+
+It emits structured requirements and two distinct engineering architecture
+alternatives for **one** learned family. No geometry is synthesized, copied or
+represented as authentic CAD. See the report for the full reproduction sequence,
+controlled capability effects, profile-baseline comparison and feedback examples.
+
 ## References and licenses
 
 - [PPO paper](https://arxiv.org/abs/1707.06347): the clipped on-policy algorithm.

@@ -1,0 +1,2167 @@
+{
+  "cadGenerated": false,
+  "capabilityConstraintStatus": "Preserve all supplied hard minimums and targets together; joint hardware feasibility and any resource budget require qualification.",
+  "capabilityConstraints": {
+    "acceleration": {
+      "reason": "Original environment has no acceleration state/dynamics; turn time is separate",
+      "status": "not_identified"
+    },
+    "basis": "Joint abstract profile selected on calibration; reach floor covers observed calibration tasks, not full profile lift range; all are design targets, not hardware measurements",
+    "evidenceRefs": [
+      "analysis.json#/effects",
+      "analysis.json#/strategyAwareVsBlind",
+      "episodes.jsonl.gz"
+    ],
+    "hardMinimums": {
+      "cupCapacity": 1,
+      "pinCapacity": 1,
+      "reachM": 0.35200000000000004
+    },
+    "minimumScope": "Pin AND Cup placements of original representative simulated rollout only",
+    "referenceCapabilities": {
+      "acquisition_seconds": 2.0,
+      "acquisition_success_probability": 0.868,
+      "allocation": {
+        "drive": 0.25,
+        "handling": 0.6,
+        "lift": 0.15
+      },
+      "drive_allocation": 0.25,
+      "drive_speed_m_s": 1.15,
+      "handling_allocation": 0.6,
+      "lift_allocation": 0.15,
+      "max_reach_m": 0.455,
+      "movement_success_probability": 0.9524999999999999,
+      "payload_capacity": 1,
+      "placement_seconds": 1.6,
+      "placement_success_probability": 0.871,
+      "toggle_success_probability": 0.9174999999999999,
+      "turn_seconds": 0.575
+    },
+    "targets": {
+      "acquisitionSeconds": 2.0,
+      "acquisitionSuccessProbability": 0.868,
+      "cycleSeconds": 9.811027235591148,
+      "driveSpeedMps": 1.15,
+      "placementSeconds": 1.6,
+      "placementSuccessProbability": 0.871,
+      "reachM": 0.35200000000000004,
+      "turnSeconds": 0.575
+    }
+  },
+  "completeRobot": false,
+  "kind": "tachyon.design_requirements",
+  "performanceDomain": "abstract_simulation_only",
+  "requirements": [
+    {
+      "acceleration": {
+        "learnedRequirement": null,
+        "reason": "No acceleration is represented in this contract; speed and turn overhead do not establish learned acceleration.",
+        "represented": false
+      },
+      "driveSpeedTargetMps": 1.15,
+      "id": "drive_motion",
+      "sourcePaths": [
+        "/capabilityRequirements/targets/driveSpeedMps",
+        "/capabilityRequirements/targets/turnSeconds"
+      ],
+      "subsystemIDs": [
+        "drive"
+      ],
+      "turnTimeTargetSeconds": 0.575
+    },
+    {
+      "constraint": "One Pin across intake, transfer and scorer combined; one separate Cup slot. No second buffered Pin.",
+      "cupCapacity": 1,
+      "id": "independent_possession",
+      "pinCapacity": 1,
+      "simultaneousIndependentRetention": true,
+      "sourcePaths": [
+        "/capabilityRequirements/hardMinimums"
+      ],
+      "subsystemIDs": [
+        "pin_intake",
+        "pin_transfer",
+        "scorer",
+        "cup_cradle"
+      ]
+    },
+    {
+      "acquisitionTimeTargetSeconds": 2.0,
+      "id": "oriented_pin_acquisition",
+      "orientationIntent": "Retain the selected Pin scoring-half orientation through pickup and transfer; verify with actual geometry and sensing.",
+      "sourcePaths": [
+        "/capabilityRequirements/targets/acquisitionSeconds",
+        "/capabilityRequirements/targets/acquisitionSuccessProbability"
+      ],
+      "subsystemIDs": [
+        "pin_intake",
+        "pin_transfer"
+      ],
+      "successProbabilityTarget": 0.868
+    },
+    {
+      "handoffIntent": "Interlock acquisition and scoring retention; preserve orientation and prevent double feeding.",
+      "id": "single_pin_transfer",
+      "pinCapacityAcrossPath": 1,
+      "sourcePaths": [
+        "/mechanicalRequirements",
+        "/capabilityRequirements/hardMinimums/pinCapacity"
+      ],
+      "subsystemIDs": [
+        "pin_intake",
+        "pin_transfer",
+        "scorer"
+      ]
+    },
+    {
+      "id": "reach_and_stack_interface",
+      "interfacePreparationIntent": "Prepare the next single-Pin stack interface using an independently held Cup; align its clear side and preserve existing scoring halves.",
+      "minimumReachM": 0.35200000000000004,
+      "preferredReachTargetM": 0.35200000000000004,
+      "sourcePaths": [
+        "/capabilityRequirements/hardMinimums/reachM",
+        "/mechanicalRequirements"
+      ],
+      "subsystemIDs": [
+        "scorer",
+        "cup_cradle",
+        "stack_interface"
+      ],
+      "toolSizingReachM": 0.35200000000000004
+    },
+    {
+      "cycleTimeTargetSeconds": 9.811027235591148,
+      "id": "scorer_cycle",
+      "performanceStatus": "targets_only_not_achieved_or_physically_verified",
+      "placementSuccessProbabilityTarget": 0.871,
+      "placementTimeTargetSeconds": 1.6,
+      "sourcePaths": [
+        "/capabilityRequirements/targets"
+      ],
+      "subsystemIDs": [
+        "drive",
+        "pin_intake",
+        "pin_transfer",
+        "scorer",
+        "cup_cradle",
+        "stack_interface"
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "source": {
+    "behavior": {
+      "conditionalPreferences": [
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.08976996548119046,
+            "move_to_goal1": 0.00034257500388083003,
+            "move_to_midfield": 0.0003799219220776909,
+            "move_to_supply0": 0.9075800345057533,
+            "move_to_supply1": 0.00014754106086911634,
+            "move_to_toggle0": 0.0002891381670321737,
+            "move_to_toggle1": 6.060545995188433e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0014302235639964541
+          },
+          "observedDecisions": 105,
+          "selectedActionCounts": {
+            "move_to_supply0": 105
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": -1,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.35444059051000154,
+            "move_to_goal1": 0.005879701294291478,
+            "move_to_midfield": 0.36131027340888977,
+            "move_to_supply0": 0.2388321545261603,
+            "move_to_supply1": 0.013176775089680003,
+            "move_to_toggle0": 0.004250187247705001,
+            "move_to_toggle1": 0.0018916396925655694,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.020218677926235475
+          },
+          "observedDecisions": 13,
+          "selectedActionCounts": {
+            "move_to_goal0": 6,
+            "move_to_midfield": 5,
+            "move_to_supply0": 2
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": -1,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.8537191947301229,
+            "acquire_cup": 0.13866296768650527,
+            "acquire_yellow": 5.676019721905441e-05,
+            "move_to_goal0": 0.007342243574328663,
+            "move_to_goal1": 2.861377109275759e-05,
+            "move_to_midfield": 2.3112309541167012e-05,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 1.6002706862598487e-05,
+            "move_to_toggle0": 1.8487522968706085e-05,
+            "move_to_toggle1": 5.5263646340050445e-06,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.00012708226799880976
+          },
+          "observedDecisions": 129,
+          "selectedActionCounts": {
+            "acquire_alliance": 129
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 0,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.9692305270582438,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0005003674464205687,
+            "move_to_goal0": 0.024584919010521844,
+            "move_to_goal1": 0.00033451197936074095,
+            "move_to_midfield": 0.0027922299232159276,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.0010139022249120444,
+            "move_to_toggle0": 0.00016209349985274457,
+            "move_to_toggle1": 0.00010902795901301943,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0012724206583243358
+          },
+          "observedDecisions": 32,
+          "selectedActionCounts": {
+            "acquire_alliance": 32
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 0,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.005379897789680399,
+            "move_to_midfield": 0.8989154934883118,
+            "move_to_supply0": 0.06773791622836142,
+            "move_to_supply1": 0.006934580951929092,
+            "move_to_toggle0": 0.004054843698395416,
+            "move_to_toggle1": 0.0015661777055356652,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.015411086811218411
+          },
+          "observedDecisions": 40,
+          "selectedActionCounts": {
+            "move_to_midfield": 40
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 2,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.00868576740935804,
+            "move_to_midfield": 0.6038671330245863,
+            "move_to_supply0": 0.336359791323004,
+            "move_to_supply1": 0.014654676448161074,
+            "move_to_toggle0": 0.006773856457277953,
+            "move_to_toggle1": 0.002506036729361099,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.027152730095907147
+          },
+          "observedDecisions": 83,
+          "selectedActionCounts": {
+            "move_to_midfield": 59,
+            "move_to_supply0": 24
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 2,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0034354571010529376,
+            "move_to_goal1": 0.00015071522905903598,
+            "move_to_midfield": 0.0,
+            "move_to_supply0": 0.0017080278630601242,
+            "move_to_supply1": 0.00040768339354713135,
+            "move_to_toggle0": 8.668275313539198e-05,
+            "move_to_toggle1": 5.603128752795783e-05,
+            "park_and_wait": 0.9937010097006956,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.00045439329043498827
+          },
+          "observedDecisions": 48,
+          "selectedActionCounts": {
+            "park_and_wait": 48
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 6,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.5133557799789641,
+            "move_to_goal1": 0.01488309742934588,
+            "move_to_midfield": 0.0,
+            "move_to_supply0": 0.368710052911882,
+            "move_to_supply1": 0.040299917968998976,
+            "move_to_toggle0": 0.009444270477009317,
+            "move_to_toggle1": 0.005419658947546311,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.047887225074831535
+          },
+          "observedDecisions": 54,
+          "selectedActionCounts": {
+            "move_to_goal0": 50,
+            "move_to_supply0": 4
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 6,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.41831372181574505,
+            "move_to_goal1": 0.006941953673958778,
+            "move_to_midfield": 0.3901583154996236,
+            "move_to_supply0": 0.1388579159975052,
+            "move_to_supply1": 0.01715285365935415,
+            "move_to_toggle0": 0.004361182373637955,
+            "move_to_toggle1": 0.0021924219521073005,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.02202162907148401
+          },
+          "observedDecisions": 3,
+          "selectedActionCounts": {
+            "move_to_goal0": 1,
+            "move_to_midfield": 2
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": -1,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.49938520391782126,
+            "move_to_goal1": 0.007358068708951274,
+            "move_to_midfield": 0.131068155169487,
+            "move_to_supply0": 0.30925758282343546,
+            "move_to_supply1": 0.022836713566600036,
+            "move_to_toggle0": 0.0038574425658831992,
+            "move_to_toggle1": 0.0024008813915619006,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.023835951276123524
+          },
+          "observedDecisions": 15,
+          "selectedActionCounts": {
+            "move_to_goal0": 14,
+            "move_to_supply0": 1
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": -1,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.9446072866992344,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0540668951672694,
+            "move_to_goal1": 0.00017163247557907616,
+            "move_to_midfield": 0.00014555252121118385,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 8.162225907336318e-05,
+            "move_to_toggle0": 0.00012269076291381175,
+            "move_to_toggle1": 3.0507942317363192e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0007738166653628772
+          },
+          "observedDecisions": 126,
+          "selectedActionCounts": {
+            "acquire_cup": 126
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.7036040127277374,
+            "move_to_goal1": 0.01917142514139414,
+            "move_to_midfield": 0.1326770931482315,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.07056883722543716,
+            "move_to_toggle0": 0.007219585357233882,
+            "move_to_toggle1": 0.006800793576985598,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.059958288446068764
+          },
+          "observedDecisions": 2,
+          "selectedActionCounts": {
+            "move_to_goal0": 2
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.855895035488661,
+            "move_to_goal1": 0.009244478987204994,
+            "move_to_midfield": 0.06858121379560163,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.027390112715968213,
+            "move_to_toggle0": 0.004236892082316931,
+            "move_to_toggle1": 0.002878363521737155,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.03177390030996744
+          },
+          "observedDecisions": 86,
+          "selectedActionCounts": {
+            "move_to_goal0": 86
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.014976483703191792,
+            "move_to_midfield": 0.620909041592053,
+            "move_to_supply0": 0.26097077823110987,
+            "move_to_supply1": 0.045775734062772244,
+            "move_to_toggle0": 0.007832590723410249,
+            "move_to_toggle1": 0.004912965323975576,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.04462242452427745
+          },
+          "observedDecisions": 14,
+          "selectedActionCounts": {
+            "move_to_midfield": 13,
+            "move_to_supply0": 1
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 2,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.01276689881665839,
+            "move_to_midfield": 0.43533210994468796,
+            "move_to_supply0": 0.46516280721813913,
+            "move_to_supply1": 0.033572414451988324,
+            "move_to_toggle0": 0.007888343669326297,
+            "move_to_toggle1": 0.0039700870088020725,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.04130734542443875
+          },
+          "observedDecisions": 126,
+          "selectedActionCounts": {
+            "move_to_midfield": 59,
+            "move_to_supply0": 67
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 2,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.004768729233182967,
+            "move_to_goal1": 0.0003521594246922177,
+            "move_to_midfield": 0.0,
+            "move_to_supply0": 0.0023975554620847108,
+            "move_to_supply1": 0.0014448576903123467,
+            "move_to_toggle0": 0.00016812694801046746,
+            "move_to_toggle1": 0.00014434334665565984,
+            "park_and_wait": 0.9897843289375305,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0009398877981584519
+          },
+          "observedDecisions": 25,
+          "selectedActionCounts": {
+            "park_and_wait": 25
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 6,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.578664006665349,
+            "move_to_goal1": 0.009276387274439912,
+            "move_to_midfield": 0.0,
+            "move_to_supply0": 0.34543027076870203,
+            "move_to_supply1": 0.025082560328276788,
+            "move_to_toggle0": 0.00679404180846177,
+            "move_to_toggle1": 0.0032525764566647317,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.03150015903520398
+          },
+          "observedDecisions": 48,
+          "selectedActionCounts": {
+            "move_to_goal0": 48
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 6,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.11873690038919449,
+            "move_to_goal1": 0.00034650454836082645,
+            "move_to_midfield": 0.0005259484229706383,
+            "move_to_supply0": 0.8783781602978706,
+            "move_to_supply1": 0.00015149546106840717,
+            "move_to_toggle0": 0.0002915275190389366,
+            "move_to_toggle1": 5.800314465886913e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0015114719353732653
+          },
+          "observedDecisions": 24,
+          "selectedActionCounts": {
+            "move_to_supply0": 24
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": -1,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.27353814244270325,
+            "move_to_goal1": 0.001141686975218666,
+            "move_to_midfield": 0.016441997344372794,
+            "move_to_supply0": 0.7019384622573852,
+            "move_to_supply1": 0.0009142954649481301,
+            "move_to_toggle0": 0.000866894724216157,
+            "move_to_toggle1": 0.00023137784398083265,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.004927147513565918
+          },
+          "observedDecisions": 30,
+          "selectedActionCounts": {
+            "move_to_goal0": 2,
+            "move_to_supply0": 28
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": -1,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.8251488530772856,
+            "acquire_cup": 0.16712745242677202,
+            "acquire_yellow": 5.036403423616122e-05,
+            "move_to_goal0": 0.007483271064354514,
+            "move_to_goal1": 2.247279778840629e-05,
+            "move_to_midfield": 2.6524518023966945e-05,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 1.3667983361609987e-05,
+            "move_to_toggle0": 1.4757860757809199e-05,
+            "move_to_toggle1": 4.185632439001652e-06,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.00010845021095770665
+          },
+          "observedDecisions": 348,
+          "selectedActionCounts": {
+            "acquire_alliance": 348
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 0,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.9179321729367779,
+            "acquire_cup": 0.06465726225606856,
+            "acquire_yellow": 0.00019535804981827705,
+            "move_to_goal0": 0.01565806494064389,
+            "move_to_goal1": 6.758650576352187e-05,
+            "move_to_midfield": 0.001047380073296447,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 5.862840445784499e-05,
+            "move_to_toggle0": 5.174783379310787e-05,
+            "move_to_toggle1": 1.4874145181825189e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0003169142151056158
+          },
+          "observedDecisions": 31,
+          "selectedActionCounts": {
+            "acquire_alliance": 29,
+            "acquire_cup": 2
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 0,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.7940789760054052,
+            "acquire_cup": 0.1957989851902197,
+            "acquire_yellow": 7.845352857922346e-05,
+            "move_to_goal0": 0.009597959338097243,
+            "move_to_goal1": 3.3507317759806474e-05,
+            "move_to_midfield": 0.00018398677423977792,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 3.602109303859937e-05,
+            "move_to_toggle0": 2.1319861812540206e-05,
+            "move_to_toggle1": 7.123580695002198e-06,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.00016366925737893107
+          },
+          "observedDecisions": 333,
+          "selectedActionCounts": {
+            "acquire_alliance": 304,
+            "acquire_cup": 29
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 0,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.0004316367401731431,
+            "move_to_midfield": 0.000816076269423786,
+            "move_to_supply0": 0.9961972572042951,
+            "move_to_supply1": 0.00020506333956252083,
+            "move_to_toggle0": 0.0003741547980587379,
+            "move_to_toggle1": 7.36323792846643e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0019021824245945313
+          },
+          "observedDecisions": 279,
+          "selectedActionCounts": {
+            "move_to_supply0": 279
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 2,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.007386960313413982,
+            "move_to_midfield": 0.5163654723653087,
+            "move_to_supply0": 0.436599504340578,
+            "move_to_supply1": 0.00527582721594997,
+            "move_to_toggle0": 0.006097096941192393,
+            "move_to_toggle1": 0.0018253309729819496,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.026449807195199862
+          },
+          "observedDecisions": 27,
+          "selectedActionCounts": {
+            "move_to_midfield": 15,
+            "move_to_supply0": 12
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 2,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.0019217385054623737,
+            "move_to_midfield": 0.03132257686054362,
+            "move_to_supply0": 0.9552181689138699,
+            "move_to_supply1": 0.0016409968863209863,
+            "move_to_toggle0": 0.0015232964736727659,
+            "move_to_toggle1": 0.0004100541358967259,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.007963167778321338
+          },
+          "observedDecisions": 266,
+          "selectedActionCounts": {
+            "move_to_midfield": 1,
+            "move_to_supply0": 265
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 2,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0023860672488808634,
+            "move_to_goal1": 8.065678157436196e-05,
+            "move_to_midfield": 0.0,
+            "move_to_supply0": 0.001857015397399664,
+            "move_to_supply1": 0.00013759746616415214,
+            "move_to_toggle0": 3.949852689402178e-05,
+            "move_to_toggle1": 2.4298218636431557e-05,
+            "park_and_wait": 0.9951828002929688,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.00029203209705883635
+          },
+          "observedDecisions": 10,
+          "selectedActionCounts": {
+            "park_and_wait": 10
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 6,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.6026039719581604,
+            "move_to_goal1": 0.0017675339477136731,
+            "move_to_midfield": 0.048393065109848976,
+            "move_to_supply0": 0.3368542492389679,
+            "move_to_supply1": 0.00044221886491868645,
+            "move_to_toggle0": 0.002080922538880259,
+            "move_to_toggle1": 0.00034744778531603515,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.007510494557209313
+          },
+          "observedDecisions": 2,
+          "selectedActionCounts": {
+            "move_to_goal0": 2
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": -1,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.94935504511783,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.04960429973638894,
+            "move_to_goal1": 0.00012237766796923161,
+            "move_to_midfield": 0.00014971065533596597,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 5.958676511797596e-05,
+            "move_to_toggle0": 9.287698147792916e-05,
+            "move_to_toggle1": 2.088201751272815e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0005952169159794912
+          },
+          "observedDecisions": 285,
+          "selectedActionCounts": {
+            "acquire_cup": 285
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.3172565715653556,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.6445543817111424,
+            "move_to_goal1": 0.0018758071318318668,
+            "move_to_midfield": 0.0255036126905387,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.0013496035765586255,
+            "move_to_toggle0": 0.001432585836612686,
+            "move_to_toggle1": 0.0003537166150376184,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0076737184198074305
+          },
+          "observedDecisions": 35,
+          "selectedActionCounts": {
+            "acquire_cup": 12,
+            "move_to_goal0": 23
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.8054426680068056,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.1885042780240674,
+            "move_to_goal1": 0.0004978984568792104,
+            "move_to_midfield": 0.00238307567777232,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.0005247438629486784,
+            "move_to_toggle0": 0.00034623767835578046,
+            "move_to_toggle1": 9.933523316537835e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0022017668137026387
+          },
+          "observedDecisions": 334,
+          "selectedActionCounts": {
+            "acquire_cup": 283,
+            "move_to_goal0": 51
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 1.2423176109411448e-05,
+            "move_to_midfield": 0.0006152616317257494,
+            "move_to_supply0": 0.0008138566346164664,
+            "move_to_supply1": 1.0433076918867175e-05,
+            "move_to_toggle0": 9.735435822159192e-06,
+            "move_to_toggle1": 3.009007229068096e-06,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.9984815901723402,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 5.367742093359742e-05
+          },
+          "observedDecisions": 29,
+          "selectedActionCounts": {
+            "place_alliance": 29
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 2,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 7.084767848848024e-06,
+            "move_to_midfield": 6.015238865502932e-05,
+            "move_to_supply0": 0.001756931985523004,
+            "move_to_supply1": 1.1822189835539557e-05,
+            "move_to_toggle0": 3.942154307878809e-06,
+            "move_to_toggle1": 1.7072169462866726e-06,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.9981275972198037,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 3.0757573446916306e-05
+          },
+          "observedDecisions": 51,
+          "selectedActionCounts": {
+            "place_alliance": 51
+          },
+          "when": {
+            "cupCarried": false,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 2,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 7.09766426360037e-05,
+            "move_to_midfield": 0.00011963837474698669,
+            "move_to_supply0": 0.1540479326400054,
+            "move_to_supply1": 4.942803754724979e-05,
+            "move_to_toggle0": 4.348742957457838e-05,
+            "move_to_toggle1": 1.3186990753082164e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.8453863473306346,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.00026900649531189606
+          },
+          "observedDecisions": 363,
+          "selectedActionCounts": {
+            "place_cup": 363
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 2,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.0010746474503701942,
+            "move_to_midfield": 0.15181288335385712,
+            "move_to_supply0": 0.017669719189058904,
+            "move_to_supply1": 0.0008456766738036517,
+            "move_to_toggle0": 0.0007516038996643971,
+            "move_to_toggle1": 0.0002735000581556368,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.8242607865222665,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0033111812798631225
+          },
+          "observedDecisions": 43,
+          "selectedActionCounts": {
+            "place_cup": 43
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 2,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 0.00020657980963780374,
+            "move_to_midfield": 0.006016848435435223,
+            "move_to_supply0": 0.06454911567029636,
+            "move_to_supply1": 0.00020714168135488195,
+            "move_to_toggle0": 0.0001280059210024256,
+            "move_to_toggle1": 4.466979450190625e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.9280956258279992,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.000752012346796601
+          },
+          "observedDecisions": 309,
+          "selectedActionCounts": {
+            "place_cup": 309
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 2,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.12606033931175867,
+            "move_to_goal1": 0.0003305148081077884,
+            "move_to_midfield": 0.00034710552184454474,
+            "move_to_supply0": 0.8714267512162527,
+            "move_to_supply1": 0.00012829284363154633,
+            "move_to_toggle0": 0.000262587748390312,
+            "move_to_toggle1": 5.275988223729655e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0013916382934742917
+          },
+          "observedDecisions": 6,
+          "selectedActionCounts": {
+            "move_to_supply0": 6
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": -1,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.9778228577445535,
+            "move_to_goal1": 0.0028859532561481874,
+            "move_to_midfield": 0.0024293182821780003,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.0013261158550021185,
+            "move_to_toggle0": 0.0020506880325995677,
+            "move_to_toggle1": 0.0005010852921758687,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.012983982318866194
+          },
+          "observedDecisions": 102,
+          "selectedActionCounts": {
+            "move_to_goal0": 102
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 2.1318942539142167e-06,
+            "move_to_midfield": 1.835008149108532e-06,
+            "move_to_supply0": 0.005926278883463934,
+            "move_to_supply1": 1.0884939519605218e-06,
+            "move_to_toggle0": 1.40871555408416e-06,
+            "move_to_toggle1": 3.809216359776166e-07,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.9940575529367496,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 9.321531323675872e-06
+          },
+          "observedDecisions": 117,
+          "selectedActionCounts": {
+            "place_alliance": 117
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": false,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 2,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.9658183554808298,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0001799153433239553,
+            "move_to_goal0": 0.03083488220969836,
+            "move_to_goal1": 0.00015853812631879313,
+            "move_to_midfield": 0.0020348729934388152,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.00015481339020576948,
+            "move_to_toggle0": 4.9748286376901284e-05,
+            "move_to_toggle1": 3.586687186422447e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0007330228690989316
+          },
+          "observedDecisions": 6,
+          "selectedActionCounts": {
+            "acquire_alliance": 6
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 0,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.9766311760132129,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 7.808125379737109e-05,
+            "move_to_goal0": 0.022379404507004298,
+            "move_to_goal1": 7.327228265169721e-05,
+            "move_to_midfield": 0.0003719905087984024,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 7.507190429560769e-05,
+            "move_to_toggle0": 2.1352267594920704e-05,
+            "move_to_toggle1": 1.5489748001038188e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0003541651805370258
+          },
+          "observedDecisions": 26,
+          "selectedActionCounts": {
+            "acquire_alliance": 26
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": false,
+            "site": 0,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.15844154819136574,
+            "move_to_goal1": 0.00036498423737828576,
+            "move_to_midfield": 0.00048320922083110504,
+            "move_to_supply0": 0.8386334606579372,
+            "move_to_supply1": 0.00016234730373114524,
+            "move_to_toggle0": 0.00028955388829455755,
+            "move_to_toggle1": 5.8634478808103485e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0015662612471108635
+          },
+          "observedDecisions": 21,
+          "selectedActionCounts": {
+            "move_to_supply0": 21
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": -1,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.522228459517161,
+            "move_to_goal1": 0.0011680313424828153,
+            "move_to_midfield": 0.01022534150009354,
+            "move_to_supply0": 0.45963504910469055,
+            "move_to_supply1": 0.0007043814160473024,
+            "move_to_toggle0": 0.0008414283996292701,
+            "move_to_toggle1": 0.00020236138758870462,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.004994985259448488
+          },
+          "observedDecisions": 3,
+          "selectedActionCounts": {
+            "move_to_goal0": 1,
+            "move_to_supply0": 2
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": -1,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.2905573633809884,
+            "move_to_goal1": 0.0005685797902212167,
+            "move_to_midfield": 0.0022069531793628507,
+            "move_to_supply0": 0.7033484404285749,
+            "move_to_supply1": 0.00031451518649798044,
+            "move_to_toggle0": 0.00043669191654771566,
+            "move_to_toggle1": 9.413171058743804e-05,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.0024733136039382466
+          },
+          "observedDecisions": 12,
+          "selectedActionCounts": {
+            "move_to_goal0": 1,
+            "move_to_supply0": 11
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": -1,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.9808941615952386,
+            "move_to_goal1": 0.0022958396400282843,
+            "move_to_midfield": 0.0027872091968861932,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.001153737410673979,
+            "move_to_toggle0": 0.0016685814240759568,
+            "move_to_toggle1": 0.0003892624190933772,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.010811209078847504
+          },
+          "observedDecisions": 243,
+          "selectedActionCounts": {
+            "move_to_goal0": 243
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.9694975465536118,
+            "move_to_goal1": 0.002066354136331938,
+            "move_to_midfield": 0.01557907072128728,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.0013686936981684994,
+            "move_to_toggle0": 0.0014286386576713994,
+            "move_to_toggle1": 0.00038096193384262733,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.009678701986558735
+          },
+          "observedDecisions": 8,
+          "selectedActionCounts": {
+            "move_to_goal0": 8
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.9812467411334412,
+            "move_to_goal1": 0.001805086564888692,
+            "move_to_midfield": 0.005613366895670557,
+            "move_to_supply0": 0.0,
+            "move_to_supply1": 0.0010721558611658819,
+            "move_to_toggle0": 0.0013451160778561498,
+            "move_to_toggle1": 0.00030917912982775676,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.0,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 0.008608348714731314
+          },
+          "observedDecisions": 257,
+          "selectedActionCounts": {
+            "move_to_goal0": 257
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 0,
+            "timeBand": "middle"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 1.570322445893804e-06,
+            "move_to_midfield": 1.952180971181768e-06,
+            "move_to_supply0": 0.003807726863684602,
+            "move_to_supply1": 9.099938108485871e-07,
+            "move_to_toggle0": 1.0536487205327586e-06,
+            "move_to_toggle1": 2.756974514700066e-07,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.9961790578152107,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 7.4543024151523235e-06
+          },
+          "observedDecisions": 246,
+          "selectedActionCounts": {
+            "place_alliance": 246
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 2,
+            "timeBand": "early"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 5.849527212831163e-06,
+            "move_to_midfield": 0.0001031902358425379,
+            "move_to_supply0": 0.0010082852333487774,
+            "move_to_supply1": 4.08389752883729e-06,
+            "move_to_toggle0": 3.972333052553784e-06,
+            "move_to_toggle1": 1.2075994507395906e-06,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.9988462410189889,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 2.7170236287268132e-05
+          },
+          "observedDecisions": 22,
+          "selectedActionCounts": {
+            "place_alliance": 22
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 2,
+            "timeBand": "late"
+          }
+        },
+        {
+          "meanNeuralActionProbabilities": {
+            "acquire_alliance": 0.0,
+            "acquire_cup": 0.0,
+            "acquire_yellow": 0.0,
+            "move_to_goal0": 0.0,
+            "move_to_goal1": 1.82519906006134e-06,
+            "move_to_midfield": 8.946963267074072e-06,
+            "move_to_supply0": 0.0018002825928329586,
+            "move_to_supply1": 1.36756551487138e-06,
+            "move_to_toggle0": 1.2590012719197848e-06,
+            "move_to_toggle1": 3.4133492349406555e-07,
+            "park_and_wait": 0.0,
+            "place_alliance": 0.9981768593574182,
+            "place_cup": 0.0,
+            "place_yellow": 0.0,
+            "toggle": 0.0,
+            "wait": 9.108523205470239e-06
+          },
+          "observedDecisions": 312,
+          "selectedActionCounts": {
+            "place_alliance": 312
+          },
+          "when": {
+            "cupCarried": true,
+            "lowCupReady": true,
+            "lowReachable": true,
+            "pinCarried": true,
+            "site": 2,
+            "timeBand": "middle"
+          }
+        }
+      ],
+      "contextApproximationValidation": {
+        "agreementOnCovered": 0.9564717162032599,
+        "coverage": 0.9996166379145103,
+        "coveredDecisions": 5215,
+        "heldOutDecisions": 5217,
+        "matchedDecisions": 4988,
+        "use": "Descriptive approximation only; actual inference always executes the frozen neural policy"
+      },
+      "inference": {
+        "actionMaskRequired": true,
+        "actionNames": [
+          "move_to_supply0",
+          "move_to_supply1",
+          "move_to_goal0",
+          "move_to_goal1",
+          "move_to_toggle0",
+          "move_to_toggle1",
+          "move_to_midfield",
+          "acquire_alliance",
+          "acquire_yellow",
+          "place_alliance",
+          "place_yellow",
+          "toggle",
+          "wait",
+          "park_and_wait",
+          "acquire_cup",
+          "place_cup"
+        ],
+        "observationNames": [
+          "time_remaining_fraction",
+          "steps_remaining_fraction",
+          "position_x",
+          "position_y",
+          "inventory_alliance",
+          "inventory_yellow",
+          "supply0_alliance",
+          "supply0_yellow",
+          "supply1_alliance",
+          "supply1_yellow",
+          "goal0_alliance",
+          "goal0_yellow",
+          "goal1_alliance",
+          "goal1_yellow",
+          "toggle0_owner",
+          "toggle1_owner",
+          "drive_allocation",
+          "handling_allocation",
+          "lift_allocation",
+          "drive_speed_m_s",
+          "acquisition_seconds",
+          "placement_seconds",
+          "acquisition_success_probability",
+          "placement_success_probability",
+          "movement_success_probability",
+          "toggle_success_probability",
+          "payload_capacity",
+          "max_reach_m",
+          "turn_seconds",
+          "goal0_required_reach",
+          "goal1_required_reach",
+          "goal0_reachable",
+          "goal1_reachable",
+          "goal0_remaining_capacity",
+          "goal1_remaining_capacity",
+          "distance_to_supply0",
+          "distance_to_supply1",
+          "distance_to_goal0",
+          "distance_to_goal1",
+          "distance_to_toggle0",
+          "distance_to_toggle1",
+          "distance_to_midfield",
+          "at_supply0",
+          "at_supply1",
+          "at_goal0",
+          "at_goal1",
+          "at_toggle0",
+          "at_toggle1",
+          "at_midfield",
+          "toggle0_opponent_hazard",
+          "toggle1_opponent_hazard",
+          "terminal",
+          "inventory_cup",
+          "supply0_cups",
+          "supply1_cups",
+          "goal0_cup_ready",
+          "goal1_cup_ready"
+        ],
+        "probabilitySemantics": "Descriptive context averages are not the executable policy or independent legality rules",
+        "runtime": "FrozenStrategyController",
+        "unknownContextBehavior": "Execute frozen neural policy on valid in-domain observation; never replay a fixed script"
+      },
+      "representation": "frozen_neural_policy_plus_observed_contexts"
+    },
+    "checkpointBytesVerified": false,
+    "competition": {
+      "environmentId": "override_abstract_strategy_v2_cups",
+      "id": "v5-override-v2.1"
+    },
+    "evidence": {
+      "analysisExperimentId": "override-frozen-policy-handoff-v1",
+      "analysisSha256": "6df644bf5fcf3a5837659ad346c6fdf15656792798c4dce8a98f976914f0acc2",
+      "effects": {
+        "acquisition_seconds": {
+          "calibration": {
+            "difference95CI": [
+              1.8434895833333336,
+              5.760677083333333
+            ],
+            "material": true,
+            "meanScoreDifference": 3.71875
+          },
+          "confirmation": {
+            "difference95CI": [
+              1.6247395833333333,
+              5.979427083333332
+            ],
+            "material": true,
+            "meanScoreDifference": 3.7291666666666665
+          },
+          "replicatedMaterialEffect": true
+        },
+        "acquisition_success_probability": {
+          "calibration": {
+            "difference95CI": [
+              1.3333333333333335,
+              5.572916666666666
+            ],
+            "material": true,
+            "meanScoreDifference": 3.3020833333333335
+          },
+          "confirmation": {
+            "difference95CI": [
+              1.0208333333333335,
+              4.833854166666664
+            ],
+            "material": true,
+            "meanScoreDifference": 2.7291666666666665
+          },
+          "replicatedMaterialEffect": true
+        },
+        "drive_speed_m_s": {
+          "calibration": {
+            "difference95CI": [
+              0.76015625,
+              3.9273437499999986
+            ],
+            "material": true,
+            "meanScoreDifference": 2.2083333333333335
+          },
+          "confirmation": {
+            "difference95CI": [
+              0.3643229166666667,
+              2.6770833333333335
+            ],
+            "material": false,
+            "meanScoreDifference": 1.4479166666666667
+          },
+          "replicatedMaterialEffect": false
+        },
+        "max_reach_m": {
+          "calibration": {
+            "difference95CI": [
+              14.270572916666666,
+              20.177083333333332
+            ],
+            "material": true,
+            "meanScoreDifference": 17.3125
+          },
+          "confirmation": {
+            "difference95CI": [
+              14.03046875,
+              20.375260416666666
+            ],
+            "material": true,
+            "meanScoreDifference": 17.302083333333332
+          },
+          "replicatedMaterialEffect": true
+        },
+        "placement_seconds": {
+          "calibration": {
+            "difference95CI": [
+              1.5828125,
+              5.18802083333333
+            ],
+            "material": true,
+            "meanScoreDifference": 3.3854166666666665
+          },
+          "confirmation": {
+            "difference95CI": [
+              1.5098958333333332,
+              5.6565104166666655
+            ],
+            "material": true,
+            "meanScoreDifference": 3.4895833333333335
+          },
+          "replicatedMaterialEffect": true
+        },
+        "placement_success_probability": {
+          "calibration": {
+            "difference95CI": [
+              0.8432291666666666,
+              3.8125
+            ],
+            "material": true,
+            "meanScoreDifference": 2.25
+          },
+          "confirmation": {
+            "difference95CI": [
+              0.4059895833333333,
+              2.739583333333333
+            ],
+            "material": false,
+            "meanScoreDifference": 1.4270833333333333
+          },
+          "replicatedMaterialEffect": false
+        },
+        "turn_seconds": {
+          "calibration": {
+            "difference95CI": [
+              0.51015625,
+              2.625
+            ],
+            "material": false,
+            "meanScoreDifference": 1.46875
+          },
+          "confirmation": {
+            "difference95CI": [
+              0.40625,
+              2.0210937499999986
+            ],
+            "material": false,
+            "meanScoreDifference": 1.15625
+          },
+          "replicatedMaterialEffect": false
+        }
+      },
+      "episodesSha256": "ac73c00f06862aeebcde65cd9828c96a2c87a514dfa1610789af8049052921ff",
+      "sourceRolloutEpisodes": 576,
+      "sourceStrategyParameterHashes": [
+        "94c4ce65d3438fc107c0df3ab676604917dc8fec7fdbec405d30befaf9c56715",
+        "b9d0ff5931f9a5c35b2fb407d5051ee08a698a83ad7cfc8537d1967bd60eb5f1",
+        "e48d6bbcaa7a90a5db8eeac1fe052af8311d4188724e40fa145e6328ed6c9399"
+      ],
+      "sourceStrategySha256": "99325f56af19b9f13d89bafe35663c4a147400f54e770d77b5d3b4a1c93eb1e2",
+      "strategyAwareVsBlind": {
+        "confirmationDifference": {
+          "difference95CI": [
+            0.0,
+            2.1875
+          ],
+          "material": false,
+          "meanScoreDifference": 0.8645833333333334
+        },
+        "meaning": "Abstract capability-profile selection only; no measured or predicted mechanical-topology performance",
+        "selectionRule": "Highest calibration frozen-policy score among four declared abstract simplex profiles",
+        "selectionUsesConfirmation": false,
+        "strategyAwareProfile": "profile_handling_priority",
+        "strategyBlindProfile": "profile_balanced"
+      },
+      "targetClaims": "Experimental simulator sensitivity plus engineering realization hypotheses; no causal hardware minimum identified",
+      "uncertainty": "95% capability-cluster bootstrap, 2000 samples; exploratory intervals, no multiplicity adjustment"
+    },
+    "limitations": [
+      "Authored abstract competition, no physical validation",
+      "Finite seed and capability coverage",
+      "Pooled intervals condition on three fixed trained policies",
+      "Marginal interventions are off the training manifold",
+      "No independent hardware feasibility claim or acceleration model",
+      "One learned family, two engineering alternatives may implement it",
+      "No generated CAD, measured robot capability, acceleration requirement or full co-optimization loop",
+      "Marginal interventions alter both observed capabilities and transitions; action noise consumption can differ across policies"
+    ],
+    "policy": {
+      "checkpoint": {
+        "parameterHash": "b9d0ff5931f9a5c35b2fb407d5051ee08a698a83ad7cfc8537d1967bd60eb5f1",
+        "path": "runs/seed-17/checkpoint.pt",
+        "sha256": "bf9788465f71ec7431de2cffdfc2683edc4bce2306758c9d12c76bbe3a131066"
+      },
+      "corroboratingCheckpoints": [
+        {
+          "config": {
+            "clip_ratio": 0.2,
+            "entropy_coefficient": 0.015,
+            "environments": 16,
+            "epochs": 4,
+            "gae_lambda": 0.95,
+            "gamma": 1.0,
+            "hidden_size": 64,
+            "learning_rate": 0.0003,
+            "max_gradient_norm": 0.5,
+            "minibatch_size": 256,
+            "reward_scale": 0.1,
+            "rollout_steps": 128,
+            "seed": 17,
+            "total_steps": 262144,
+            "value_coefficient": 0.5
+          },
+          "gradientUpdates": 4096,
+          "initialParameterHash": "5794c972cd0e36146d0900d6ca822ed8245fcd1fc7b7c65206413f8737d14ae5",
+          "name": "ppo_seed_17",
+          "parameterHash": "b9d0ff5931f9a5c35b2fb407d5051ee08a698a83ad7cfc8537d1967bd60eb5f1",
+          "path": "runs/seed-17/checkpoint.pt",
+          "sha256": "bf9788465f71ec7431de2cffdfc2683edc4bce2306758c9d12c76bbe3a131066",
+          "steps": 262144
+        },
+        {
+          "config": {
+            "clip_ratio": 0.2,
+            "entropy_coefficient": 0.015,
+            "environments": 16,
+            "epochs": 4,
+            "gae_lambda": 0.95,
+            "gamma": 1.0,
+            "hidden_size": 64,
+            "learning_rate": 0.0003,
+            "max_gradient_norm": 0.5,
+            "minibatch_size": 256,
+            "reward_scale": 0.1,
+            "rollout_steps": 128,
+            "seed": 29,
+            "total_steps": 262144,
+            "value_coefficient": 0.5
+          },
+          "gradientUpdates": 4096,
+          "initialParameterHash": "422a990ed66aedd0037f456db1c73ccf28c10c7f918bab507e260caf3c655a77",
+          "name": "ppo_seed_29",
+          "parameterHash": "e48d6bbcaa7a90a5db8eeac1fe052af8311d4188724e40fa145e6328ed6c9399",
+          "path": "runs/seed-29/checkpoint.pt",
+          "sha256": "e357515a1551c5a053bb4f93912a43bdee339dec5c31e9b72a955c5f5239544b",
+          "steps": 262144
+        },
+        {
+          "config": {
+            "clip_ratio": 0.2,
+            "entropy_coefficient": 0.015,
+            "environments": 16,
+            "epochs": 4,
+            "gae_lambda": 0.95,
+            "gamma": 1.0,
+            "hidden_size": 64,
+            "learning_rate": 0.0003,
+            "max_gradient_norm": 0.5,
+            "minibatch_size": 256,
+            "reward_scale": 0.1,
+            "rollout_steps": 128,
+            "seed": 43,
+            "total_steps": 262144,
+            "value_coefficient": 0.5
+          },
+          "gradientUpdates": 4096,
+          "initialParameterHash": "ca13d79596f44c5ce168b8cbec2edaeb2813e33a5459b990036f00a5206e9490",
+          "name": "ppo_seed_43",
+          "parameterHash": "94c4ce65d3438fc107c0df3ab676604917dc8fec7fdbec405d30befaf9c56715",
+          "path": "runs/seed-43/checkpoint.pt",
+          "sha256": "3cb42f4b4e30adb18e7bcb82b0cc7facd181517c53df1dcb1e697804a89615c4",
+          "steps": 262144
+        }
+      ],
+      "experimentId": "override-ppo-v1",
+      "selection": "Seed 17 chosen by fixed seed identity, not held-out score ranking",
+      "sourceCommit": "ac1aa01"
+    },
+    "provenanceStatus": "declared_not_independently_verified",
+    "strategyId": "strategy-spec-4c5452f1550499ebcd54cab6",
+    "strategySpecSha256": "217f28b3d50a80959d9a177535551c9eb7eea56fc32b5f3326fbd1f0672a5b43",
+    "strategySpecVersion": 2
+  },
+  "sourceMechanicalRequirements": [
+    {
+      "accelerationStatus": "not_identified",
+      "id": "drive",
+      "requirements": [
+        "speed_target",
+        "turn_time_target"
+      ],
+      "supports": [
+        "move_to_supply0",
+        "move_to_goal0",
+        "move_to_midfield"
+      ]
+    },
+    {
+      "id": "intake",
+      "requirements": [
+        "one_pin",
+        "independent_cup",
+        "orientation_retention",
+        "acquisition_latency",
+        "acquisition_reliability"
+      ],
+      "supports": [
+        "acquire_alliance",
+        "acquire_cup"
+      ]
+    },
+    {
+      "id": "transfer",
+      "requirements": [
+        "single_pin_handoff",
+        "independent_cup_path",
+        "avoid_double_possession"
+      ],
+      "supports": [
+        "acquire_alliance",
+        "place_alliance",
+        "place_cup"
+      ]
+    },
+    {
+      "id": "scorer",
+      "requirements": [
+        "reach_floor",
+        "pin_grip",
+        "cup_interface_preparation",
+        "placement_latency",
+        "placement_reliability"
+      ],
+      "supports": [
+        "place_alliance",
+        "place_cup"
+      ]
+    }
+  ],
+  "strategyFamily": "low_quadrant_cycles",
+  "strategyId": "strategy-spec-4c5452f1550499ebcd54cab6"
+}

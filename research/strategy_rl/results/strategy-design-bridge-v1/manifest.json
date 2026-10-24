@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "performanceDomain": "abstract_simulation_only",
+  "sourceExperiment": "override-ppo-v1",
+  "sourceCommit": "ac1aa01",
+  "trainingPerformed": false,
+  "sourceFiles": {
+    "research/strategy_rl/tachyon_strategy_rl/capability_analysis.py": "5e33661733b099d26b1659c2ce0625c7128463b7f442370c92f58d30e10094e8",
+    "research/strategy_rl/tachyon_strategy_rl/handoff.py": "f4bfd44cc9b54a4ba479424090c3cc9175f726048768f2c00984d5d2ea6ba573",
+    "research/strategy_rl/tachyon_strategy_rl/strategy-v2.schema.json": "506fec1a72abd23d60e40f874a24d363f3f25ee86c0075cd430d8474d96c4a91",
+    "research/strategy_rl/tools/verify_handoff.py": "ef5db9a5091a03adc4f9da953e123ea2c6dd93391ff56c8d53e68c677332e2de",
+    "research/strategy_rl/tools/plot_handoff.py": "59959eae7791df689b1c9c9f25fc70d34af73811e10482d549cd61148f1be44a",
+    "server/tachyon/design.py": "522a0d169a25685f4de8fedbe194e23bf44f7e672b7f6b7781f36453567a4feb"
+  },
+  "files": {
+    "REPORT.md": "a4fedfe210cdb4bb70846d58c318bdafc10ebd25d5eaddabaa55e4ab2530f347",
+    "analysis.json": "6df644bf5fcf3a5837659ad346c6fdf15656792798c4dce8a98f976914f0acc2",
+    "capability-effects.png": "2048d761d6d89d78771b2e21b6ab6b5575f9df674eaee7778dbd8e51507642fa",
+    "design/architecture-proposals.json": "8511965910088befe213b1ac503254f84f397bd7dc5d1e65a4a47ca2de128b1b",
+    "design/design-requirements.json": "1c94f34c503d9af60eae9eec3a48ea2577651c54eb71e3a3eff571c4c3e014b5",
+    "episodes.jsonl.gz": "ac73c00f06862aeebcde65cd9828c96a2c87a514dfa1610789af8049052921ff",
+    "feedback-nominal-input.json": "0cb63352fabf3786c573e88ae6897c6b42e80748794dedaaa14fe6d94ccc31a7",
+    "feedback-nominal-result.json": "722d61bbb0ece266967eab2dd18d88134eb9ce8e4a08e100c3763b92ca4d7d3f",
+    "feedback-restricted-reach-input.json": "61a8e6afd4ad07b3e397c33fdadfb8d43f1b1d7f0e4e7c8d4d50ef6d809de08d",
+    "feedback-restricted-reach-result.json": "63d97ed6ab02de907b50956e9545b81a90e7ea3f87dad79f7600c68b5b66b942",
+    "reproduction.json": "d9a316783c16bca3ba61f7ec5df0aac34d78db87fea472a037c2b16e3cd78d00",
+    "strategy-spec-v2.json": "be2f111ac5d3c1c599e6328a33c01d26bc0fa8c2c8cb454aa353cadbb4df27b4",
+    "verification.json": "bd866fda5dfde3b4c942f9857c43b86bce9c370d1b56c596fc46c1a1ea1e21ba"
+  }
+}

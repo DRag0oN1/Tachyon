@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 2,
+  "strategySpecId": "strategy-spec-4c5452f1550499ebcd54cab6",
+  "robotDesignId": "strategy-spec-4c5452f1550499ebcd54cab6:architecture-a:f5bff3b56bf1b3549372d7ae",
+  "designRevisionId": "design-spec-revision-1",
+  "environmentId": "override_abstract_strategy_v2_cups",
+  "source": "predicted",
+  "method": "Illustrative engineer-supplied estimate for interface verification; not CAD-derived or measured",
+  "evidenceReference": "feedback-interface-demonstration",
+  "testConditions": "Nominal simulated inputs; no physical trials",
+  "units": "SI_seconds_metres_probabilities",
+  "capabilities": {
+    "driveSpeedMps": 1.15,
+    "reachM": 0.32,
+    "acquisitionSeconds": 2.0,
+    "placementSeconds": 1.6,
+    "acquisitionSuccessProbability": 0.868,
+    "placementSuccessProbability": 0.871,
+    "turnSeconds": 0.575,
+    "accelerationMps2": 1.2
+  },
+  "uncertainty": {
+    "driveSpeedMps": 0.1,
+    "reachM": 0.02,
+    "acquisitionSeconds": 0.1,
+    "placementSeconds": 0.1,
+    "acquisitionSuccessProbability": 0.05,
+    "placementSuccessProbability": 0.05,
+    "turnSeconds": 0.1
+  }
+}

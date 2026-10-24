@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tachyon.local/schemas/strategy-specification-v2",
+  "title": "Conditional learned strategy to mechanical design handoff",
+  "type": "object",
+  "required": ["schemaVersion", "kind", "id", "performanceDomain", "competition", "policy", "strategyFamily", "objectives", "behavior", "capabilityRequirements", "mechanicalRequirements", "evidence", "limitations"],
+  "properties": {
+    "schemaVersion": {"const": 2},
+    "kind": {"const": "tachyon.strategy_spec"},
+    "id": {"type": "string", "minLength": 1},
+    "performanceDomain": {"const": "abstract_simulation_only"},
+    "competition": {"type": "object", "required": ["id", "environmentId"], "properties": {"id": {"type": "string", "minLength": 1}, "environmentId": {"type": "string", "minLength": 1}}},
+    "policy": {"type": "object", "required": ["experimentId", "checkpoint"], "properties": {
+      "experimentId": {"type": "string", "minLength": 1},
+      "checkpoint": {"type": "object", "required": ["path", "sha256", "parameterHash"], "properties": {
+        "path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "parameterHash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }}
+    }},
+    "strategyFamily": {"type": "string", "minLength": 1},
+    "learnedStrategyCount": {"const": 1},
+    "objectives": {"type": "array", "minItems": 1},
+    "behavior": {"type": "object", "required": ["representation", "conditionalPreferences", "inference"], "properties": {
+      "representation": {"const": "frozen_neural_policy_plus_observed_contexts"},
+      "conditionalPreferences": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["when", "observedDecisions", "meanNeuralActionProbabilities", "selectedActionCounts"], "properties": {"when": {"type": "object"}, "observedDecisions": {"type": "integer", "minimum": 1}, "meanNeuralActionProbabilities": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}}, "selectedActionCounts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}}}}},
+      "inference": {"type": "object", "required": ["observationNames", "actionNames", "actionMaskRequired", "unknownContextBehavior"], "properties": {"observationNames": {"type": "array", "minItems": 57, "maxItems": 57}, "actionNames": {"type": "array", "minItems": 16, "maxItems": 16}, "actionMaskRequired": {"const": true}, "unknownContextBehavior": {"type": "string"}}}
+    }},
+    "capabilityRequirements": {"type": "object", "required": ["hardMinimums", "targets", "basis", "evidenceRefs"], "properties": {
+      "hardMinimums": {"type": "object", "required": ["reachM", "pinCapacity", "cupCapacity"], "properties": {"reachM": {"type": "number", "exclusiveMinimum": 0}, "pinCapacity": {"const": 1}, "cupCapacity": {"const": 1}}},
+      "targets": {"type": "object", "required": ["driveSpeedMps", "turnSeconds", "reachM", "acquisitionSeconds", "placementSeconds", "acquisitionSuccessProbability", "placementSuccessProbability", "cycleSeconds"], "properties": {
+        "driveSpeedMps": {"type": "number", "exclusiveMinimum": 0}, "turnSeconds": {"type": "number", "exclusiveMinimum": 0}, "reachM": {"type": "number", "exclusiveMinimum": 0}, "acquisitionSeconds": {"type": "number", "exclusiveMinimum": 0}, "placementSeconds": {"type": "number", "exclusiveMinimum": 0}, "cycleSeconds": {"type": "number", "exclusiveMinimum": 0}, "acquisitionSuccessProbability": {"type": "number", "minimum": 0, "maximum": 1}, "placementSuccessProbability": {"type": "number", "minimum": 0, "maximum": 1}
+      }},
+      "basis": {"type": "string"}, "evidenceRefs": {"type": "array", "items": {"type": "string"}}
+    }},
+    "mechanicalRequirements": {"type": "array", "minItems": 1},
+    "evidence": {"type": "object"},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}
