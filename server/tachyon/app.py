@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from . import __version__
 from .cad.catalog import Catalog
 from .cad.inspection import source_inspection
+from .cad.discovery import source_status
 from .config import Settings
 from .errors import TachyonError
 from .models import WorkspacePatch
@@ -93,6 +94,12 @@ def create_app(settings: Settings | None = None):
     @app.get("/api/catalog")
     def catalog(request: Request):
         return Catalog(settings).public(lan=is_lan(request))
+
+    @app.get("/api/sources")
+    def sources():
+        # Owner-authenticated metadata only. This never converts, exposes source
+        # paths/evidence, or turns discovery into a geometry-display grant.
+        return source_status(settings)
 
     @app.get("/api/capabilities")
     def capabilities(request: Request):

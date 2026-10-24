@@ -12,6 +12,51 @@ particular uploaded file or establish that complete robot recipes already work.
 The learner approved the technical specification on this basis, with asset,
 recipe, task-compatibility, and browser checks retained as build gates.
 
+## Slice 1 external source register — 2026-10-23
+
+Created the learner-selected private roots `~/Documents/TachyonCAD/step/` and
+`~/Documents/TachyonCAD/rights/`, outside Git. Explicitly requested manufacturer
+originals were downloaded to the STEP root; source facts, terms observations and
+operation-specific **unverified** records remain in the rights root. No converted
+VEX meshes, native measurement receipts or VEX screenshots were produced.
+
+| Official source and offered identity | Original bytes | SHA-256 | Current application permissions |
+| --- | --- | --- | --- |
+| [System Bundle](https://www.vexrobotics.com/v5-system-bundle.html): [V5 Clawbot 276-6009 STEP](https://www.vexrobotics.com/cadmodels/upload/download/upload_id/0212d660-fca3-43ad-addb-bc9dc58b28e4) | 119,373,056 | `d291e70cf6ccd5260983193ab07d9f824b965b1c5f7e2ef298e961e7e7768fb7` | Unverified; native processing/display blocked |
+| [V5 Smart Motor 276-4840](https://www.vexrobotics.com/276-4840.html): [offered STEP](https://www.vexrobotics.com/cadmodels/upload/download/upload_id/4d4d0c25-ee11-41b1-a39a-97eadda19619) | 16,822,582 | `3399374de417a5b403619e9e475d616e0cc1c3196324b4ba15d4fd0049ab9cec` | Unverified; native processing/display blocked |
+
+The [Structure page](https://www.vexrobotics.com/v5-structure.html), product
+download links and [general terms](https://www.iubenda.com/terms-and-conditions/89449486)
+were rechecked. The footer-linked [Licensing EULA](https://www.vexrobotics.com/licensing-eula)
+does not establish an affirmative V5 CAD conversion grant; its applicability to
+these assets remains unresolved. Permissions for other product families do not
+establish V5 rights. No asset-specific license or written permission covering
+conversion, assembly placement and local browser display was found. Original and
+mesh redistribution, public hosting and public imagery remain separately blocked.
+The private review is an observation record, **not permission from VEX**.
+
+Implemented discovery, source-provenance recording, permission-gated native
+measurement, external manifest registration, local conversion/cache loading and
+owner-authenticated source status. Files supplied by the user follow the same
+workflow. Discovery only hashes bytes and samples literal text; it does not
+verify dimensions, geometry, identity or mechanical connections. The importer
+now accepts bounded sources up to 256 MiB to accommodate the offered Clawbot;
+its actual conversion/render performance remains untested.
+
+Both originals were discovered and their actual hashes/provenance recorded.
+`assets-measure` correctly refused both before native import because required
+rights remain unverified. Desktop SNAP and mobile SHIFT source-status screens
+were tested; they contain **no CAD**. The Clawbot remains an import fixture, not
+an AI-generated robot or evidence of competition task suitability.
+
+Missing next input: applicable asset-specific terms or rightsholder permission
+covering the intended local processing/display; new robot assemblies also need
+assembly-placement scope. Once available, native dimensional/hierarchy review,
+conversion, actual desktop/mobile rendering and multi-part picking still must
+run before Slice 1 can pass. See [external catalog evidence](verification/external-catalog.md)
+and [catalog instructions](../data/catalog/README.md). No slice or skill approval
+has been inferred from downloading originals.
+
 ## Findings from the requested sources
 
 | Source | Verified observation | Restriction / decision |
@@ -74,9 +119,10 @@ not replace measurement of the selected row. The claw source uses millimetres
 and contains 83 valid solids; that is not a claim of 83 independently editable
 or correctly cataloged components.
 
-Some offered downloads returned HTTP 403, including the candidate 25-hole
+During the earlier `4-spec` investigation, some offered downloads returned HTTP 403, including the candidate 25-hole
 channel, gusset, motor, and separate nut request. No restriction was bypassed.
-Availability of one channel/claw does not establish a complete robot part set.
+The later Slice 1 motor download above succeeded through its explicitly offered
+link. Available originals do not establish a qualified complete robot part set.
 
 ## Two scoring-mount configurations: bounded verification
 

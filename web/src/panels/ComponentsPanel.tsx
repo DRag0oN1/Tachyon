@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { geometryLabel, isInspectable, type Catalog, type ComponentDefinition, type Mode } from '../api/contracts';
 import { Icon } from '../components/Icon';
+import { SourceRegisterPanel } from './SourceRegisterPanel';
 
 export function SourceDetails({ component: c, mode }: { component: ComponentDefinition; mode: Mode }) {
   const sourceUrl = /^https?:\/\//i.test(c.sourceUrl) ? c.sourceUrl : null;
@@ -15,11 +16,14 @@ export function SourceDetails({ component: c, mode }: { component: ComponentDefi
 }
 export function ComponentsPanel({ catalog, activeId, mode, canInspect, onOpen, onSelect, onSelectNode }: { catalog: Catalog | null; activeId: string | null; mode: Mode; canInspect: boolean; onOpen: (c: ComponentDefinition) => void; onSelect: (c: ComponentDefinition) => void; onSelectNode: (c: ComponentDefinition, nodeId: string, name: string) => void }) {
   const [query, setQuery] = useState('');
+  const [showSources, setShowSources] = useState(false);
   const active = catalog?.components.find(c => c.id === activeId);
   const components = catalog?.components.filter(c => `${c.name} ${c.sku} ${c.id}`.toLowerCase().includes(query.toLowerCase())) ?? [];
   return <>
     <label className="search-field"><span>Filter components</span><input type="search" placeholder="Name or part number" value={query} onChange={e => setQuery(e.target.value)} /></label>
     <div className="catalog-heading"><span>LOCAL SOURCE PARTS</span><span>{catalog?.components.length ?? 0}</span></div>
+    <button className="text-action" aria-expanded={showSources} onClick={() => setShowSources(value => !value)}>{showSources ? 'Hide source register' : 'Review source register'}</button>
+    {showSources && <SourceRegisterPanel mode={mode} />}
     {components.length ? <ul className="component-list">{components.map(c => <li key={c.id}>
       <button className={`component-row ${activeId === c.id ? 'is-active' : ''}`} aria-pressed={activeId === c.id} onClick={() => onOpen(c)} disabled={!canInspect || !isInspectable(c)}><span className="part-symbol"><Icon name="parts" size={22} /></span><span><strong>{c.name}</strong><small>{c.sku || c.id}</small><small>{geometryLabel(c)}</small></span><Icon name={activeId === c.id ? 'check' : 'chevron'} size={16} /></button>
     </li>)}</ul> : <div className="panel-empty"><Icon name="parts" size={32} /><h2>{query ? 'No matching components' : 'Your catalog is empty'}</h2><p>{query ? 'Try another name or part number.' : 'Register and prepare rights-qualified local STEP files with the Tachyon CLI, then refresh the workspace.'}</p></div>}

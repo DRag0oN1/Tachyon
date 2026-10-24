@@ -11,9 +11,13 @@ that coverage without marking the complete criterion passed. Blocked means the
 necessary authentic inputs/device evidence are missing. No known failing software
 check is carried forward; unimplemented functionality is not a passing negative test.
 
-Software evidence: 148 backend tests and 24 frontend tests passed; production build
-passed. Six source-profile browser cases passed with two mutually exclusive
-empty-catalog cases skipped; those two cases passed separately against the real
+Latest software evidence: 205 backend tests and 28 frontend tests passed; production
+build passed. Two additional real desktop/mobile external-source status cases
+passed with no geometry requests. Official Clawbot and motor originals now exist
+outside the repository, but native processing/display rights remain unverified.
+See [external catalog evidence](external-catalog.md). The updated production
+source-profile suite passed four cases with two mutually exclusive
+empty-catalog cases skipped; those two cases are checked separately against the real
 empty default workspace. The source uses an original Tachyon-authored **non-VEX**
 calibration STEP fixture. Actual source file conversion, binary GLB vertices,
 metres/axes, hierarchy, selection and camera actions were checked. Physical-phone
@@ -35,7 +39,7 @@ See [slice evidence](slice-1.md) and [structured results](slice-1-results.json).
 | ROBOT-3 | P0 | unimplemented | Not implemented. Both candidates are inspectable as complete conceptual component assemblies under F4; a failed or incomplete alternative is clearly labeled and does not count toward completion. |
 | ROBOT-4 | P1 | unimplemented | Not implemented. Comparison identifies the actual mechanical differences and tradeoffs; opening and switching candidates preserves the correct strategy/assembly associations. |
 | ROBOT-5 | P1 | unimplemented | Not implemented. Generation failure and partial success preserve existing accepted designs and expose specific retry or revise-request actions. |
-| CAD-1 | P0 | blocked | Native import/conversion validated on original non-VEX fixtures only. Authentic VEX rights and asset inputs are unresolved. |
+| CAD-1 | P0 | blocked | Native import/conversion validated on original non-VEX fixtures only. Official Clawbot/motor originals are present externally; applicable native-processing/display rights and actual authentic import/render checks remain unresolved. |
 | CAD-2 | P0 | unimplemented | Native source parent hierarchy is preserved; new robot attachments, joints and actuation paths are not implemented. |
 | CAD-3 | P0 | unimplemented | Invalid sources, rights, units and receipts are rejected; whole-robot completeness checks are not implemented. |
 | CAD-4 | P0 | blocked | Rights/source/asset safeguards pass software tests; no submitted authentic robot asset set is qualified. |

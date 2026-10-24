@@ -13,6 +13,7 @@ approved. `5-build` is active in fast mode.
 
 The first implementation provides local STEP registration, operation-specific
 rights checks, source-preserving import, GLB conversion, native hierarchy,
+external catalog discovery/provenance records, permission-gated measurement,
 authenticated local asset serving and a full-screen source viewer. SNAP/SHIFT,
 source selection, orbit/zoom/pan/reset, assistant expansion, Simple/Advanced source
 detail and persisted preferences are implemented. See the
@@ -48,8 +49,10 @@ Open the **owner launch URL printed by that serving process**. Its session is
 independent of the model-provider credential. The app removes the session fragment
 from the address bar and authorizes local requests; a plain URL without the owner
 session shows a connection error. Do not record the owner-console URL in a public
-demo. Restarting the server invalidates the old session. Private data defaults to
-ignored `.local/`; no CAD library is installed automatically.
+demo. Restarting the server invalidates the old session. STEP originals default to
+`~/Documents/TachyonCAD/step/`, rights and source records to
+`~/Documents/TachyonCAD/rights/`; these stay outside the repository. Private caches
+and the database use ignored `.local/`. No CAD library is installed automatically.
 
 For frontend development, run the API with
 `TACHYON_UI_ORIGIN=http://127.0.0.1:5173`, start
@@ -63,7 +66,7 @@ pinch/pan and the complete phone journey remain unverified.
 
 See [local catalog setup](data/catalog/README.md) for source manifests, private
 permission records, measured bounds, ports and CLI registration/preparation.
-Source paths and evidence stay in local data storage. Missing or changed rights,
+Source paths and evidence stay in private local storage. Missing or changed rights,
 wrong source hashes, invalid units and ambiguous source roots fail closed.
 Manufacturer CAD is preferred, but public availability and tooling licenses do
 not establish CAD conversion or redistribution permission.

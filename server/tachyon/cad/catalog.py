@@ -4,11 +4,12 @@ import hashlib
 from importlib.metadata import version
 import json
 import re
+import tempfile
 from pathlib import Path
 
 from pydantic import ValidationError
 
-from ..config import Settings
+from ..config import MAX_SOURCE_BYTES, Settings
 from ..errors import TachyonError
 from ..models import CatalogManifest, ComponentInput, Operation, RightsManifest, PreparedComponent
 from .rights import RightsPolicy, sha256_file
@@ -21,9 +22,15 @@ PREPARE_OPERATIONS = [Operation.acquisition_storage, Operation.conversion]
 
 def write_json(path: Path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_suffix(path.suffix + ".tmp")
-    temp.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n")
-    temp.replace(path)
+    # Unique temporary files avoid following an attacker-controlled .tmp link.
+    with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, delete=False) as stream:
+        temp = Path(stream.name)
+        try:
+            stream.write(json.dumps(data, indent=2, sort_keys=True) + "\n")
+            stream.close()
+            temp.replace(path)
+        finally:
+            temp.unlink(missing_ok=True)
 
 
 def read_json(path, model):
@@ -37,31 +44,34 @@ class Catalog:
     def __init__(self, settings: Settings, manifest_path: Path | None = None,
                  rights_path: Path | None = None):
         self.settings = settings
-        registration = settings.data_dir / "catalog/registration.json"
+        registration = settings.local_path("catalog/registration.json", must_exist=False)
         if (manifest_path is None or rights_path is None) and registration.is_file():
             try:
                 registered = json.loads(registration.read_text())
                 if not isinstance(registered, dict):
                     raise ValueError()
                 if manifest_path is None:
-                    manifest_path = settings.local_path(registered["manifestPath"])
+                    manifest_path = settings.rights_path(registered["manifestPath"])
                 if rights_path is None:
-                    rights_path = settings.local_path(registered["rightsPath"])
-            except (ValueError, KeyError, TypeError):
+                    rights_path = settings.rights_path(registered["rightsPath"])
+            except (OSError, ValueError, KeyError, TypeError):
                 raise TachyonError("INVALID_MANIFEST", "The local catalog registration is invalid") from None
-        self.manifest_path = settings.local_path(str(manifest_path or settings.data_dir / "catalog/manifest.json"), must_exist=False)
-        self.rights_path = settings.local_path(str(rights_path or settings.data_dir / "catalog/rights.json"), must_exist=False)
+        self.manifest_path = settings.rights_path(str(manifest_path or settings.data_dir / "catalog/manifest.json"), must_exist=manifest_path is not None)
+        self.rights_path = settings.rights_path(str(rights_path or settings.data_dir / "catalog/rights.json"), must_exist=rights_path is not None)
+        # Conversion remains confined to the private cache when sources live elsewhere.
+        settings.local_path("meshes", must_exist=False)
+        settings.local_path("catalog/prepared", must_exist=False)
         self.manifest = read_json(self.manifest_path, CatalogManifest) if self.manifest_path.exists() else CatalogManifest()
         rights = read_json(self.rights_path, RightsManifest) if self.rights_path.exists() else RightsManifest()
         self.policy = RightsPolicy(settings, rights)
 
     def source(self, component: ComponentInput, operations=REGISTER_OPERATIONS):
         self.policy.require(component.source_sha256, operations)
-        path = self.settings.local_path(component.source_path)
+        path = self.settings.source_path(component.source_path)
         if path.suffix.lower() not in (".step", ".stp"):
             raise TachyonError("UNSUPPORTED_CAD_FORMAT", "Supply STEP; native Fusion files are not supported")
-        if path.stat().st_size > 100 * 1024 * 1024:
-            raise TachyonError("CAD_TOO_LARGE", "This initial local importer supports files up to 100 MiB")
+        if path.stat().st_size > MAX_SOURCE_BYTES:
+            raise TachyonError("CAD_TOO_LARGE", "This local importer supports files up to 256 MiB")
         with path.open("rb") as stream:
             if not stream.read(4096).lstrip().startswith(b"ISO-10303-21;"):
                 raise TachyonError("INVALID_STEP", "The supplied source is not an ISO STEP document")
@@ -80,12 +90,15 @@ class Catalog:
         return hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
 
     def receipt_path(self, component):
-        return self.settings.data_dir / "catalog/prepared" / (self.fingerprint(component) + ".json")
+        return self.settings.local_path("catalog/prepared/" + self.fingerprint(component) + ".json", must_exist=False)
 
     def register(self):
-        write_json(self.settings.data_dir / "catalog/registration.json", {
-            "manifestPath": str(self.manifest_path.relative_to(self.settings.data_dir)),
-            "rightsPath": str(self.rights_path.relative_to(self.settings.data_dir))})
+        def reference(path):
+            return str(path.relative_to(self.settings.data_dir)) if path.is_relative_to(self.settings.data_dir) else str(path)
+
+        write_json(self.settings.local_path("catalog/registration.json", must_exist=False), {
+            "manifestPath": reference(self.manifest_path),
+            "rightsPath": reference(self.rights_path)})
         results = []
         for component in self.manifest.components:
             try:
@@ -93,7 +106,7 @@ class Catalog:
                 results.append({"componentId": component.id, "status": "registered", "converted": False})
             except TachyonError as error:
                 results.append({"componentId": component.id, "status": "blocked", **error.public()})
-        write_json(self.settings.data_dir / "catalog/registration-report.json", {"results": results})
+        write_json(self.settings.local_path("catalog/registration-report.json", must_exist=False), {"results": results})
         return results
 
     def prepared(self, component, *, lan=False):
@@ -109,7 +122,7 @@ class Catalog:
             mesh_hash = data["meshSha256"]
             if not re.fullmatch(r"[a-f0-9]{64}", mesh_hash):
                 raise ValueError()
-            mesh = self.settings.data_dir / "meshes" / (mesh_hash + ".glb")
+            mesh = self.settings.local_path("meshes/" + mesh_hash + ".glb", must_exist=False)
             if not mesh.is_file() or sha256_file(mesh) != mesh_hash:
                 raise TachyonError("MESH_HASH_MISMATCH", "The prepared mesh is missing or its bytes changed")
             if data["sourceSha256"] != component.source_sha256 or data["catalogFingerprint"] != self.fingerprint(component):
@@ -145,7 +158,7 @@ class Catalog:
                     candidate = json.loads(receipt.read_text())
                     if isinstance(candidate, dict) and candidate.get("meshSha256") == mesh_hash:
                         self.prepared(component, lan=lan)
-                        return self.settings.data_dir / "meshes" / (mesh_hash + ".glb")
+                        return self.settings.local_path("meshes/" + mesh_hash + ".glb")
                 except (ValueError, KeyError, TypeError):
                     pass
         raise TachyonError("ASSET_NOT_FOUND", "Local mesh not found", 404)

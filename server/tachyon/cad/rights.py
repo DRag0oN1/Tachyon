@@ -37,7 +37,25 @@ class RightsPolicy:
                 raise TachyonError("RIGHTS_EVIDENCE_MISSING", f"Reviewed evidence is required for {operation.value}")
             if decision.reviewed_on > date.today() or (decision.expires_on and decision.expires_on < date.today()):
                 raise TachyonError("RIGHTS_EVIDENCE_EXPIRED", f"Permission is not current for {operation.value}")
-            evidence = self.settings.local_path(decision.evidence_path)
+            evidence = self.settings.rights_path(decision.evidence_path)
             if sha256_file(evidence) != decision.evidence_sha256:
                 raise TachyonError("RIGHTS_EVIDENCE_CHANGED", "Permission evidence no longer matches its reviewed identity")
         return record
+
+    def operation_status(self, source_hash: str):
+        """Recheck evidence per operation; never trust a cached qualified label."""
+        result = {}
+        record = self.records.get(source_hash)
+        for operation in Operation:
+            permission = record.operations.get(operation) if record else None
+            if permission and permission.status == "disallowed":
+                result[operation.value] = {"status": "disallowed", "code": "SOURCE_OPERATION_DISALLOWED"}
+                continue
+            try:
+                self.require(source_hash, [operation])
+                result[operation.value] = {"status": "qualified", "code": None}
+            except TachyonError as error:
+                result[operation.value] = {"status": "unverified", "code": error.code}
+            except OSError:
+                result[operation.value] = {"status": "unverified", "code": "RIGHTS_EVIDENCE_UNREADABLE"}
+        return result

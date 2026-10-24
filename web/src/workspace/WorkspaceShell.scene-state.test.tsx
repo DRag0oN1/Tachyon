@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 import { api } from '../api/client';
 import { capabilitiesFixture, catalogFixture, componentFixture, workspaceFixture } from '../test/contracts';
@@ -21,7 +21,7 @@ it('reopening the already loaded source never resets readiness or submits anothe
   vi.mocked(api.workspace).mockResolvedValue({ ...workspaceFixture, activeComponentId: componentFixture.id });
   render(<WorkspaceShell />);
   await screen.findByLabelText('Unit-test renderer contract stub');
-  expect(screen.getByTestId('scene-status')).toHaveAttribute('data-state', 'ready');
+  await waitFor(() => expect(screen.getByTestId('scene-status')).toHaveAttribute('data-state', 'ready'));
   fireEvent.click(screen.getByRole('button', { name: 'Components' }));
   fireEvent.click(screen.getByRole('button', { name: /Tachyon-authored non-VEX calibration fixture/ }));
   expect(screen.getByTestId('scene-status')).toHaveAttribute('data-state', 'ready');

@@ -1,9 +1,15 @@
 # Source import and inspection increment — verification
 
 Recorded 2026-10-23. `5-build` is active; the approved first slice is **partial**.
-The executable software path is implemented and tested. Authentic-VEX inputs
-and applicable conversion/display evidence remain missing, so the slice checkbox
+The executable software path is implemented and tested. Official Clawbot/motor
+originals now exist in the external private catalog, but applicable
+conversion/display evidence remains missing, so the slice checkbox
 and the full P0/POC completion gates remain unchecked.
+
+The subsequent [external catalog increment](external-catalog.md) records the
+latest 205 backend / 28 frontend test results, actual original source hashes and
+two real source-status browser cases. The earlier rendering results below use
+only the original authored non-VEX calibration fixture.
 
 ## Implemented behavior
 

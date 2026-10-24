@@ -57,7 +57,7 @@ def test_health_requires_no_token_and_does_not_claim_provider_or_robot_readiness
     assert_private(response)
 
 
-@pytest.mark.parametrize("path", ["/api/catalog", "/api/capabilities", "/api/workspace",
+@pytest.mark.parametrize("path", ["/api/catalog", "/api/sources", "/api/capabilities", "/api/workspace",
                                     f"/api/inspection/{FIXTURE_ID}", "/api/assets/" + "0" * 64 + ".glb"])
 @pytest.mark.parametrize("token", ["", "invalid-owner-token"])
 def test_private_routes_require_current_owner_token(api, path, token):

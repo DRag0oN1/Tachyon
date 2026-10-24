@@ -1,5 +1,6 @@
 import { parseCapabilities, parseCatalog, parseHealth, parseWorkspace, type ComponentDefinition, type WorkspacePatch } from './contracts';
 import { sha256Hex } from './sha256';
+import { parseSourceRegister } from './sources';
 
 export const SESSION_KEY = 'tachyon.owner-session';
 let memorySession: string | null = null;
@@ -54,6 +55,7 @@ async function json(path: string, init?: RequestInit, publicHealth = false): Pro
 export const api = {
   health: (signal?: AbortSignal) => json('/api/health', { signal }, true).then(parseHealth),
   catalog: (signal?: AbortSignal) => json('/api/catalog', { signal }).then(parseCatalog),
+  sources: (signal?: AbortSignal) => json('/api/sources', { signal }).then(parseSourceRegister),
   capabilities: (signal?: AbortSignal) => json('/api/capabilities', { signal }).then(parseCapabilities),
   workspace: (signal?: AbortSignal) => json('/api/workspace', { signal }).then(parseWorkspace),
   patchWorkspace: (patch: WorkspacePatch) => json('/api/workspace', {

@@ -1,18 +1,29 @@
 {
   "stage": "5-build slice 1, partial; authentic VEX qualification blocked",
   "backend": {
-    "passed": 148,
+    "passed": 205,
     "failed": 0,
-    "seconds": 10.092
+    "seconds": 14.93
   },
   "frontend": {
-    "passed": 24,
-    "testFiles": 7,
+    "passed": 28,
+    "testFiles": 8,
     "failed": 0
   },
   "productionBuild": "passed",
+  "externalCatalog": {
+    "officialOriginalsPresent": 2,
+    "sourceDiscoveryAndProvenance": "verified",
+    "vexNativeImportOrConversionPerformed": false,
+    "vexProcessingAndDisplayRights": "unverified",
+    "publicHostingAndRedistributionRights": "unverified_blocked",
+    "sourceStatusBrowserPassed": 2,
+    "sourceStatusBrowserFailed": 0,
+    "sourceStatusScreenshotsContainCad": false,
+    "evidence": "external-catalog.md"
+  },
   "sourceProfileBrowser": {
-    "expected": 6,
+    "expected": 4,
     "skipped": 2,
     "unexpected": 0,
     "flaky": 0

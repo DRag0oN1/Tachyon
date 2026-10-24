@@ -29,13 +29,13 @@ coverage/
 /uploads/
 /cad-cache/
 /artifacts/
-*.f3d
-*.step
-*.stp
-*.brep
-*.stl
-*.glb
-*.gltf
+*.[fF]3[dD]
+*.[sS][tT][eE][pP]
+*.[sS][tT][pP]
+*.[bB][rR][eE][pP]
+*.[sS][tT][lL]
+*.[gG][lL][bB]
+*.[gG][lL][tT][fF]
 
 # Python package metadata and local browser verification artifacts
 *.egg-info/

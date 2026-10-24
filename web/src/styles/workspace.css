@@ -118,6 +118,16 @@
 .blockers strong { font-size: 10px; font-weight: 650; text-transform: capitalize; }
 .blockers p { color: var(--muted); font-size: 11px; line-height: 1.7; margin-bottom: 0; }
 .blockers small { color: var(--muted); font-size: 10px; }
+.source-register { margin: 18px 0; padding: 16px 0; border-block: 1px solid var(--border); }
+.source-records { list-style: none; padding: 0; }
+.source-records > li { margin-top: 18px; padding: 14px; background: var(--surface-muted); border-radius: 8px; }
+.source-records h3 { font-size: 14px; margin: 0 0 8px; }
+.source-records small, .source-record-blockers { color: var(--muted); font-size: 11px; line-height: 1.6; }
+.source-records dl { font-size: 11px; }
+.source-records dl > div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.source-records dt { color: var(--muted); }
+.source-records dd { margin: 0; text-align: right; }
+.source-hash { overflow-wrap: anywhere; font: 10px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; color: var(--muted); }
 .preferences-content fieldset { border: 0; padding: 0; margin: 0 0 32px; }
 .preferences-content legend { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
 .preferences-content fieldset > p { color: var(--muted); font-size: 12px; line-height: 1.7; }

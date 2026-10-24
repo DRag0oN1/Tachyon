@@ -228,8 +228,10 @@ source .venv/bin/activate
 python -m pip install -r server/requirements.lock
 python -m pip install --no-deps -e ./server
 npm ci --prefix web
-python -m tachyon.cli assets-register --manifest .local/catalog/manifest.json --rights .local/catalog/rights.json
-python -m tachyon.cli assets-prepare --manifest .local/catalog/manifest.json
+python -m tachyon.cli assets-discover
+# After source-specific evidence and measured component metadata are qualified:
+python -m tachyon.cli assets-register --manifest rights:manifest.json --rights rights:rights.json
+python -m tachyon.cli assets-prepare
 TACHYON_UI_ORIGIN=http://127.0.0.1:5173 python -m uvicorn tachyon.app:app --host 127.0.0.1 --port 8000
 ```
 
@@ -266,7 +268,11 @@ asset paths. Use symbolic recipe IDs and permitted non-geometric capabilities.
 Planned server configuration names: `TACHYON_AI_PROVIDER=openai`,
 `TACHYON_AI_MODEL=<verified-structured-output-model>`, `OPENAI_API_KEY` (private server credential), and
 `TACHYON_DATA_DIR=.local`, and `TACHYON_UI_ORIGIN` (the permitted UI origin).
-Configuration resolves data paths within this project's workspace. Only the
+`TACHYON_CAD_DIR=~/Documents/TachyonCAD/step` and
+`TACHYON_RIGHTS_DIR=~/Documents/TachyonCAD/rights` select separate external input
+roots, as requested during slice 1. Only caches/database remain within the
+project's ignored private data directory. Role-specific resolution rejects
+cross-root access, public project paths and escaping symlinks. Only the
 serving process owns the ephemeral session token, and restarting it invalidates
 old session tokens; the client preserves local input and requests a new launch
 URL instead of claiming a successful mutation. Explicit
@@ -386,6 +392,16 @@ permitted user export to STEP; there is no Fusion integration. Detailed source
 hierarchy/parts/ports live in the local manifest after inspection, not in a
 committed manufacturer-geometry bundle. Public recipe code and required-role
 schemas contain no BReps, meshes, raw asset archives, or private permission files.
+
+`assets-discover` inventories external originals into a private source register,
+including raw hashes, bounded literal observations, known provenance, terms and
+separate permission status. It invokes no CAD reader and grants no rights.
+`assets-record-source` records provenance without qualifying permissions.
+`assets-measure` requires reviewed storage/conversion evidence before native
+import, returning measured millimetre bounds and parent transforms without a mesh.
+The owner-authenticated `/api/sources` endpoint exposes redacted status only.
+The bounded 256 MiB source limit accommodates the offered 119,373,056-byte
+Clawbot fixture; it is not a tested performance guarantee for that assembly.
 
 The API serves CAD only to the owner session, from the qualified local cache,
 with `Cache-Control: private, no-store`; do not use service-worker/offline caches
@@ -661,7 +677,7 @@ fixtures catch drift between TypeScript and server validation.
 | `StrategySet` | Competition snapshot ID/hash, provider receipt, two strategies with objectives/actions, citations, requirements, recipe choices, tradeoffs | Workspace JSON; never relabeled for another competition |
 | `ActionRequirement` / `MechanismCapability` | Revision/action/mechanism identity, sourced object interface, acquisition/retention needs, scoring target frames, reach/pose envelope, hardware and clearance evidence, support/unknown status | Candidate/accepted revision; compatibility required for every required action |
 | `ComponentDefinition` | Source/mesh identity, SKU or qualified identity, geometry class, unit/frame conversion, dimensions, solids, material display data, interfaces, rights evidence | Versioned catalog plus qualified local asset cache |
-| `AssetRightsRecord` | Source hash/subject/rightsholder; reviewed terms/permission reference; operation-specific status/scope; evidence date/expiry; attribution; separate unverified user assertion | Private `.local/catalog/rights.json`; checked at registration, preparation, serving and demo review; not in public Git |
+| `AssetRightsRecord` | Source hash/subject/rightsholder; reviewed terms/permission reference; operation-specific status/scope; evidence date/expiry; attribution; separate unverified user assertion | External private `rights:rights.json` (legacy fixtures may use `.local/catalog/rights.json`); checked at registration, preparation, serving and demo review; not in public Git |
 | `InterfacePort` | Component-local frame, kind, size/shaft/mount properties, allowed mating types, tolerance and evidence | Catalog definition; manually verified from actual source |
 | `AssemblySnapshot` | Catalog/recipe/configuration versions; component instances; subsystems; connections; joints; actuation paths; completeness/evidence report | Immutable `revisions` JSON; instances reference shared definitions |
 | `ComponentInstance` | Stable ID, definition ID, subsystem, rigid translation/quaternion, parent/joint group, provenance reference | Inside its assembly revision; no arbitrary per-instance scaling |

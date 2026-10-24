@@ -11,7 +11,7 @@ does not remove learner ownership or the required tests.
 
 Scope, PRD and technical specification are approved. The learner approved the implementation order with execution refinements:
 prove one complete strategy-linked assembly before the full live two-design flow.
-No application slice is implemented or passed yet. The
+Slice 1 is partially implemented; no application slice has passed yet. The
 existing native-CAD mount probe is pre-build source research, not a completed
 slice or evidence of a working lift, robot, AI edit or browser application.
 
@@ -126,6 +126,9 @@ Activity mode: Planned focused investigation for the learner's existing technica
 experience; use the finished app and real code, not a redundant introductory tour.
 
 ## Revisions
+
+- Learner-directed external CAD catalog: originals now use `~/Documents/TachyonCAD/step/` and rights/source records use `~/Documents/TachyonCAD/rights/`, with private generated caches retained in ignored `.local/`. Add bounded metadata discovery, provenance recording, gated native measurement and owner-only source status without granting permissions. The actual offered Clawbot original is 119,373,056 bytes, so the bounded input limit is 256 MiB. Source records exist for the Clawbot and motor; conversion/display permissions remain unverified. This preserves slice order and does not pass authentic import or complete-robot gates.
+- External-catalog software checkpoint: 205 backend tests, 28 frontend tests, production build and 2 real external-source status browser cases passed. Desktop SNAP/mobile SHIFT screenshots show blocked metadata only, with no CAD requests. Native measurement refused both VEX originals before import. Preserve the unchecked Slice 1 gate and all later slices; see `docs/verification/external-catalog.md` for the exact blocked authentic-assembly checks.
 
 - Learner-approved execution refinement: split the former generation slice into a first complete strategy-linked robot (slice 2), then live generation of two distinct designs (slice 3). Keep the mobile CAD interface alongside engineering, and the required early review after the full P0 edit journey (slice 4). No new planning approval is needed.
 - Native exporter verification found that the pinned CadQuery 2.8 GLB path changes axes but retains millimetre values. Added an explicit one-time generated-GLB unit root and actual-vertex bound checks; no source geometry is resized or altered. The pre-build static mount is still not application evidence.

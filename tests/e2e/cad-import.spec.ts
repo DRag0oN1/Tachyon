@@ -52,7 +52,7 @@ test('@cad-import authenticated empty catalog explains missing source inputs', a
   for (const blocker of catalog.blockers) await expect(page.getByRole('dialog', { name: 'Components' })).toContainText(blocker.message);
 });
 
-test('@cad-import real authenticated GLB keeps identity, bounds, selection and workspace context', async ({ page, request, baseURL }) => {
+test('@cad-import real authenticated GLB keeps identity, bounds, selection and workspace context without crypto.subtle', async ({ page, request, baseURL }) => {
   const token = ownerSession();
   test.skip(!token, 'Blocked: supply a runtime owner session; no catalog or rendering evidence is fabricated.');
   const headers = { 'X-Tachyon-Session': token!, Origin: baseURL! };
@@ -76,10 +76,13 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     }
   });
   try {
-    if (test.info().project.name === 'mobile-webkit') await page.addInitScript(() => {
+    // Verify the actual production asset path on both engines. Importing a
+    // /src/*.ts module tests only Vite development serving, not the built app.
+    await page.addInitScript(() => {
       Object.defineProperty(window, 'crypto', { configurable: true, value: { subtle: undefined } });
     });
     await connect(page, token!);
+    expect(await page.evaluate(() => typeof window.crypto.subtle)).toBe('undefined');
     await openSource(page, component);
     const status = page.getByTestId('scene-status');
     await expect(status).toHaveAttribute('data-component-id', component.id);
@@ -182,18 +185,4 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     if (component.geometryClass === 'test_fixture') await page.screenshot({ path: test.info().outputPath(`${test.info().project.name}-failed-tachyon-authored-non-vex-converter-fixture.png`) });
     throw error;
   } finally { await request.patch('/api/workspace', { headers, data: initial }); }
-});
-
-test('@cad-import HTTP-phone SHA-256 fallback works with crypto.subtle unavailable in a real browser', async ({ page }) => {
-  await page.goto('/');
-  const actual = await page.evaluate(async () => {
-    const oldCrypto = window.crypto;
-    Object.defineProperty(window, 'crypto', { configurable: true, value: { subtle: undefined } });
-    try {
-      const modulePath = '/src/api/sha256.ts';
-      const { sha256Hex } = await import(modulePath);
-      return await sha256Hex(new TextEncoder().encode('abc').buffer);
-    } finally { Object.defineProperty(window, 'crypto', { configurable: true, value: oldCrypto }); }
-  });
-  expect(actual).toBe('ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad');
 });
