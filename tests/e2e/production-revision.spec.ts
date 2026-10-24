@@ -1,0 +1,114 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { test, expect } from '../../web/e2e-support';
+
+test('@production-revision original STEP mechanism has real preview/apply/discard/undo and revision-exact strategy links', async ({page,request,baseURL}) => {
+  test.setTimeout(120_000);
+  const file=process.env.TACHYON_E2E_SESSION_FILE;
+  test.skip(!file || !process.env.TACHYON_E2E_MECHANISM_FIXTURE,'Opt-in original non-VEX mechanism workspace only.');
+  const token=readFileSync(file!,'utf8').trim();
+  const headers={'X-Tachyon-Session':token,Origin:baseURL!};
+  const catalog=await(await request.get('/api/catalog',{headers})).json();
+  expect(catalog.components).toHaveLength(3);
+  expect(catalog.components.every((c:{geometryClass:string;originKind:string})=>c.geometryClass==='test_fixture'&&c.originKind==='tachyon_authored')).toBe(true);
+  const proposals=JSON.parse(readFileSync(resolve('../research/strategy_rl/results/strategy-design-bridge-v1/design/architecture-proposals.json'),'utf8'));
+  let baseline=await(await request.post('/api/designs/realize',{headers,data:{architecture_id:proposals[1].id}})).json();
+  expect(baseline.qualification.testFixtureOnly).toBe(true);
+  if (baseline.candidate) baseline=await(await request.post(`/api/designs/${baseline.designId}/decision`,{headers,data:{action:'discard',base_revision_id:baseline.revisionId,candidate_revision_id:baseline.candidate.id}})).json();
+  if (baseline.accepted.assembly.configurationId!=='lower') {
+    const lower=await(await request.post(`/api/designs/${baseline.designId}/preview`,{headers,data:{base_revision_id:baseline.revisionId,configuration_id:'lower'}})).json();
+    baseline=await(await request.post(`/api/designs/${baseline.designId}/decision`,{headers,data:{action:'apply',base_revision_id:baseline.revisionId,candidate_revision_id:lower.candidate.id}})).json();
+  }
+  const original=await(await request.get('/api/workspace',{headers})).json();
+  let designId:string|undefined;
+  const mobile=test.info().project.name.includes('mobile');
+  await request.patch('/api/workspace',{headers,data:{preferences:{theme:mobile?'shift':'snap',mode:'simple'}}});
+  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+  try {
+    await page.addInitScript(owner=>sessionStorage.setItem('tachyon.owner-session',owner),token);
+    await page.goto('/');
+    await expect(page.getByRole('button',{name:'Create Robot',exact:true})).toBeEnabled({timeout:20_000});
+    await page.getByRole('button',{name:'Create Robot',exact:true}).click();
+    await expect(page.locator('.architecture-options button')).toHaveCount(2,{timeout:35_000});
+    await page.locator('.architecture-options button').nth(1).click();
+    await page.getByRole('button',{name:'Check parts and realize concept',exact:true}).click();
+    const status=page.getByTestId('design-status');
+    await expect(status).toHaveAttribute('data-state','ready',{timeout:30_000});
+    await expect(status).toContainText('NOT AUTHENTIC VEX / NOT COMPLETE ROBOT');
+    expect(Number(await status.getAttribute('data-mesh-count'))).toBeGreaterThanOrEqual(3);
+    const viewport=page.getByTestId('design-canvas');
+    designId=(await viewport.getAttribute('data-design-id'))!;
+    const read=async()=>await(await request.get(`/api/designs/${designId}`,{headers})).json();
+    const initial=await read();
+    expect(initial.status).toBe('partial');expect(initial.canEdit).toBe(true);
+    expect(initial.qualification.completeRobot).toBe(false);
+    expect(initial.qualification.reach.heightM).toBeCloseTo(.08);
+    await page.getByRole('button',{name:'View the strategy behind these concepts',exact:true}).click();
+    await page.locator('.strategy-timeline button').filter({hasText:'Place an alliance Pin'}).first().click();
+    const canvas=viewport.locator('canvas');
+    await expect(canvas).toHaveAttribute('data-bound-instance-ids','["carrier","tool"]');
+    await expect(page.locator('.assembly-coordinate-sketch')).toHaveAttribute('data-revision-id',initial.revisionId);
+    await page.locator('.assembly-coordinate-sketch').scrollIntoViewIfNeeded();
+    await page.screenshot({path:test.info().outputPath(`${test.info().project.name}-source-step-mechanism-strategy-lower.png`)});
+
+    // Select an actual jaw through Three's real raycaster, using the displayed
+    // camera and a known point inside the authored tool's CAD solid.
+    await page.getByRole('button',{name:'Close Strategy',exact:true}).click();
+    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve(null)))));
+    const position=JSON.parse((await canvas.getAttribute('data-camera-position'))!);
+    const target=JSON.parse((await canvas.getAttribute('data-controls-target'))!);
+    const box=(await canvas.boundingBox())!;
+    const subtract=(a:number[],b:number[])=>a.map((v,i)=>v-b[i]);
+    const dot=(a:number[],b:number[])=>a.reduce((sum,v,i)=>sum+v*b[i],0);
+    const normalize=(a:number[])=>{const length=Math.hypot(...a);return a.map(v=>v/length);};
+    const cross=(a:number[],b:number[])=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+    const backward=normalize(subtract(position,target)),right=normalize(cross([0,1,0],backward)),up=cross(backward,right);
+    const point=subtract([.012,.075,-.096],position),depth=-dot(point,backward),tan=Math.tan(20*Math.PI/180);
+    const x=box.x+box.width/2*(1+dot(point,right)/(depth*tan*(box.width/box.height)));
+    const y=box.y+box.height/2*(1-dot(point,up)/(depth*tan));
+    await page.mouse.click(x,y);
+    await expect(page.locator('.design-selection-chip')).toContainText('tool · displayed revision');
+    await page.locator('.design-selection-chip').getByRole('button',{name:'Place an alliance Pin',exact:true}).click();
+    await expect(canvas).toHaveAttribute('data-bound-instance-ids','["carrier","tool"]');
+    await page.getByRole('button',{name:'Expand assistant',exact:true}).click();
+    await page.getByLabel('Design request',{exact:true}).fill('Raise scoring height');
+    await page.getByRole('button',{name:'Send request',exact:true}).click();
+    await expect(page.getByRole('button',{name:'Apply',exact:true})).toBeEnabled();
+    const candidate=await read();
+    expect(candidate.revisionId).toBe(initial.revisionId);
+    expect(candidate.candidate.id).not.toBe(initial.revisionId);
+    expect(candidate.candidateWorldTransforms.carrier[13]-candidate.worldTransforms.carrier[13]).toBeCloseTo(.10);
+    expect(candidate.candidateWorldTransforms.tool[13]-candidate.worldTransforms.tool[13]).toBeCloseTo(.10);
+    expect(candidate.candidateWorldTransforms.support).toEqual(candidate.worldTransforms.support);
+    expect(candidate.qualification.candidateReach.heightM).toBeCloseTo(.18);
+    expect(candidate.candidateBindings.actions[0].anchors[0].id).toBe(initial.bindings.actions[0].anchors[0].id);
+    await expect(viewport).toHaveAttribute('data-revision-id',candidate.candidate.id);
+    await expect(status).toHaveAttribute('data-state','ready');
+    await page.screenshot({path:test.info().outputPath(`${test.info().project.name}-source-step-mechanism-candidate.png`)});
+    await page.getByRole('button',{name:'Discard',exact:true}).click();
+    await expect(viewport).toHaveAttribute('data-revision-id',initial.revisionId);
+    expect((await read()).candidate).toBeNull();
+    await page.getByRole('button',{name:'Preview raised',exact:true}).click();
+    await expect(page.getByRole('button',{name:'Apply',exact:true})).toBeEnabled();
+    const second=await read();
+    await page.getByRole('button',{name:'Apply',exact:true}).click();
+    await expect(status).toContainText('ACCEPTED ASSEMBLY REVISION');
+    await expect(status).not.toContainText('CANDIDATE PREVIEW');
+    await expect(viewport).toHaveAttribute('data-revision-id',second.candidate.id);
+    const applied=await read();
+    expect(applied.bindings.revisionId).toBe(applied.revisionId);
+    expect(applied.qualification.reach.heightM).toBeCloseTo(.18);
+    await page.screenshot({path:test.info().outputPath(`${test.info().project.name}-source-step-mechanism-applied.png`)});
+    await page.getByRole('button',{name:'Undo',exact:true}).click();
+    await expect(viewport).not.toHaveAttribute('data-revision-id',applied.revisionId);
+    const restored=await read();
+    expect(restored.revisionId).not.toBe(initial.revisionId); // Compensating history revision.
+    expect(restored.accepted.engineeringHash).toBe(initial.accepted.engineeringHash);
+    expect(restored.worldTransforms).toEqual(initial.worldTransforms);
+    expect(restored.bindings.actions[0].anchors[0].worldPointM).toEqual(initial.bindings.actions[0].anchors[0].worldPointM);
+    await expect(viewport).toHaveAttribute('data-revision-id',restored.revisionId);
+    await expect(canvas).toHaveAttribute('data-bound-instance-ids','["carrier","tool"]');
+    expect(errors).toEqual([]);
+    test.info().annotations.push({type:'boundary',description:'Original non-VEX STEP mechanism endpoint/revision proof only. No authentic-VEX robot, hardware actuation, continuous mechanism solver, collision or scoring support is proven.'});
+  } finally { await request.patch('/api/workspace',{headers,data:original}).catch(()=>{}); }
+});

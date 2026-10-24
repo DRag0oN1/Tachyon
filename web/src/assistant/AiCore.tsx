@@ -1,10 +1,24 @@
-import { useRef } from 'react';
+import { useRef, useState, type FormEvent } from 'react';
 import type { ComponentDefinition, Selection } from '../api/contracts';
 import { Icon } from '../components/Icon';
 import type { AssistantSize } from '../workspace/reducer';
 import { useDialogFocus } from '../workspace/useDialogFocus';
 
-interface Props {
+export interface CommandResult { message: string }
+export interface AiCoreEditControls {
+  canPreview: boolean;
+  canApply: boolean;
+  canDiscard: boolean;
+  canUndo: boolean;
+  busy?: boolean;
+  reason?: string;
+  candidateLabel?: string;
+  preview: (configuration: 'lower' | 'raised') => Promise<CommandResult>;
+  apply: () => Promise<CommandResult>;
+  discard: () => Promise<CommandResult>;
+  undo: () => Promise<CommandResult>;
+}
+export interface AiCoreProps {
   size: AssistantSize;
   onSize: (size: AssistantSize) => void;
   draft: string;
@@ -13,6 +27,11 @@ interface Props {
   selection: Selection | null;
   loading: boolean;
   onComponents: () => void;
+  contextLabel?: string;
+  command?: (text: string) => Promise<CommandResult>;
+  controls?: AiCoreEditControls;
+  onIntent?: (intent: 'showstrategy' | 'showarchitectures' | 'explain') => void;
+  unavailableReason?: string;
 }
 function CoreGlyph({ loading }: { loading: boolean }) {
   return <svg className={`core-glyph ${loading ? 'is-connecting' : ''}`} viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -24,10 +43,36 @@ function CoreGlyph({ loading }: { loading: boolean }) {
     <path className="core-center" d="m32 26 7 4v8l-7 4-7-4v-8Z" />
   </svg>;
 }
-export function AiCore(props: Props) {
+export function AiCore(props: AiCoreProps) {
   const ref = useRef<HTMLElement>(null);
+  const submitting = useRef(false);
+  const [busy, setBusy] = useState(false);
+  const [reply, setReply] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
   const expanded = props.size !== 'compact';
   useDialogFocus(ref, expanded, props.size === 'fullscreen');
+  async function run(action: () => Promise<CommandResult>, clearDraft = false) {
+    if (submitting.current || props.controls?.busy) return;
+    submitting.current = true; setBusy(true); setFailed(false);
+    const submitted = props.draft;
+    try {
+      const result = await action(); setReply(result.message);
+      if (clearDraft && draftRef.current === submitted) props.onDraft('');
+    } catch (error) { setReply(error instanceof Error ? error.message : 'The request failed. No successful change was confirmed.'); setFailed(true); }
+    finally { submitting.current = false; setBusy(false); }
+  }
+  const draftRef = useRef(props.draft); draftRef.current = props.draft;
+  function submit(e: FormEvent) {
+    e.preventDefault();
+    if (props.command && props.draft.trim()) void run(() => props.command!(props.draft.trim()), true);
+  }
+  const disabled = busy || !!props.controls?.busy;
+  const reason = props.controls?.reason ?? props.unavailableReason ?? 'Editing requires a qualified assembly and a supported mechanism.';
+  const composer = <form className={expanded ? 'assistant-composer' : 'assistant-compact-composer'} onSubmit={submit}>
+    <label htmlFor="assistant-command" className={expanded ? undefined : 'sr-only'}>Design request</label>
+    {expanded ? <textarea id="assistant-command" rows={3} value={props.draft} onChange={e => props.onDraft(e.target.value)} placeholder="Explain this selection, show strategy, or request a supported edit…" /> : <input id="assistant-command" value={props.draft} onChange={e => props.onDraft(e.target.value)} placeholder="Ask about this selection…" autoComplete="off" />}
+    <div className="composer-footer">{expanded && <span>Selection context included · draft kept in this tab</span>}<button className={expanded ? 'primary-button' : 'icon-button'} disabled={disabled || !props.command || !props.draft.trim()} type="submit" aria-label="Send request">{expanded && (disabled ? 'Working…' : 'Send request')}<Icon name="arrow" size={16} /></button></div>
+  </form>;
   return <aside ref={ref} className={`ai-core ai-${props.size}`} data-testid="ai-core" data-state={props.size}
     role={expanded ? 'dialog' : undefined} aria-modal={props.size === 'fullscreen' || undefined}
     aria-label="Tachyon assistant" tabIndex={-1}
@@ -42,18 +87,23 @@ export function AiCore(props: Props) {
         {expanded && <button className="icon-button" aria-label="Close assistant" onClick={() => props.onSize('compact')}><Icon name="close" size={16} /></button>}
       </div>
     </div>
+    {!expanded && <>{composer}{reply && <p className="assistant-compact-reply" role={failed ? 'alert' : 'status'}>{reply}</p>}</>}
     {expanded && <div className="assistant-body">
       <span className="eyebrow">YOUR WORKSPACE, IN CONTEXT</span>
-      <h2>Start with what’s real.</h2>
-      <p>Inspect your source components and their provenance. Design generation and engineering changes are currently unavailable.</p>
-      <div className="context-card"><span className="status-dot" /><div><strong>{props.selection ? 'Selected source component' : 'Inspection context'}</strong><p>{props.component?.name ?? 'No source component loaded'}{props.selection?.meshName ? ` · ${props.selection.meshName}` : ''}</p></div></div>
+      <h2>Work from this context.</h2>
+      <p>Explain a strategy or selection, compare engineering alternatives, and preview supported mechanism changes when qualified.</p>
+      <div className="context-card"><span className="status-dot" /><div><strong>{props.selection ? 'Selected source component' : 'Workspace context'}</strong><p>{props.contextLabel ?? `${props.component?.name ?? 'No source component loaded'}${props.selection?.meshName ? ` · ${props.selection.meshName}` : ''}`}</p></div></div>
+      {props.onIntent && <div className="assistant-intents"><button className="text-action" onClick={() => props.onIntent?.('showstrategy')}>Show strategy</button><button className="text-action" onClick={() => props.onIntent?.('showarchitectures')}>Show architectures</button><button className="text-action" disabled={disabled} onClick={() => props.command ? void run(() => props.command!('Explain this selection')) : props.onIntent?.('explain')}>Explain selection</button></div>}
       <button className="text-action" onClick={props.onComponents}>Inspect component catalog <Icon name="arrow" /></button>
-      <div className="assistant-composer">
-        <label htmlFor="assistant-command">Design request</label>
-        <textarea id="assistant-command" rows={3} value={props.draft} onChange={e => props.onDraft(e.target.value)} placeholder="Keep a request here for when editing is available…" />
-        <div className="composer-footer"><span>Draft retained in this tab</span><button className="primary-button" disabled>Send request <Icon name="arrow" size={15} /></button></div>
-      </div>
-      <p className="availability-note" role="status">Editing unavailable. No command has been submitted and no design has changed.</p>
+      {composer}
+      {(disabled || reply) && <p className="assistant-reply" role={failed ? 'alert' : 'status'}>{disabled ? 'Working on your request…' : reply}</p>}
+      <section className="assistant-revisions" aria-label="Supported design edits"><h3>Revision controls</h3>{props.controls?.candidateLabel && <p className="strategy-notice">{props.controls.candidateLabel}</p>}<div className="assistant-revision-actions">
+        <button className="secondary-button" disabled={disabled || !props.controls?.canPreview} onClick={() => void run(() => props.controls!.preview('raised'))}>Preview raised</button>
+        <button className="secondary-button" disabled={disabled || !props.controls?.canPreview} onClick={() => void run(() => props.controls!.preview('lower'))}>Preview lower</button>
+        <button className="primary-button" disabled={disabled || !props.controls?.canApply} onClick={() => void run(() => props.controls!.apply())}>Apply</button>
+        <button className="secondary-button" disabled={disabled || !props.controls?.canDiscard} onClick={() => void run(() => props.controls!.discard())}>Discard</button>
+        <button className="secondary-button" disabled={disabled || !props.controls?.canUndo} onClick={() => void run(() => props.controls!.undo())}>Undo</button>
+      </div><p className="availability-note">{reason}</p></section>
     </div>}
   </aside>;
 }

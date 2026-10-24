@@ -184,9 +184,23 @@
 .native-hierarchy { font-size: 11px; margin-top: 22px; }
 .native-hierarchy summary { cursor: pointer; min-height: 44px; padding: 12px 0; }
 .native-hierarchy ul { list-style: none; padding: 0; margin: 0; }
-.native-hierarchy button { display: flex; align-items: center; gap: 10px; padding: 10px; min-height: 44px; width: 100%; text-align: left; border-bottom: 1px solid var(--border); background: none; font-size: 11px; }
-.native-hierarchy button > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.native-hierarchy button small { display: block; margin-top: 5px; color: var(--muted); font-size: 9px; }
+.native-tree { max-height: 380px; overflow: auto; margin-top: 12px; }
+.native-tree ul ul { margin-left: 14px; border-left: 1px solid var(--border); padding-left: 5px; }
+.native-node-row { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); }
+.native-node-row button { display: flex; align-items: center; gap: 8px; padding: 8px; min-height: 44px; text-align: left; background: none; font-size: 11px; }
+.native-node-toggle, .native-node-spacer { width: 44px; flex: 0 0 44px; }
+.native-node-toggle { justify-content: center; }
+.native-node-toggle[aria-expanded="true"] svg { transform: rotate(90deg); }
+.native-node-select { flex: 1; min-width: 0; }
+.native-node-select > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.native-node-select > svg { flex-shrink: 0; }
+.native-node-select small { display: block; margin-top: 5px; color: var(--muted); font-size: 9px; line-height: 1.5; }
+.native-node-row button:not(:disabled):hover { background: var(--surface-muted); }
+.native-node-more { margin-left: 8px; font-size: 11px; }
+.reference-tag { display: block; color: var(--text); }
+.source-defect-warning { margin: 12px 0; padding: 12px; border: 1px solid var(--warning); border-radius: 6px; background: var(--warning-bg); color: var(--warning); font-size: 11px; line-height: 1.7; }
+.source-defect-warning p { margin: 6px 0 0; }
+.source-defect-warning ul { margin: 8px 0 0; padding-left: 18px; }
 @media (min-width: 1500px) { .workspace { --panel-width: 470px; } .workspace-panel { top: 90px; bottom: 115px; } .home-content h2 { font-size: 36px; } .panel-scroll { padding: 28px; } }
 @media (max-width: 1100px) and (min-width: 761px) { .workspace { --panel-width: 370px; } .context-type, .context-divider { display: none; } .workspace-context > span:nth-child(2) { max-width: 160px; } .canvas-empty h2 { font-size: 26px; } .entry-actions { grid-template-columns: 1fr; } .entry-card p { margin-bottom: 8px; } .entry-card h3 { margin-top: 10px; } .connection-banner { flex-wrap: wrap; } }
 @media (max-width: 760px) {
@@ -196,6 +210,13 @@
   .wordmark { font-size: 9px; letter-spacing: .1em; }
   .wordmark-symbol { font-size: 17px; margin-left: 4px; }
   .ai-core { left: 12px; top: max(12px, env(safe-area-inset-top)); width: 240px; }
+  .ai-core.ai-compact { width: 156px; }
+  .ai-compact .ai-header { min-height: 48px; padding: 3px; }
+  .ai-compact .core-glyph { width: 36px; height: 36px; }
+  .ai-compact .core-caption strong { font-size: 11px; }
+  .ai-compact .core-caption > span { display: none; }
+  .ai-compact .assistant-controls { margin-left: 2px; }
+  .ai-compact .assistant-controls .icon-button { min-height: 44px; min-width: 44px; }
   .ai-header { min-height: 58px; padding: 3px; }
   .core-glyph { width: 46px; height: 46px; }
   .core-caption strong { font-size: 13px; }
@@ -245,7 +266,7 @@
   .save-state { top: max(80px, calc(env(safe-area-inset-top) + 66px)); left: 19px; font-size: 8px; }
   .connection-banner { top: 109px; left: 12px; width: calc(100% - 24px); font-size: 10px; padding: 10px; align-items: center; }
   .connection-banner button { font-size: 9px; white-space: normal; }
-  .source-status { top: 103px; left: 12px; max-width: calc(100% - 24px); padding: 7px 10px; font-size: 9px; }
+  .source-status { top: 75px; left: 12px; max-width: calc(100% - 24px); padding: 5px 8px; font-size: 8px; }
   .source-status strong { font-size: 8px; }
   .selection-chip { left: 12px; bottom: max(93px, calc(env(safe-area-inset-bottom) + 84px)); max-width: calc(100% - 24px); }
   .workspace:has(.workspace-panel) .selection-chip { display: none; }

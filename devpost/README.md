@@ -65,7 +65,7 @@ authorization.
 The learner approved the build checklist and execution refinements on 2026-10-23. Application implementation begins from slice 1. Actual permissions, model access, complete robot acceptance and test evidence remain separate from planning approval.
 
 
-## First implementation increment
+## First implementation increment — historical checkpoint
 
 The local source pipeline and mobile full-window inspection application are now
 implemented. Actual tests pass: 148 backend, 24 frontend, production build,
@@ -77,3 +77,18 @@ strategy actions and actual assembly revisions are not implemented. See
 [verification](../docs/verification/slice-1.md) and
 [criterion status](../docs/verification/acceptance-status.md). No hands-on review
 or learner sign-off has been inferred.
+
+## Production integration — 2026-10-24
+
+Following the saved PPO experiment (`ac1aa01`) and bridge (`eb1265c`), the learner
+requested their production integration. Existing uncommitted source-inspection,
+assembly and binding foundations were preserved and integrated with the new
+strategy service, strategy/architecture screens, measured-port realization,
+revision-aware CAD, bidirectional action links and functional bounded core.
+No training was repeated or geometry published. Actual motor source inspection
+and a separate original non-VEX STEP mechanism were tested in desktop/mobile
+browsers. The complete authentic robot and full P0 journey remain unmet; user
+review and shipping have not occurred. See the
+[current verification](../docs/verification/production-integration.md) and
+[criterion status](../docs/verification/acceptance-status.md), rather than the
+historical first-increment counts above.

@@ -47,7 +47,8 @@ class Bounds(Model):
 class Permission(Model):
     status: Literal["qualified", "unverified", "disallowed"] = "unverified"
     rightsholder: str = ""
-    basis: Literal["license", "written_permission", "self_authored"] | None = None
+    basis: Literal["license", "written_permission", "self_authored", "terms_interpretation"] | None = None
+    use_scope: Literal["private_local_inspection"] | None = None
     evidence_path: str = ""
     evidence_sha256: str = ""
     reviewed_by: str = ""
@@ -67,6 +68,11 @@ class RightsManifest(Model):
 
 
 class InterfacePort(Model):
+    """Attachment reference in prepared component display coordinates, metres/Y-up.
+
+    Native STEP Z-up millimetres are not these coordinates. Measure after the
+    documented native-to-display frame conversion; source solids stay intact.
+    """
     id: str
     kind: Literal["mount", "shaft", "bearing", "revolute", "prismatic"]
     position_m: Vector3
@@ -94,6 +100,7 @@ class ComponentInput(Model):
     expected_bounds_mm: Bounds
     measurement_tolerance_mm: float = Field(default=0.05, gt=0, le=1)
     ports: list[InterfacePort] = Field(default_factory=list)
+    reference_only: bool = False
 
 
 class CatalogManifest(Model):
@@ -123,6 +130,7 @@ class ConversionReceipt(Model):
     frame: str
     max_bounds_error_m: float = Field(ge=0)
     display_mesh_only: Literal[True]
+    source_bounds_basis: Literal["native_measurement", "reviewed_registration_measurement"] = "native_measurement"
 
 
 class PreparedComponent(Model):
@@ -146,6 +154,8 @@ class PreparedComponent(Model):
     conversion: ConversionReceipt
     attribution: str
     complete_robot: Literal[False]
+    reference_only: bool = False
+    geometry_validation: dict = Field(default_factory=dict)
 
 
 class Preferences(Model):

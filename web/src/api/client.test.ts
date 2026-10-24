@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { api, captureSession, SESSION_KEY } from './client';
 import { componentFixture, workspaceFixture } from '../test/contracts';
 import { sha256Hex } from './sha256';
+import { strategyFixture } from '../test/strategy';
 
 beforeEach(() => {
   history.replaceState(null, '', '/#session='); captureSession(); sessionStorage.clear();
@@ -58,5 +59,21 @@ describe('owner-session API boundary', () => {
     launch(); const fetcher = vi.fn(); vi.stubGlobal('fetch', fetcher);
     await expect(api.asset({ ...componentFixture, meshUrl: 'https://example.com/component.glb' })).rejects.toThrow('mesh identity is invalid');
     expect(fetcher).not.toHaveBeenCalled();
+  });
+  it('authenticates strategy generation and generic CAD requests with the documented JSON bodies', async () => {
+    launch();
+    const fetcher = vi.fn().mockImplementation((path: string) => Promise.resolve(new Response(JSON.stringify(path === '/api/strategy/generate' ? strategyFixture() : { result: 'opaque CAD response' }))));
+    vi.stubGlobal('fetch', fetcher);
+    await expect(api.generateStrategy()).resolves.toMatchObject({ source: 'trained_ppo' });
+    await api.post('/api/designs/realize', { architecture_id: 'actual-proposal-id' });
+    expect(JSON.parse(fetcher.mock.calls[0][1].body)).toEqual({ competition_id: 'v5-override-v2.1' });
+    expect(JSON.parse(fetcher.mock.calls[1][1].body)).toEqual({ architecture_id: 'actual-proposal-id' });
+    for (const [, init] of fetcher.mock.calls) {
+      expect(init.method).toBe('POST');
+      expect(init.headers.get('X-Tachyon-Session')).toBe('unit-test-owner');
+      expect(init.credentials).toBe('omit');
+    }
+    await expect(api.post('https://example.com/api/designs', {})).rejects.toThrow('Unsupported API resource');
+    expect(fetcher).toHaveBeenCalledTimes(2);
   });
 });

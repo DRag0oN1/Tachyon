@@ -1,0 +1,151 @@
+/* Strategy UI uses the workspace theme tokens and preserves the full canvas. */
+.strategy-workspace .ai-core.ai-compact { width: min(310px, calc(100% - 40px)); }
+.strategy-workspace .ai-core .icon-button { min-width: 44px; min-height: 44px; }
+.assistant-compact-composer { display: flex; align-items: center; border-top: 1px solid var(--border); padding: 4px 8px; gap: 4px; }
+.assistant-compact-composer input { background: transparent; border: 0; color: var(--text); min-width: 0; width: 100%; min-height: 44px; font-size: 12px; padding: 8px 4px; }
+.assistant-compact-composer input::placeholder { color: var(--muted); }
+.assistant-compact-reply { font-size: 11px; line-height: 1.65; max-height: 90px; overflow: auto; padding: 10px 14px; margin: 0; border-top: 1px solid var(--border); }
+.assistant-intents { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.assistant-reply { border-left: 2px solid var(--blue); padding: 10px 12px; overflow-wrap: anywhere; }
+.assistant-revisions { border-top: 1px solid var(--border); margin-top: 22px; padding-top: 14px; }
+.assistant-revisions h3 { font-size: 14px; font-weight: 600; }
+.assistant-revision-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.assistant-revision-actions button { flex: 1 1 80px; }
+.strategy-workspace .save-state { top: 154px; }
+.strategy-workspace .source-status, .strategy-workspace .connection-banner { top: 180px; }
+.strategy-workspace:has(.assistant-compact-reply) .save-state { top: 250px; }
+.strategy-workspace:has(.assistant-compact-reply) .source-status, .strategy-workspace:has(.assistant-compact-reply) .connection-banner { top: 274px; }
+.strategy-workspace .design-status { pointer-events: auto; }
+.assembly-anchor-height { display: block; margin: 6px 0; color: var(--text); }
+.strategy-workspace .design-status strong { padding-left: 0; }
+.strategy-workspace .workspace-dock { max-width: calc(100% - 24px); }
+.strategy-workspace .workspace-dock nav { min-width: 0; overflow-x: auto; scrollbar-width: thin; }
+.strategy-workspace .workspace-dock nav > button { flex-shrink: 0; }
+.strategy-workspace .competition-card > span, .strategy-workspace .competition-card > small { color: var(--muted); font-size: 11px; line-height: 1.65; }
+.strategy-workspace .entry-card:not(:has(button:disabled)) { border-color: var(--blue); }
+.strategy-workspace .entry-card button:not(:disabled) { color: var(--blue); }
+.strategy-content { font-size: 13px; line-height: 1.75; min-width: 0; }
+.strategy-content > h2, .strategy-heading h2 { font-weight: 550; font-size: clamp(23px, 3vw, 31px); letter-spacing: -.035em; line-height: 1.2; margin: 12px 0 16px; }
+.strategy-content p { color: var(--muted); overflow-wrap: anywhere; }
+.strategy-content section { border-top: 1px solid var(--border); margin: 26px 0; padding-top: 20px; }
+.strategy-content h3 { font-size: 15px; line-height: 1.5; font-weight: 650; margin: 0 0 12px; }
+.strategy-content h4 { font-size: 12px; line-height: 1.6; }
+.strategy-content ul { padding-left: 20px; }
+.strategy-domain { display: inline-block; padding: 6px 10px; background: var(--warning-bg); color: var(--warning) !important; border: 1px solid currentColor; border-radius: 5px; font-size: 11px; }
+.strategy-panel-tools { display: grid; gap: 12px; margin-bottom: 22px; }
+.strategy-panel-tabs { display: flex; gap: 6px; }
+.strategy-panel-tabs button { flex: 1; min-height: 44px; background: var(--surface-muted); color: var(--muted); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; }
+.strategy-panel-tabs button[aria-pressed="true"] { color: var(--text); border-color: var(--blue); box-shadow: inset 0 -2px var(--blue); }
+.strategy-width-control { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 11px; }
+.strategy-width-control input { flex: 1; min-width: 0; min-height: 44px; accent-color: var(--blue); }
+.strategy-notice { margin: 16px 0; border: 1px solid var(--border); border-left: 3px solid var(--accent); background: var(--surface-muted); border-radius: 7px; padding: 14px; font-size: 12px; line-height: 1.75; overflow-wrap: anywhere; }
+.strategy-notice p { margin: 8px 0; }
+.strategy-notice small { display: block; color: var(--muted); }
+.strategy-objectives { padding-left: 22px; }
+.strategy-objectives li { padding: 10px 0 10px 6px; border-bottom: 1px solid var(--border); }
+.strategy-objectives strong, .strategy-objectives span { display: block; }
+.strategy-objectives span { font-size: 11px; color: var(--muted); }
+.strategy-caption { font-size: 11px; line-height: 1.7; color: var(--muted); }
+.strategy-section-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline; }
+.strategy-score { color: var(--blue); font-size: 12px; font-variant-numeric: tabular-nums; }
+.strategy-sequence-select { display: grid; gap: 8px; font-size: 11px; color: var(--muted); }
+.strategy-sequence-select select { background: var(--surface); color: var(--text); min-height: 44px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; width: 100%; font-size: 13px; }
+.strategy-sequence-select select:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.strategy-figure { background: var(--surface-muted); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin: 18px 0; }
+.strategy-figure svg { display: block; width: 100%; max-height: 370px; color: var(--blue); fill: none; stroke: currentColor; stroke-width: 1.5; }
+.strategy-figure text { font-family: inherit; font-size: 11px; fill: var(--text); stroke: none; }
+.strategy-figure figcaption { color: var(--muted); font-size: 10px; line-height: 1.7; padding: 10px 4px 0; }
+.strategy-figure .playbook-field { fill: var(--surface); stroke: var(--border); }
+.strategy-figure .playbook-grid { stroke: var(--border); stroke-dasharray: 4 4; }
+.strategy-figure .playbook-path { opacity: .13; stroke-width: 2; }
+.strategy-figure .playbook-path.is-selected { opacity: .85; stroke-width: 3; }
+.strategy-figure .playbook-number { text-anchor: middle; font-size: 10px; }
+.strategy-figure .playbook-focus { stroke: var(--text); stroke-width: 2; stroke-dasharray: 3 3; }
+.concept-sketch svg { max-height: 300px; stroke-width: 2; }
+.concept-sketch .concept-ground { stroke: var(--border); }
+.concept-sketch .is-selected { stroke: var(--text); stroke-width: 3; }
+.strategy-timeline { max-height: 380px; overflow-y: auto; scrollbar-width: thin; list-style: none; padding: 4px !important; margin: 12px -4px; }
+.strategy-timeline li { margin: 6px 0; }
+.strategy-timeline button { width: 100%; display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 10px; background: var(--surface-raised); border: 1px solid var(--border); border-radius: 7px; text-align: left; }
+.strategy-timeline button[aria-pressed="true"] { border-color: var(--blue); box-shadow: inset 3px 0 var(--blue); }
+.strategy-timeline strong { font-size: 12px; font-weight: 600; }
+.strategy-timeline small { display: block; color: var(--muted); font-size: 10px; margin-top: 4px; line-height: 1.6; }
+.strategy-step-number { width: 24px; flex-shrink: 0; font-size: 11px; color: var(--blue); font-variant-numeric: tabular-nums; }
+.strategy-requirements { list-style: none; padding: 0 !important; }
+.strategy-requirements li, .strategy-contexts article { border: 1px solid var(--border); background: var(--surface-muted); border-radius: 7px; padding: 12px; margin: 8px 0; }
+.strategy-requirements p, .strategy-contexts p { font-size: 12px; margin: 5px 0; }
+.strategy-requirements small, .strategy-contexts small { color: var(--muted); font-size: 10px; display: block; }
+.strategy-metrics, .strategy-evidence dl { margin: 14px 0; font-size: 11px; font-variant-numeric: tabular-nums; }
+.strategy-metrics > div, .strategy-evidence dl > div { display: flex; gap: 16px; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.strategy-metrics dt, .strategy-evidence dt { color: var(--muted); }
+.strategy-metrics dd, .strategy-evidence dd { margin: 0; text-align: right; overflow-wrap: anywhere; max-width: 65%; }
+.strategy-evidence { border-top: 1px solid var(--border); margin: 16px 0; font-size: 12px; }
+.strategy-evidence summary { cursor: pointer; padding: 13px 0; min-height: 44px; font-weight: 600; }
+.strategy-evidence li { color: var(--muted); margin: 8px 0; }
+.strategy-hash { font: 10px/1.8 ui-monospace, monospace; }
+.architecture-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 12px; margin: 22px 0; }
+.architecture-option { background: var(--surface-raised); border: 1px solid var(--border); border-radius: 8px; text-align: left; padding: 14px; min-height: 120px; }
+.architecture-option[aria-pressed="true"] { border-color: var(--blue); box-shadow: inset 0 -3px var(--blue); }
+.architecture-option strong { display: block; font-size: 13px; line-height: 1.6; margin: 10px 0; }
+.architecture-option small { font-size: 10px; color: var(--muted); }
+.architecture-table-scroll { overflow-x: auto; max-width: 100%; scrollbar-width: thin; }
+.architecture-table { width: 100%; min-width: 360px; border-collapse: collapse; font-size: 11px; line-height: 1.65; }
+.architecture-table th, .architecture-table td { text-align: left; padding: 12px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.architecture-table th { font-weight: 600; }
+.architecture-table td { color: var(--muted); }
+.architecture-tradeoffs li { color: var(--muted); margin: 10px 0; font-size: 12px; }
+.design-selection-chip { max-height: 30dvh; overflow-y: auto; }
+.design-selection-chip .text-action { display: flex; font-size: 11px; }
+@media (min-width: 761px) {
+  .strategy-workspace[data-panel="strategy"], .strategy-workspace[data-panel="architectures"] { --panel-width: min(var(--strategy-panel-width), calc(100vw - 330px)); }
+  .strategy-workspace[data-panel="strategy"] .workspace-panel, .strategy-workspace[data-panel="architectures"] .workspace-panel { width: var(--panel-width); min-width: 340px; max-width: calc(100vw - 330px); resize: horizontal; overflow: hidden; }
+}
+@media (max-width: 760px) {
+  .strategy-workspace .ai-core.ai-compact { width: min(280px, calc(100% - 100px)); }
+  .strategy-workspace .ai-compact .core-caption > span { display: none; }
+  .assistant-compact-composer input { font-size: 16px; }
+  .strategy-workspace .save-state { top: max(125px, calc(env(safe-area-inset-top) + 113px)); }
+  .strategy-workspace .source-status, .strategy-workspace .connection-banner { top: max(148px, calc(env(safe-area-inset-top) + 136px)); }
+  .strategy-workspace:has(.assistant-compact-reply) .save-state { top: max(218px, calc(env(safe-area-inset-top) + 206px)); }
+  .strategy-workspace:has(.assistant-compact-reply) .source-status, .strategy-workspace:has(.assistant-compact-reply) .connection-banner { top: max(242px, calc(env(safe-area-inset-top) + 230px)); }
+  .strategy-workspace .source-status { max-width: min(300px, calc(100% - 24px)); }
+  .strategy-width-control { display: none; }
+  .strategy-workspace .workspace-dock { width: calc(100% - 16px); }
+  .strategy-workspace .workspace-dock button { padding: 7px 8px; min-width: 52px; min-height: 48px; }
+  .strategy-workspace .workspace-dock nav { flex: 1; }
+  .strategy-workspace .view-controls { flex-shrink: 0; }
+  .strategy-workspace .view-controls button { min-width: 44px; padding: 7px; }
+  .strategy-workspace .workspace-panel .icon-button { min-width: 44px; min-height: 44px; }
+  .strategy-panel-tools { margin-bottom: 18px; }
+  .strategy-content { font-size: 12px; }
+  .strategy-sequence-select select { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .strategy-workspace *, .strategy-workspace *::before, .strategy-workspace *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+/* One compact command row leaves the phone's CAD visible above its sheet. */
+.assembly-tree ul { list-style: none; padding-left: 14px; margin: 5px 0; border-left: 1px solid var(--border); }
+.assembly-tree-row { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; width: 100%; min-height: 48px; border: 1px solid var(--border); border-radius: 9px; padding: 10px; color: var(--text); background: var(--panel); text-align: left; }
+.assembly-tree-row[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 3px 0 var(--accent); }
+.assembly-tree-row small { color: var(--muted); overflow-wrap: anywhere; }
+.assembly-part-details { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 14px; }
+.assembly-part-details dd { margin: 3px 0 12px; overflow-wrap: anywhere; }
+@media (max-width: 760px) {
+  .strategy-workspace .ai-core.ai-compact { width: calc(100% - 24px); max-width: none; left: 12px; top: 12px; display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; padding: 3px; }
+  .ai-compact .ai-header { display: contents; }
+  .ai-compact .core-launch { grid-column: 1; grid-row: 1; min-width: 44px; min-height: 44px; padding: 2px; }
+  .ai-compact .core-caption { display: none; }
+  .ai-compact .core-glyph { width: 38px; height: 38px; }
+  .ai-compact .assistant-controls { grid-column: 3; grid-row: 1; padding: 0; }
+  .ai-compact .assistant-compact-composer { grid-column: 2; grid-row: 1; display: flex; min-width: 0; border: 0; margin: 0; padding: 0 4px; }
+  .ai-compact .assistant-compact-composer input { min-width: 0; width: 100%; min-height: 44px; font-size: 16px; }
+  .ai-compact .composer-footer { flex: 0 0 44px; margin: 0; padding: 0; }
+  .ai-compact .assistant-compact-reply { grid-column: 1 / -1; margin: 4px; max-height: 40px; }
+  .workspace-topline .wordmark { display: none; }
+  .strategy-workspace .save-state:not(.save-unsaved):not(.save-saving) { display: none; }
+  .strategy-workspace .save-state.save-unsaved, .strategy-workspace .save-state.save-saving { top: auto; bottom: 104px; padding: 6px 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; z-index: 9; }
+  .strategy-workspace .source-status { top: 75px; left: 12px; max-width: calc(100% - 24px); padding: 6px 9px; gap: 5px; }
+  .strategy-workspace:has(.assistant-compact-reply) .source-status { top: 125px; }
+  .source-status:not(.design-status) > span:not(.status-dot) { display: none; }
+  .source-status > strong { white-space: normal; font-size: 9px; line-height: 1.4; }
+}

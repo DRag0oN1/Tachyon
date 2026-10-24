@@ -1,5 +1,12 @@
 # Learned strategy to robot design interface
 
+**Production follow-up (2026-10-24):** the standalone bridge described below is
+now consumed by the running application. Frozen neural inference, StrategySpec v2
+screens, actual architecture comparison and qualified private assembly/revision
+interfaces are integrated. This changes the original increment's isolation
+status, without modifying its experiment artifacts. Authentic complete robots
+remain blocked/unimplemented. See [production verification](verification/production-integration.md).
+
 This learner-directed `5-build` extension consumes the frozen `ac1aa01`
 experiment. It adds a working structured boundary, not a new policy or a claim
 that complete robots have been generated. Existing app routes, CAD, themes and

@@ -1,4 +1,5 @@
 export type Theme = 'snap' | 'shift';
+export type { ArchitectureProposal, AssemblyRevisionJSON, BindingSnapshot, DesignRealization, DesignSession, StrategySession, StrategySpec, StrategyStatus } from './strategy';
 export type Mode = 'simple' | 'advanced';
 export interface Preferences { theme: Theme; mode: Mode }
 export interface Workspace { preferences: Preferences; activeComponentId: string | null }
@@ -23,6 +24,8 @@ export interface ComponentDefinition {
   conversion?: Record<string, unknown>;
   attribution?: string;
   completeRobot?: false;
+  referenceOnly?: boolean;
+  geometryValidation?: { status: 'valid' | 'source_defects'; nativeBrepValid: boolean; invalidDefinitionCount: number | null; invalidComponentInstances: { path: string; name: string; definitionName: string }[]; qualifiedForRobotGeneration: boolean; limitations: string[] };
   [metadata: string]: unknown;
 }
 export interface CatalogBlocker { code: string; message: string; componentId?: string }
@@ -33,7 +36,7 @@ export interface Catalog {
 }
 export interface Capabilities {
   canInspect: boolean;
-  canGenerateStrategy: false;
+  canGenerateStrategy: boolean;
   canGenerateRobot: false;
   canEdit: false;
   reasons: string[];
@@ -70,7 +73,7 @@ export function parseHealth(v: unknown): Health {
   return v as unknown as Health;
 }
 export function parseCapabilities(v: unknown): Capabilities {
-  if (!record(v) || typeof v.canInspect !== 'boolean' || v.canGenerateStrategy !== false ||
+  if (!record(v) || typeof v.canInspect !== 'boolean' || typeof v.canGenerateStrategy !== 'boolean' ||
     v.canGenerateRobot !== false || v.canEdit !== false || !Array.isArray(v.reasons) || !v.reasons.every(string)) return invalid();
   return v as unknown as Capabilities;
 }

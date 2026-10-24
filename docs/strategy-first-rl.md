@@ -1,5 +1,12 @@
 # Strategy-first reinforcement learning
 
+**Production follow-up (2026-10-24):** the historical isolated experiment below
+now supplies a bounded subprocess inference interface to the app. The server
+and browser still do not import Torch. Checkpoints, environment and evaluation
+artifacts are unchanged; no retraining occurred. Strategy/architecture UI and
+private assembly/revision contracts are connected, while authentic complete
+robot generation remains unmet. See [production evidence](verification/production-integration.md).
+
 The learner requested this architecture change on 2026-10-24, after the app and
 private STEP pipeline had already begun. This is an isolated, newly implemented
 research increment, not retroactive evidence that the application was planned

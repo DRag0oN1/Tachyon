@@ -1,9 +1,31 @@
-import { Box3, LoadingManager, Mesh, type Group, type Material } from 'three';
+import { Box3, LoadingManager, Mesh, type Group, type Material, type Object3D, type Texture } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { api } from '../api/client';
 import type { ComponentDefinition } from '../api/contracts';
+import { clearSelectionHighlight } from './inspection';
+import { batchSourcePrimitives } from './batchSourcePrimitives';
 
 export interface LoadedComponent { scene: Group; meshCount: number; bounds: Box3 }
+export function actualSourceBounds(scene: Group): Box3 { return new Box3().setFromObject(scene, true); }
+
+export function annotateNativeNodes(scene: Group, component: ComponentDefinition, associations: ReadonlyMap<Object3D | Material | Texture, { nodes?: number }>, nodes: readonly { name?: string }[]): void {
+  const names = new Map(component.nativeHierarchy?.map(node => [node.id, node.name]));
+  scene.traverse(object => {
+    object.userData.tachyonComponentId = component.id;
+    object.userData.tachyonMeshSha256 = component.meshSha256;
+    const index = associations.get(object)?.nodes;
+    // Face primitives often have a mesh association but no native node. Picking
+    // must climb to their associated parent, not invent a primitive identity.
+    delete object.userData.tachyonNativeNodeId;
+    delete object.userData.tachyonNativeNodeName;
+    if (index !== undefined) {
+      const id = `node-${index}`;
+      object.userData.tachyonNativeNodeId = id;
+      // GLTFLoader sanitizes/deduplicates Object3D.name. Keep the source name.
+      object.userData.tachyonNativeNodeName = nodes[index]?.name ?? names.get(id) ?? `Body ${index}`;
+    }
+  });
+}
 
 // GLBs must be self-contained. Never let a loader bypass authenticated fetching
 // through an external buffer, image, decoder, or network URL.
@@ -21,6 +43,7 @@ export async function validateGlb(blob: Blob): Promise<void> {
   if (document.extensionsRequired?.some((extension: string) => /draco|basisu|meshopt/i.test(extension))) throw new Error('This component requires an unavailable mesh decoder. Prepare an uncompressed GLB.');
 }
 export function disposeScene(scene: Group): void {
+  clearSelectionHighlight(scene);
   const geometries = new Set<Mesh['geometry']>();
   const materials = new Set<Material>();
   scene.traverse(object => {
@@ -51,16 +74,13 @@ export async function loadComponent(component: ComponentDefinition, signal: Abor
     scene = gltf.scene;
     signal.throwIfAborted();
     let meshCount = 0;
-    scene.traverse(object => {
-      // Preserve native names, transforms, geometry, materials and GLTF extras.
-      object.userData.tachyonComponentId = component.id;
-      object.userData.tachyonMeshSha256 = component.meshSha256;
-      const index = gltf.parser.associations.get(object)?.nodes;
-      if (index !== undefined) object.userData.tachyonNativeNodeId = `node-${index}`;
-      if (object instanceof Mesh) meshCount++;
-    });
+    annotateNativeNodes(scene, component, gltf.parser.associations, gltf.parser.json.nodes ?? []);
+    batchSourcePrimitives(scene);
+    scene.traverse(object => { if (object instanceof Mesh) meshCount++; });
     if (!meshCount) throw new Error('The imported GLB contains no renderable source meshes.');
-    const bounds = new Box3().setFromObject(scene);
+    // Rotated curved/sparse parts have conservative transformed local AABBs.
+    // Check actual world vertices, matching the native conversion receipt.
+    const bounds = actualSourceBounds(scene);
     const values = [...bounds.min.toArray(), ...bounds.max.toArray()];
     const declared = [...component.boundsM.min, ...component.boundsM.max];
     if (bounds.isEmpty() || values.some((n, i) => !Number.isFinite(n) || Math.abs(n - declared[i]) > Math.max(0.0002, Math.abs(declared[i]) * 0.01))) throw new Error('Rendered mesh bounds do not match the catalog in metres. Refresh or re-prepare this component.');

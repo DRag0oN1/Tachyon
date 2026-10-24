@@ -1,63 +1,81 @@
 # CAD source qualification status
 
-Reviewed 2026-10-23 for `4-spec`. **Official manufacturer geometry is preferred.
-Neither investigated library has verified permission for Tachyon to redistribute
-original CAD or converted browser meshes.** No such geometry is included in the
-public project, and no geometry was deployed. No permission request was sent.
+Updated 2026-10-24 from the current implementation and private local receipts.
+The historical `4-spec` investigation is retained below. **Official manufacturer
+geometry is preferred; public redistribution/hosting of the investigated CAD
+remains unverified.** Original CAD and converted meshes stay in private storage,
+outside application bundles and commits. No new licensing research or permission
+request was performed for this update.
 
 **Selected implementation approach: user-provided STEP, local processing, and
-operation-specific rights qualification.** This resolves the distribution
-dependency in the architecture; it does not grant permission to convert a
-particular uploaded file or establish that complete robot recipes already work.
+operation-specific rights qualification.** Local inspection and public asset
+redistribution are separate gates. The two sources below now have a narrow
+private-inspection basis recorded; this establishes neither new assembly-placement
+scope nor complete robot recipes.
 The learner approved the technical specification on this basis, with asset,
 recipe, task-compatibility, and browser checks retained as build gates.
 
-## Slice 1 external source register — 2026-10-23
+## Current local sources and qualification — 2026-10-24
 
 Created the learner-selected private roots `~/Documents/TachyonCAD/step/` and
 `~/Documents/TachyonCAD/rights/`, outside Git. Explicitly requested manufacturer
-originals were downloaded to the STEP root; source facts, terms observations and
-operation-specific **unverified** records remain in the rights root. No converted
-VEX meshes, native measurement receipts or VEX screenshots were produced.
+originals were downloaded to the STEP root. The initial 2026-10-23 register left
+processing/display unverified and correctly refused native measurement at that
+time. The later `rights.json` and
+`private-inspection-review-2026-10-23.json` supersede that local-inspection status:
+`acquisition_storage`, `conversion`, and `loopback_display` are qualified for
+these exact source hashes under `terms_interpretation` /
+`private_local_inspection`. **This is not explicit manufacturer permission,
+an asset-specific license, or written rightsholder permission.**
 
 | Official source and offered identity | Original bytes | SHA-256 | Current application permissions |
 | --- | --- | --- | --- |
-| [System Bundle](https://www.vexrobotics.com/v5-system-bundle.html): [V5 Clawbot 276-6009 STEP](https://www.vexrobotics.com/cadmodels/upload/download/upload_id/0212d660-fca3-43ad-addb-bc9dc58b28e4) | 119,373,056 | `d291e70cf6ccd5260983193ab07d9f824b965b1c5f7e2ef298e961e7e7768fb7` | Unverified; native processing/display blocked |
-| [V5 Smart Motor 276-4840](https://www.vexrobotics.com/276-4840.html): [offered STEP](https://www.vexrobotics.com/cadmodels/upload/download/upload_id/4d4d0c25-ee11-41b1-a39a-97eadda19619) | 16,822,582 | `3399374de417a5b403619e9e475d616e0cc1c3196324b4ba15d4fd0049ab9cec` | Unverified; native processing/display blocked |
+| [System Bundle](https://www.vexrobotics.com/v5-system-bundle.html): [V5 Clawbot 276-6009 STEP](https://www.vexrobotics.com/cadmodels/upload/download/upload_id/0212d660-fca3-43ad-addb-bc9dc58b28e4) | 119,373,056 | `d291e70cf6ccd5260983193ab07d9f824b965b1c5f7e2ef298e961e7e7768fb7` | Private storage/conversion/authenticated loopback inspection qualified by narrow terms interpretation; new assembly placement unverified |
+| [V5 Smart Motor 276-4840](https://www.vexrobotics.com/276-4840.html): [offered STEP](https://www.vexrobotics.com/cadmodels/upload/download/upload_id/4d4d0c25-ee11-41b1-a39a-97eadda19619) | 16,822,582 | `3399374de417a5b403619e9e475d616e0cc1c3196324b4ba15d4fd0049ab9cec` | Private storage/conversion/authenticated loopback inspection qualified by narrow terms interpretation; new assembly placement unverified |
 
-The [Structure page](https://www.vexrobotics.com/v5-structure.html), product
-download links and [general terms](https://www.iubenda.com/terms-and-conditions/89449486)
-were rechecked. The footer-linked [Licensing EULA](https://www.vexrobotics.com/licensing-eula)
-does not establish an affirmative V5 CAD conversion grant; its applicability to
-these assets remains unresolved. Permissions for other product families do not
-establish V5 rights. No asset-specific license or written permission covering
-conversion, assembly placement and local browser display was found. Original and
-mesh redistribution, public hosting and public imagery remain separately blocked.
-The private review is an observation record, **not permission from VEX**.
+The review permits only the requested personal local inspection/development run,
+unchanged originals/geometry, retained attribution, and authenticated loopback
+display. `assembly_placement`, `part_modification`, `lan_display`,
+`public_depiction`, original/mesh redistribution and public hosting remain
+unverified. The policy explicitly prevents the private-inspection interpretation
+from authorizing those operations. No remote CAD processing/transmission is
+authorized by these records.
 
 Implemented discovery, source-provenance recording, permission-gated native
 measurement, external manifest registration, local conversion/cache loading and
 owner-authenticated source status. Files supplied by the user follow the same
 workflow. Discovery only hashes bytes and samples literal text; it does not
 verify dimensions, geometry, identity or mechanical connections. The importer
-now accepts bounded sources up to 256 MiB to accommodate the offered Clawbot;
-its actual conversion/render performance remains untested.
+accepts bounded STEP sources up to 256 MiB. Both sources have native measurement
+and prepared browser meshes in ignored `.local/`; source/mesh hashes and current
+converter/catalog fingerprints were checked. The active registration points to
+`.local/catalog/vex-local-manifest.json` and the external `rights.json`.
 
-Both originals were discovered and their actual hashes/provenance recorded.
-`assets-measure` correctly refused both before native import because required
-rights remain unverified. Desktop SNAP and mobile SHIFT source-status screens
-were tested; they contain **no CAD**. The Clawbot remains an import fixture, not
-an AI-generated robot or evidence of competition task suitability.
+| Prepared inspection reference | Native solids | Display hierarchy nodes | Geometry qualification |
+| --- | --- | --- | --- |
+| `v5_motor_reference` | 23 | 28 | Aggregate BRep valid; reference inspection only |
+| `v5_clawbot_reference` | 450 | 515 | Aggregate BRep invalid; reference inspection only |
 
-Missing next input: applicable asset-specific terms or rightsholder permission
-covering the intended local processing/display; new robot assemblies also need
-assembly-placement scope. Once available, native dimensional/hierarchy review,
-conversion, actual desktop/mobile rendering and multi-part picking still must
-run before Slice 1 can pass. See [external catalog evidence](verification/external-catalog.md)
-and [catalog instructions](../data/catalog/README.md). No slice or skill approval
-has been inferred from downloading originals.
+Both receipts retain `referenceOnly: true`, `ports: []`, `completeRobot: false`
+and `qualifiedForRobotGeneration: false`. A separate read-only native Clawbot
+audit found 48 unique leaf definitions across 435 geometry occurrences individually
+BRep-valid. That does not resolve the aggregate failure: the current receipt uses
+`aggregate_only` diagnostics and `invalidDefinitionCount: null`. Native parent
+relationships are not physical mates, actuator paths or joints. Source labels,
+definition labels and occurrence metadata exist in the native importer; the
+current display receipt is not a selected-part assembly catalog.
 
-## Findings from the requested sources
+Actual motor rendering, native-part selection, focus/reset and SNAP/SHIFT passed
+on desktop and mobile WebKit in the saved
+`.local/verification/production-motor-inspection/.last-run.json`. This is browser
+viewport evidence on loopback, not physical-phone/LAN or public-image permission.
+The motor and Clawbot remain manufacturer inspection references, not newly
+generated robots. See the [production integration evidence](verification/production-integration.md)
+and its final test/command report, [historical external catalog evidence](verification/external-catalog.md)
+and [catalog instructions](../data/catalog/README.md). No slice or learner-review
+completion is inferred from these checks.
+
+## Historical findings from the requested sources — `4-spec`
 
 | Source | Verified observation | Restriction / decision |
 | --- | --- | --- |
@@ -75,11 +93,11 @@ was obtained in this investigation.
 
 | Operation | Current evidence | Tachyon policy for this build |
 | --- | --- | --- |
-| Acquire / store original | Specific manufacturer downloads, subject to terms. | User supplies lawfully obtained files; retain source identity and terms. No bulk downloader or automatic mirror. |
-| Convert STEP to browser mesh | No general permission verified. | Require an applicable asset-specific basis covering conversion before preprocessing. Local storage alone is insufficient. |
-| Place instances / modify assembly | No general permission verified. Placement and changing part geometry are distinct operations. | Record assembly-placement authorization separately. V1 never stretches or edits source solids. Part editing remains unavailable. |
-| Local browser display | No blanket permission inferred. | Qualify local display separately; retain access-controlled local API. |
-| Phone access on LAN | Additional transmission/display context. | Enable only where declared permission covers that use; owner token and explicit LAN origin required. Otherwise loopback only. |
+| Acquire / store original | Qualified for the two hashes above by the narrow private-inspection terms interpretation. | Retain unchanged sources, source identity, terms and attribution. No bulk downloader or automatic mirror. |
+| Convert STEP to browser mesh | Qualified for those two originals for private local inspection; not an explicit manufacturer grant. | Local conversion and content-addressed meshes are implemented. Other supplied files require their own applicable records. |
+| Place instances / modify assembly | **Unverified** for both references. Placement and changing source geometry are distinct operations. | Recheck assembly placement for each design part. The production service rejects `referenceOnly` inputs; source-part editing remains unavailable. |
+| Local browser display | Authenticated loopback inspection qualified for those two hashes. | Check source identity, receipt, mesh and current operation evidence before serving. |
+| Phone access on LAN | **Unverified** for both references. Mobile WebKit viewport tests used loopback. | Physical-phone/LAN verification remains separate; owner authentication alone does not grant LAN scope. |
 | Screenshots / public demo video | No general publication permission verified. | Qualify rendered depiction/publication separately before releasing CAD recordings. A private-use grant is insufficient by itself. |
 | Redistribute original or converted files | **Unverified** for both sources. | Disabled: no Git/Git LFS, releases, app bundles, sample downloads, public storage, geometry exports, or public mesh endpoint. |
 | Public hosting / deployment | **Unverified** for both sources. | Disabled for these assets. Publishing application code through an authorized shipping decision does not host the local CAD library. |
@@ -99,11 +117,12 @@ this profile. Do not retain geometry in access logs.
 
 ## Original-source inspection and provenance
 
-Explicit manufacturer downloads were inspected as native BReps in ignored
-`.local/cad-research/` for this user-requested feasibility investigation. No mesh
-was generated, no original file changed, and no permission for later conversion
-or publication is inferred. These are research inputs, not bundled app content
-or an automatically qualified runtime catalog.
+The following channel/claw/hardware records belong to the historical `4-spec`
+native-BRep investigation in ignored `.local/cad-research/`. That investigation
+generated no display meshes and changed no originals. These research inputs are
+not active runtime catalog entries and are not covered by the later two-source
+Clawbot/motor inspection records. Later conversion of those separate references
+does not qualify these research sources or any new assembly placement.
 
 | Identity | Offered original / source | Bytes | SHA-256 |
 | --- | --- | --- | --- |
@@ -124,13 +143,14 @@ channel, gusset, motor, and separate nut request. No restriction was bypassed.
 The later Slice 1 motor download above succeeded through its explicitly offered
 link. Available originals do not establish a qualified complete robot part set.
 
-## Two scoring-mount configurations: bounded verification
+## Historical `4-spec` scoring-mount configurations: bounded verification
 
 The newly authored [headless probe](../tools/verification/verify_scoring_mount.py)
 reads the channel and claw originals and selects native bolt/nut definitions in memory.
 [Measured results](verification/scoring-mount-feasibility.json) contain native
-geometry and reference revision checks, without meshes or solids. No application
-UI, API, or production revision service has been built by this probe.
+geometry and reference revision checks, without meshes or solids. This probe did
+not build or exercise the application UI/API or production revision service.
+The later production STEP-fixture lifecycle below is separate evidence.
 
 One authentic channel upright supports the claw through two existing through-holes
 with two genuine 1.5-inch screw/hex-nut pairs. The selected holes have measured
@@ -214,9 +234,10 @@ in [third-party notices](../THIRD_PARTY_NOTICES.md).
    powered lift members/guides/mounts; power/control; hardware/bracing. Verify
    game-object interfaces, target poses, reach and clearances. The static fixture
    passes none of these missing whole-robot gates by implication.
-5. Integrate the remount edit on at least one qualified complete recipe, rederive
-   capabilities/bindings after every revision, and verify the lifecycle in the app
-   and browser. Unsupported edits/recipes/integrations remain unavailable.
+5. The production service now constructs declared joint endpoint configurations,
+   revisions and derived bindings; integrate that path with a qualified complete
+   authentic recipe. The historical static remount is not the production joint
+   demonstration. Task capabilities remain unverified after graph/pose checks.
 6. Before `6-ship`, qualify demo-image/video publication for every visible asset
    or obtain permission. Distribution/hosting stay disabled unless resolved
    separately. A private working recording is not permission to publish imagery.
@@ -226,11 +247,48 @@ component-set and end-to-end evidence remain explicit delivery risks, not hidden
 planning successes.
 
 
-## Build-stage update
+## Production integration and remaining acceptance gates — 2026-10-24
 
-The local registration/conversion/inspection pipeline is implemented. Its
-[software verification](verification/slice-1.md) uses only original Tachyon-authored
-non-VEX calibration fixtures. No manufacturer research CAD was converted or
-assigned invented permission. Authentic-VEX and whole-robot acceptance remain
-blocked/unimplemented as recorded in the criterion report. The pre-build static
-mount remains separate from actual application mechanism/revision verification.
+The app now exposes fresh frozen-PPO inference from the saved seed-17 policy,
+without training, and two mechanically distinct engineering alternatives for
+one learned family. The learner explicitly accepts this same-family alternative
+pair; it is not two learned policies or two complete robots. The real production
+UI, genuine motor reference and architecture-blocked path have passed desktop
+and mobile WebKit checks saved under `.local/verification/production-browser/`
+and `.local/verification/production-browser-mobile/` (`.last-run.json`: passed).
+No CAD bytes or renders are inputs to this local policy execution.
+
+`realization.py` / `design_api.py` and the design renderer now exercise actual
+prepared STEP component instances, explicit attachments/joints, rigid world
+transforms, revision-exact action links, derived tool anchors and coordinate
+sketches. Preview keeps the accepted revision intact; Discard, exact-candidate
+Apply and compensating Undo are implemented with persistence/conflict checks and
+current catalog/rights requalification. The current source requires positive
+scoring-height intent, every changing joint to be bound to the scoring action
+and move the same anchor, all affected instances within that binding, and higher
+Y for the raised anchor. New regression tests are present; their final rerun
+results are not presumed here.
+
+The saved `.local/verification/mechanism-browser-complete/.last-run.json` is
+passed for two desktop/mobile WebKit cases using **three instances from three
+new Tachyon-authored non-VEX STEP sources**. The actual renderer, picking,
+strategy highlight, 0.10 m endpoint change, Preview/Discard/Apply/Undo, derived
+links/anchors and restored engineering content were checked. **This proves a
+software lifecycle on original STEP fixtures, not authentic VEX, a complete
+robot, powered hardware, a physically proven mechanism or continuous motion.**
+Do not merge it with the historical static-mount probe or the genuine motor
+inspection claim.
+
+The existing authentic catalog cannot produce a complete robot. Qualified role
+parts, measured ports, role/instance mappings and complete four-bar/elevator
+recipes are missing. BOM/supporting-hardware, actuator/transmission, task and
+clearance qualification are unimplemented; graph closure and endpoint checks do
+not supply them. Other-competition PDF ingestion, custom layouts and broader
+inspection remain incomplete/unimplemented. Physical-phone/LAN and public
+depiction remain unverified. The complete authentic-robot gate stays **blocked**;
+see the [44-criterion status](verification/acceptance-status.md).
+
+The [production integration report](verification/production-integration.md) is
+the forthcoming location for final commands, suite totals and rerun outcomes.
+This update records existing receipts and current source, without speculative
+final test counts or inferred learner sign-off.

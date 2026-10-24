@@ -10,7 +10,7 @@ from .catalog import read_json
 from .rights import RightsPolicy, sha256_file
 
 
-def measure_source(settings: Settings, source_path: str, rights_path: str | None = None):
+def measure_source(settings: Settings, source_path: str, rights_path: str | None = None, reference_only: bool = False):
     source = settings.source_path(source_path)
     if source.suffix.lower() not in (".step", ".stp"):
         raise TachyonError("UNSUPPORTED_CAD_FORMAT", "Supply an original STEP file")
@@ -30,7 +30,9 @@ def measure_source(settings: Settings, source_path: str, rights_path: str | None
         assembly = import_source(source)
         shape = assembly.toCompound()
         solids = shape.Solids()
-        if not solids or not shape.isValid():
+        from .validation import geometry_validation
+        validation = geometry_validation(assembly, shape, detailed=not reference_only)
+        if not solids or (not validation["nativeBrepValid"] and not reference_only):
             raise TachyonError("INVALID_GEOMETRY", "Source must contain valid solid component geometry")
         bounds = shape.BoundingBox()
         nodes = []
@@ -52,6 +54,7 @@ def measure_source(settings: Settings, source_path: str, rights_path: str | None
                 "boundsMm": {"min": [bounds.xmin, bounds.ymin, bounds.zmin],
                              "max": [bounds.xmax, bounds.ymax, bounds.zmax]},
                 "solidCount": len(solids), "nativeHierarchy": nodes,
+                "geometryValidation": validation, "referenceOnly": reference_only,
                 "frame": "Millimetres, native source axes; matrices are local to parent, column-major",
                 "geometryIncluded": False, "convertedMesh": False, "completeRobot": False,
                 "limitations": ["Measured geometry is not independent dimensional certification",

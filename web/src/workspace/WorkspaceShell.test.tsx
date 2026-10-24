@@ -30,7 +30,7 @@ it('preserves a command draft across all assistant sizes and panel switches', as
   fireEvent.click(screen.getByRole('button', { name: 'Expand assistant' }));
   expect(screen.queryByRole('dialog', { name: 'Welcome to Tachyon' })).not.toBeInTheDocument();
   fireEvent.change(screen.getByLabelText('Design request'), { target: { value: 'Raise the scoring height' } });
-  expect(screen.getByRole('button', { name: 'Send request' })).toBeDisabled();
+  expect(screen.getByRole('button', { name: 'Send request' })).toBeEnabled();
   fireEvent.click(screen.getByRole('button', { name: 'Full-screen assistant' }));
   expect(screen.getByRole('dialog', { name: 'Tachyon assistant' })).toHaveAttribute('aria-modal', 'true');
   fireEvent.click(screen.getByRole('button', { name: 'Close assistant' }));

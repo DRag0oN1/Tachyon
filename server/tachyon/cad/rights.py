@@ -31,6 +31,10 @@ class RightsPolicy:
             decision = record.operations.get(operation)
             if not decision or decision.status != "qualified":
                 raise TachyonError("SOURCE_NOT_QUALIFIED", f"Permission is unresolved for {operation.value}")
+            if decision.basis == "terms_interpretation" and (
+                decision.use_scope != "private_local_inspection" or operation not in (
+                    Operation.acquisition_storage, Operation.conversion, Operation.loopback_display)):
+                raise TachyonError("RIGHTS_SCOPE_MISMATCH", "A private inspection interpretation cannot authorize assembly edits, LAN transmission or public distribution")
             if not all((decision.rightsholder.strip(), decision.basis,
                         decision.reviewed_by.strip(), decision.reviewed_on,
                         decision.evidence_path, decision.evidence_sha256)):

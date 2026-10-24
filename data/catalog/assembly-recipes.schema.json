@@ -1,0 +1,805 @@
+{
+  "$defs": {
+    "ActionBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "actionId": {
+          "minLength": 1,
+          "title": "Actionid",
+          "type": "string"
+        },
+        "subsystemId": {
+          "minLength": 1,
+          "title": "Subsystemid",
+          "type": "string"
+        },
+        "instanceIds": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Instanceids",
+          "type": "array"
+        },
+        "jointIds": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Jointids",
+          "type": "array"
+        },
+        "anchors": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/BindingAnchor"
+          },
+          "title": "Anchors",
+          "type": "array"
+        }
+      },
+      "required": [
+        "actionId",
+        "subsystemId"
+      ],
+      "title": "ActionBinding",
+      "type": "object"
+    },
+    "AssemblyTemplate": {
+      "additionalProperties": false,
+      "properties": {
+        "rootInstanceId": {
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Rootinstanceid",
+          "type": "string"
+        },
+        "rootTransform": {
+          "$ref": "#/$defs/RigidTransform",
+          "default": {
+            "matrix": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          }
+        },
+        "instances": {
+          "items": {
+            "$ref": "#/$defs/TemplateInstance"
+          },
+          "maxItems": 512,
+          "minItems": 1,
+          "title": "Instances",
+          "type": "array"
+        },
+        "subsystems": {
+          "items": {
+            "$ref": "#/$defs/Subsystem"
+          },
+          "maxItems": 7,
+          "minItems": 1,
+          "title": "Subsystems",
+          "type": "array"
+        },
+        "relationships": {
+          "items": {
+            "$ref": "#/$defs/Relationship"
+          },
+          "maxItems": 1024,
+          "title": "Relationships",
+          "type": "array"
+        }
+      },
+      "required": [
+        "rootInstanceId",
+        "instances",
+        "subsystems",
+        "relationships"
+      ],
+      "title": "AssemblyTemplate",
+      "type": "object"
+    },
+    "AttachmentPort": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "mount",
+            "shaft",
+            "bearing",
+            "revolute",
+            "prismatic"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "frame": {
+          "$ref": "#/$defs/RigidTransform"
+        },
+        "evidence": {
+          "minLength": 1,
+          "title": "Evidence",
+          "type": "string"
+        },
+        "frameBasis": {
+          "default": "measured",
+          "enum": [
+            "measured",
+            "axis_only"
+          ],
+          "title": "Framebasis",
+          "type": "string"
+        },
+        "positionToleranceM": {
+          "default": 1e-05,
+          "exclusiveMinimum": 0,
+          "maximum": 0.001,
+          "title": "Positiontolerancem",
+          "type": "number"
+        },
+        "angleToleranceRad": {
+          "default": 0.0001,
+          "exclusiveMinimum": 0,
+          "maximum": 0.01,
+          "title": "Angletolerancerad",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "frame",
+        "evidence"
+      ],
+      "title": "AttachmentPort",
+      "type": "object"
+    },
+    "BindingAnchor": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "instanceId": {
+          "minLength": 1,
+          "title": "Instanceid",
+          "type": "string"
+        },
+        "portId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Portid"
+        },
+        "localPointM": {
+          "default": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Localpointm",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "instanceId"
+      ],
+      "title": "BindingAnchor",
+      "type": "object"
+    },
+    "MateVerification": {
+      "additionalProperties": false,
+      "description": "Caller-supplied physical-mate evidence for these exact sources and ports.",
+      "properties": {
+        "parentSourceSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Parentsourcesha256",
+          "type": "string"
+        },
+        "childSourceSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Childsourcesha256",
+          "type": "string"
+        },
+        "parentPortId": {
+          "minLength": 1,
+          "title": "Parentportid",
+          "type": "string"
+        },
+        "childPortId": {
+          "minLength": 1,
+          "title": "Childportid",
+          "type": "string"
+        },
+        "kind": {
+          "default": "fixed",
+          "enum": [
+            "fixed",
+            "revolute",
+            "prismatic"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "mateTransform": {
+          "$ref": "#/$defs/RigidTransform",
+          "default": {
+            "matrix": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          }
+        },
+        "evidence": {
+          "pattern": "\\S",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "parentSourceSha256",
+        "childSourceSha256",
+        "parentPortId",
+        "childPortId",
+        "evidence"
+      ],
+      "title": "MateVerification",
+      "type": "object"
+    },
+    "MeasuredPorts": {
+      "additionalProperties": false,
+      "properties": {
+        "sourceSha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sourcesha256",
+          "type": "string"
+        },
+        "ports": {
+          "items": {
+            "$ref": "#/$defs/AttachmentPort"
+          },
+          "maxItems": 128,
+          "minItems": 1,
+          "title": "Ports",
+          "type": "array"
+        }
+      },
+      "required": [
+        "sourceSha256",
+        "ports"
+      ],
+      "title": "MeasuredPorts",
+      "type": "object"
+    },
+    "Pose": {
+      "additionalProperties": false,
+      "properties": {
+        "jointPositions": {
+          "maxProperties": 1024,
+          "patternProperties": {
+            "^[A-Za-z0-9_-]+$": {
+              "type": "number"
+            }
+          },
+          "propertyNames": {
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "title": "Jointpositions",
+          "type": "object"
+        },
+        "reach": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Reach"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "jointPositions"
+      ],
+      "title": "Pose",
+      "type": "object"
+    },
+    "Reach": {
+      "additionalProperties": false,
+      "properties": {
+        "actionId": {
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Actionid",
+          "type": "string"
+        },
+        "anchorId": {
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Anchorid",
+          "type": "string"
+        },
+        "worldPointM": {
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "title": "Worldpointm",
+          "type": "array"
+        },
+        "evidence": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Evidence",
+          "type": "string"
+        },
+        "toleranceM": {
+          "default": 1e-05,
+          "exclusiveMinimum": 0,
+          "maximum": 0.001,
+          "title": "Tolerancem",
+          "type": "number"
+        }
+      },
+      "required": [
+        "actionId",
+        "anchorId",
+        "worldPointM",
+        "evidence"
+      ],
+      "title": "Reach",
+      "type": "object"
+    },
+    "Recipe": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "alternative": {
+          "enum": [
+            "A",
+            "B"
+          ],
+          "title": "Alternative",
+          "type": "string"
+        },
+        "roleComponentIds": {
+          "additionalProperties": {
+            "items": {
+              "maxLength": 100,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "type": "string"
+            },
+            "maxItems": 128,
+            "minItems": 1,
+            "type": "array"
+          },
+          "maxProperties": 7,
+          "propertyNames": {
+            "enum": [
+              "chassis",
+              "drive",
+              "pin_intake",
+              "pin_transfer",
+              "scorer",
+              "cup_cradle",
+              "stack_interface"
+            ]
+          },
+          "title": "Rolecomponentids",
+          "type": "object"
+        },
+        "portFrames": {
+          "maxProperties": 128,
+          "patternProperties": {
+            "^[A-Za-z0-9_-]+$": {
+              "$ref": "#/$defs/MeasuredPorts"
+            }
+          },
+          "propertyNames": {
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "title": "Portframes",
+          "type": "object"
+        },
+        "template": {
+          "$ref": "#/$defs/AssemblyTemplate"
+        },
+        "actions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/ActionBinding"
+          },
+          "maxItems": 32,
+          "title": "Actions",
+          "type": "array"
+        },
+        "configurations": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Pose"
+          },
+          "maxProperties": 2,
+          "minProperties": 1,
+          "propertyNames": {
+            "enum": [
+              "lower",
+              "raised"
+            ]
+          },
+          "title": "Configurations",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "alternative",
+        "roleComponentIds",
+        "portFrames",
+        "template",
+        "configurations"
+      ],
+      "title": "Recipe",
+      "type": "object"
+    },
+    "Relationship": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "parentInstanceId": {
+          "title": "Parentinstanceid",
+          "type": "string"
+        },
+        "parentPortId": {
+          "title": "Parentportid",
+          "type": "string"
+        },
+        "childInstanceId": {
+          "title": "Childinstanceid",
+          "type": "string"
+        },
+        "childPortId": {
+          "title": "Childportid",
+          "type": "string"
+        },
+        "kind": {
+          "default": "fixed",
+          "enum": [
+            "fixed",
+            "revolute",
+            "prismatic"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "mateTransform": {
+          "$ref": "#/$defs/RigidTransform",
+          "default": {
+            "matrix": [
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          }
+        },
+        "axis": {
+          "anyOf": [
+            {
+              "maxItems": 3,
+              "minItems": 3,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Axis"
+        },
+        "limits": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Limits"
+        },
+        "position": {
+          "default": 0.0,
+          "title": "Position",
+          "type": "number"
+        },
+        "movingMemberIds": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Movingmemberids",
+          "type": "array"
+        },
+        "verification": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MateVerification"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "id",
+        "parentInstanceId",
+        "parentPortId",
+        "childInstanceId",
+        "childPortId"
+      ],
+      "title": "Relationship",
+      "type": "object"
+    },
+    "RigidTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "matrix": {
+          "default": [
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "items": {
+            "type": "number"
+          },
+          "title": "Matrix",
+          "type": "array"
+        }
+      },
+      "title": "RigidTransform",
+      "type": "object"
+    },
+    "Subsystem": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "Subsystem",
+      "type": "object"
+    },
+    "TemplateInstance": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "componentId": {
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "title": "Componentid",
+          "type": "string"
+        },
+        "subsystemId": {
+          "enum": [
+            "chassis",
+            "drive",
+            "pin_intake",
+            "pin_transfer",
+            "scorer",
+            "cup_cradle",
+            "stack_interface"
+          ],
+          "title": "Subsystemid",
+          "type": "string"
+        },
+        "parentId": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parentid"
+        },
+        "placementRelationshipId": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Placementrelationshipid"
+        }
+      },
+      "required": [
+        "id",
+        "componentId",
+        "subsystemId"
+      ],
+      "title": "TemplateInstance",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1,
+      "default": 1,
+      "title": "Schemaversion",
+      "type": "integer"
+    },
+    "recipes": {
+      "items": {
+        "$ref": "#/$defs/Recipe"
+      },
+      "maxItems": 2,
+      "title": "Recipes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "recipes"
+  ],
+  "title": "RecipeBook",
+  "type": "object"
+}

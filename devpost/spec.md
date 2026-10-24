@@ -23,6 +23,23 @@ this conditional local pipeline; it grants no CAD rights or readiness status.
 
 ## How This Works, In Plain Language
 
+**Learner-directed production integration (2026-10-24):** the subsequent request
+supersedes the historical isolation/LLM-only status below. The app now executes
+the saved PPO policy through an isolated bounded subprocess and displays its
+conditional StrategySpec v2 and the two actual bridge architectures for one
+learned family. This requires no model-provider key or retraining. PPO supports
+only the authored Override v2.1 environment; another rulebook's non-RL generation
+path remains unimplemented. The source inspector, measured-port graph service,
+revision-aware renderer and bounded assistant are integrated. Discrete scoring
+joint endpoints replace a static remount as the tested computational edit path;
+this does not establish powered hardware or full mechanism task functionality.
+Current authentic inputs remain reference-only and lack qualified role parts,
+ports, recipes and assembly-placement scope. Full BOM, actuation, task and
+clearance qualification also remains required. See the
+[production contracts](../docs/assembly-realization.md) and
+[executed checks](../docs/verification/production-integration.md). Existing
+22 P0 gates and learner reviews remain unchanged; approval is not completion.
+
 **Learner-directed strategy-first extension (2026-10-24):** strategy discovery
 now begins with a bounded rule-derived abstract game and a genuinely trained
 PyTorch PPO actor–critic across sampled capabilities, before any robot design.

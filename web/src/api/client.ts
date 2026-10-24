@@ -1,6 +1,7 @@
 import { parseCapabilities, parseCatalog, parseHealth, parseWorkspace, type ComponentDefinition, type WorkspacePatch } from './contracts';
 import { sha256Hex } from './sha256';
 import { parseSourceRegister } from './sources';
+import { OVERRIDE_COMPETITION_ID, parseStrategySession, parseStrategyStatus } from './strategy';
 
 export const SESSION_KEY = 'tachyon.owner-session';
 let memorySession: string | null = null;
@@ -53,6 +54,15 @@ async function json(path: string, init?: RequestInit, publicHealth = false): Pro
   catch { throw new Error('The server returned an unreadable response.'); }
 }
 export const api = {
+  // Uses the same owner session, response checks and no-store policy as source inspection.
+  get: (path: string, signal?: AbortSignal) => json(path, { signal }),
+  post: (path: string, body: unknown, signal?: AbortSignal) => json(path, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal,
+  }),
+  strategyStatus: (signal?: AbortSignal) => json('/api/strategy/status', { signal }).then(parseStrategyStatus),
+  generateStrategy: (signal?: AbortSignal) => json('/api/strategy/generate', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ competition_id: OVERRIDE_COMPETITION_ID }), signal,
+  }).then(parseStrategySession),
   health: (signal?: AbortSignal) => json('/api/health', { signal }, true).then(parseHealth),
   catalog: (signal?: AbortSignal) => json('/api/catalog', { signal }).then(parseCatalog),
   sources: (signal?: AbortSignal) => json('/api/sources', { signal }).then(parseSourceRegister),

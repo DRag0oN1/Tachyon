@@ -42,6 +42,7 @@ def main():
     measure = sub.add_parser("assets-measure", help="Measure permitted native STEP into metadata; no meshes or permission approval")
     measure.add_argument("--source", required=True)
     measure.add_argument("--rights")
+    measure.add_argument("--reference-only", action="store_true", help="Report source defects for inspection; does not qualify defective geometry for robot generation")
     args = p.parse_args()
     try:
         settings = Settings.environment()
@@ -58,7 +59,7 @@ def main():
             return 2 if document.get("issues") or document.get("blockers") else 0
         if args.command == "assets-measure":
             from .cad.qualification import measure_source
-            document = measure_source(settings, _input_path(args.source), _input_path(args.rights))
+            document = measure_source(settings, _input_path(args.source), _input_path(args.rights), args.reference_only)
             print(json.dumps(document, indent=2))
             return 0
         manifest = _input_path(args.manifest)

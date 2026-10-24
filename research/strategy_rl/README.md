@@ -1,5 +1,12 @@
 # Strategy-first robot co-design experiment
 
+Production follow-up: the running app now consumes the preserved policy and v2
+handoff through an isolated worker, without retraining or changing these research
+artifacts. The historical experiment/isolation statements below describe the
+earlier increments. See [production integration](../../docs/verification/production-integration.md)
+for the implemented interfaces, actual CAD/revision tests and remaining complete-
+robot limitations.
+
 This independent package implements the learner's 2026-10-24 RL architecture:
 
 **Competition rules → abstract game → trained PPO policy → Strategy

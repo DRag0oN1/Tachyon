@@ -20,12 +20,21 @@ def prepare_component(catalog: Catalog, component):
         assembly = import_source(source)
         shape = assembly.toCompound()
         solids = shape.Solids()
-        if not solids or not shape.isValid():
+        from .validation import geometry_validation
+        validation = geometry_validation(assembly, shape, detailed=not component.reference_only)
+        if not solids or (not validation["nativeBrepValid"] and not component.reference_only):
             raise TachyonError("INVALID_GEOMETRY", "Source must contain valid solid component geometry")
-        bb = shape.BoundingBox()
-        low = np.array([bb.xmin, bb.ymin, bb.zmin])
-        high = np.array([bb.xmax, bb.ymax, bb.zmax])
         expected = component.expected_bounds_mm
+        if component.reference_only:
+            # Explicit references retain the previously reviewed, source-hash-
+            # bound measurements. Validate actual converted world vertices below.
+            # Re-solving whole-assembly BSpline extrema adds minutes without
+            # providing a new independent dimension source.
+            low, high = np.array(expected.min), np.array(expected.max)
+        else:
+            bb = shape.BoundingBox()
+            low = np.array([bb.xmin, bb.ymin, bb.zmin])
+            high = np.array([bb.xmax, bb.ymax, bb.zmax])
         if max(np.max(np.abs(low - expected.min)), np.max(np.abs(high - expected.max))) > component.measurement_tolerance_mm:
             raise TachyonError("SOURCE_DIMENSION_MISMATCH", "Native geometry does not match the measured source bounds")
         # The tested exporter changes Z-up to Y-up but retains millimetre values.
@@ -64,9 +73,11 @@ def prepare_component(catalog: Catalog, component):
             "declaredUse": "user_provided_local", "sourceBoundsMm": {"min": low.tolist(), "max": high.tolist()},
             "conversion": {"tool": "CadQuery", "version": cq.__version__, "linearDeflectionMm": 0.05,
                            "angularDeflectionRad": 0.1, "frame": "native STEP to mm; exporter Z-up to Y-up; explicit mm-to-m root conversion once",
+                           "sourceBoundsBasis": "reviewed_registration_measurement" if component.reference_only else "native_measurement",
                            "maxBoundsErrorM": float(delta), "displayMeshOnly": True},
             "attribution": catalog.policy.records[component.source_sha256].attribution,
-            "completeRobot": False}
+            "completeRobot": False, "referenceOnly": component.reference_only,
+            "geometryValidation": {**validation, "qualifiedForRobotGeneration": validation["nativeBrepValid"] and not component.reference_only}}
         write_json(catalog.receipt_path(component), record)
         return record
     except TachyonError:

@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-24",
+  "baseCommit": "eb1265c",
+  "boundary": "Actual source inspection + isolated frozen inference + original non-VEX STEP endpoint mechanism; no complete authentic robot or physical-performance proof",
+  "tests": {
+    "backend": 528,
+    "frontend": 86,
+    "rl": 102,
+    "browser": 6,
+    "build": "passed"
+  },
+  "preservedCheckpoints": [
+    {
+      "path": "research/strategy_rl/results/override-ppo-v1/runs/seed-17/checkpoint.pt",
+      "sha256": "bf9788465f71ec7431de2cffdfc2683edc4bce2306758c9d12c76bbe3a131066"
+    },
+    {
+      "path": "research/strategy_rl/results/override-ppo-v1/runs/seed-29/checkpoint.pt",
+      "sha256": "e357515a1551c5a053bb4f93912a43bdee339dec5c31e9b72a955c5f5239544b"
+    },
+    {
+      "path": "research/strategy_rl/results/override-ppo-v1/runs/seed-43/checkpoint.pt",
+      "sha256": "3cb42f4b4e30adb18e7bcb82b0cc7facd181517c53df1dcb1e697804a89615c4"
+    }
+  ],
+  "privateScreenshots": [
+    {
+      "path": ".local/verification/production-motor-inspection/authentic-reference--authe-abb40-ate-parts-in-SNAP-and-SHIFT-desktop/desktop-shift-v5_motor_reference-private.png",
+      "sha256": "b0f6ffac956a682edaf7d2cbd7d6484011c967ffbdcd66a86b4b96367934e90e",
+      "bytes": 345232,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-motor-inspection/authentic-reference--authe-abb40-ate-parts-in-SNAP-and-SHIFT-desktop/desktop-snap-v5_motor_reference-private.png",
+      "sha256": "b2ffbe2b21235e1862d89464cbcb721ed1be3d1dadd3dc74c3bae711f363c042",
+      "bytes": 475662,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-motor-inspection/authentic-reference--authe-abb40-ate-parts-in-SNAP-and-SHIFT-desktop/desktop-v5_motor_reference-selected-native-part-private.png",
+      "sha256": "e3d372e30e5249baff2fac96a6245de5ca8e19f0f65e852fceaa11422e0c9021",
+      "bytes": 428775,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-motor-inspection/authentic-reference--authe-abb40-ate-parts-in-SNAP-and-SHIFT-mobile-webkit/mobile-webkit-shift-v5_motor_reference-private.png",
+      "sha256": "0f8fc832018ea2c2acc756d094e1fef5519b338d9f15670289ffeb8d8eccfb38",
+      "bytes": 1272713,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-motor-inspection/authentic-reference--authe-abb40-ate-parts-in-SNAP-and-SHIFT-mobile-webkit/mobile-webkit-snap-v5_motor_reference-private.png",
+      "sha256": "0936ab7b4a31bb4c27110132faa642391a3a0f47a8efb6ec70fc0116593a3346",
+      "bytes": 1654224,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-motor-inspection/authentic-reference--authe-abb40-ate-parts-in-SNAP-and-SHIFT-mobile-webkit/mobile-webkit-v5_motor_reference-selected-native-part-private.png",
+      "sha256": "7124dd5405ac4af0112fe98efccdb3250927f64e84197d97ffce679e5bcb66eb",
+      "bytes": 1290320,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-browser-final/production-strategy--produ-d8c2a-ference-share-one-workspace-desktop/desktop-snap-architecture-blockers-private.png",
+      "sha256": "e842117f739dd9f8017c0236db9ab2c8a50af10961a6e4d4342ed33c817405ec",
+      "bytes": 383720,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-browser-final/production-strategy--produ-d8c2a-ference-share-one-workspace-desktop/desktop-snap-strategy-authentic-reference-private.png",
+      "sha256": "a212a2f7f1d55c11bb609d384becb1ed97d4d94a02311f9d3805136fdf45ff79",
+      "bytes": 374109,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-browser-final/production-strategy--produ-d8c2a-ference-share-one-workspace-desktop/desktop-snap-unsupported-height-private.png",
+      "sha256": "3a72485858bbf859a11465e7623e6fb38878d7793b01db122d06f2103fd4585e",
+      "bytes": 425963,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-browser-final/production-strategy--produ-d8c2a-ference-share-one-workspace-mobile-webkit/mobile-webkit-shift-architecture-blockers-private.png",
+      "sha256": "254f478dff06676221a52d481416350dcea61e29c74b639b4800f44fe743ab87",
+      "bytes": 591375,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-browser-final/production-strategy--produ-d8c2a-ference-share-one-workspace-mobile-webkit/mobile-webkit-shift-strategy-authentic-reference-private.png",
+      "sha256": "b02ed8589d39769c326540ae92968c0a994bf9378f98f69da985b1a294886fad",
+      "bytes": 590288,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/production-browser-final/production-strategy--produ-d8c2a-ference-share-one-workspace-mobile-webkit/mobile-webkit-shift-unsupported-height-private.png",
+      "sha256": "9dda61477fd406271f35f9049b253d201ca54b3326f7a1aefdc1a51fd3bbb7b4",
+      "bytes": 625253,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/mechanism-browser-final/production-revision--produ-86ae8-vision-exact-strategy-links-desktop/desktop-source-step-mechanism-applied.png",
+      "sha256": "3ccf6cfc10fd6b2f78cc4cfad681cc011263e5e3b5e4c9094a643aff80ecf6dd",
+      "bytes": 409562,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/mechanism-browser-final/production-revision--produ-86ae8-vision-exact-strategy-links-desktop/desktop-source-step-mechanism-candidate.png",
+      "sha256": "87008f5ef997daacba88d3a3101fa0cf73f9dafd4fc503b197d660beb75f9f93",
+      "bytes": 426654,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/mechanism-browser-final/production-revision--produ-86ae8-vision-exact-strategy-links-desktop/desktop-source-step-mechanism-strategy-lower.png",
+      "sha256": "848336f708220c675d7e54bd9df831b3fbba5bd881cbe83b8fb50543dbc59ea7",
+      "bytes": 328848,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/mechanism-browser-final/production-revision--produ-86ae8-vision-exact-strategy-links-mobile-webkit/mobile-webkit-source-step-mechanism-applied.png",
+      "sha256": "4bc0fec3b4979840b98759f3eb216d453f9eab597c3b2daa8337bcce65d6e71a",
+      "bytes": 547467,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/mechanism-browser-final/production-revision--produ-86ae8-vision-exact-strategy-links-mobile-webkit/mobile-webkit-source-step-mechanism-candidate.png",
+      "sha256": "422004fe2bc8dc567ff9a3c3f185318fef5f284a0494ba3c5123dd84c12368cd",
+      "bytes": 564478,
+      "publication": "private_only_unpublished"
+    },
+    {
+      "path": ".local/verification/mechanism-browser-final/production-revision--produ-86ae8-vision-exact-strategy-links-mobile-webkit/mobile-webkit-source-step-mechanism-strategy-lower.png",
+      "sha256": "00fa4c31ea5b45f7646c13075d390abec68337cbdbfa399510e19485d7719a16",
+      "bytes": 485769,
+      "publication": "private_only_unpublished"
+    }
+  ]
+}

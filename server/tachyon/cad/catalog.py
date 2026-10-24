@@ -83,7 +83,7 @@ class Catalog:
 
     def fingerprint(self, component):
         implementation = hashlib.sha256()
-        for name in ("prepare.py", "glb.py", "native.py"):
+        for name in ("prepare.py", "glb.py", "native.py", "validation.py"):
             implementation.update(Path(__file__).with_name(name).read_bytes())
         identity = {"component": component.json_data(), "cadquery": version("cadquery"),
                     "ocp": version("cadquery-ocp"), "converterCode": implementation.hexdigest()}
@@ -127,7 +127,7 @@ class Catalog:
                 raise TachyonError("MESH_HASH_MISMATCH", "The prepared mesh is missing or its bytes changed")
             if data["sourceSha256"] != component.source_sha256 or data["catalogFingerprint"] != self.fingerprint(component):
                 raise TachyonError("STALE_MESH", "The source catalog changed; prepare the component again")
-            for key in ("id", "name", "sku", "originKind", "geometryClass", "sourceUrl", "ports"):
+            for key in ("id", "name", "sku", "originKind", "geometryClass", "sourceUrl", "ports", "referenceOnly"):
                 if data[key] != component.json_data()[key]:
                     raise TachyonError("STALE_MESH", "The mesh receipt no longer matches the registered component identity")
             data["declaredUse"] = "lan_source_inspection" if lan else "loopback_source_inspection"

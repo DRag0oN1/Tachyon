@@ -227,7 +227,7 @@ presented as fresh model-generated results.
 
 | ID | Acceptance criterion |
 | --- | --- |
-| STRAT-1 | Generate Strategy works from Home with no robot and returns at least two substantively different approaches. |
+| STRAT-1 | Generate Strategy works from Home with no robot. Learner-directed saved-PPO amendment (2026-10-24): expose the evidenced conditional strategy family; show a second learned approach only when policy evaluation supports it. The two mechanically distinct robot alternatives may implement that same family. Other generation paths retain the original goal of distinct supported approaches. |
 | STRAT-2 | Each approach exposes objectives, mechanism needs, execution sequence, rationale, tradeoffs, and relevant rule sources. |
 | STRAT-3 | Creating from a selected strategy retains its competition/version and action identities through the resulting design. |
 | STRAT-4 | Failure, cancel, and retry retain the user's competition and inputs; failed or example output is never labeled successful AI generation. |

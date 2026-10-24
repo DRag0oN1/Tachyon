@@ -43,7 +43,9 @@ def inspect_glb(path):
     if any(b.get("uri") for b in doc.get("buffers", [])) or any(i.get("uri") for i in doc.get("images", [])):
         raise TachyonError("EXTERNAL_MESH_RESOURCE", "Local meshes must not reference external files or services")
     nodes = doc.get("nodes", [])
-    points, hierarchy = [], []
+    hierarchy = []
+    low, high = np.full(3, np.inf), np.full(3, -np.inf)
+    point_count = 0
     binary_offset = 20 + size
     binary_size, binary_kind = struct.unpack_from("<II", data, binary_offset)
     if binary_kind != 0x004e4942 or binary_offset + 8 + binary_size != len(data):
@@ -63,6 +65,7 @@ def inspect_glb(path):
         return np.ndarray((count, 3), dtype="<f4", buffer=binary, offset=offset, strides=(stride, 4))
 
     def visit(index, parent, transform, ancestors=frozenset()):
+        nonlocal low, high, point_count
         if index in ancestors:
             raise TachyonError("INVALID_MESH", "The mesh hierarchy contains a cycle")
         node = nodes[index]
@@ -83,13 +86,17 @@ def inspect_glb(path):
         if "mesh" in node:
             for primitive in doc["meshes"][node["mesh"]]["primitives"]:
                 vertices = positions(primitive["attributes"]["POSITION"])
-                points.extend(vertices @ world[:3, :3].T + world[:3, 3])
+                transformed = vertices @ world[:3, :3].T + world[:3, 3]
+                if not np.isfinite(transformed).all():
+                    raise TachyonError("EMPTY_MESH", "The imported source produced nonfinite display geometry")
+                low, high = np.minimum(low, transformed.min(axis=0)), np.maximum(high, transformed.max(axis=0))
+                point_count += len(transformed)
         for child in node.get("children", []):
             visit(child, f"node-{index}", world, ancestors | {index})
 
     for root in doc.get("scenes", [{}])[doc.get("scene", 0)].get("nodes", []):
         visit(root, None, np.eye(4))
-    if not points or not np.isfinite(points).all():
+    if not point_count:
         raise TachyonError("EMPTY_MESH", "The imported source produced no finite display geometry")
-    return {"boundsM": {"min": np.min(points, axis=0).tolist(), "max": np.max(points, axis=0).tolist()},
+    return {"boundsM": {"min": low.tolist(), "max": high.tolist()},
             "hierarchy": hierarchy, "meshCount": len(doc.get("meshes", []))}

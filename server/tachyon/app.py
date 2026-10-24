@@ -13,6 +13,10 @@ from . import __version__
 from .cad.catalog import Catalog
 from .cad.inspection import source_inspection
 from .cad.discovery import source_status
+from .assembly_api import router as assembly_router
+from .strategy_api import router as strategy_router
+from .strategy_runtime import status as strategy_status
+from .design_api import router as design_router
 from .config import Settings
 from .errors import TachyonError
 from .models import WorkspacePatch
@@ -54,6 +58,9 @@ def create_app(settings: Settings | None = None):
     app = FastAPI(title="Tachyon", version=__version__, lifespan=lifespan,
                   docs_url=None, redoc_url=None, openapi_url=None)
     app.state.settings = settings
+    app.include_router(assembly_router)
+    app.include_router(strategy_router)
+    app.include_router(design_router)
 
     @app.middleware("http")
     async def owner_session(request: Request, call_next):
@@ -104,10 +111,12 @@ def create_app(settings: Settings | None = None):
     @app.get("/api/capabilities")
     def capabilities(request: Request):
         state = Catalog(settings).public(lan=is_lan(request))
-        return {"canInspect": bool(state["components"]), "canGenerateStrategy": False,
+        learned = strategy_status(settings.root)
+        return {"canInspect": bool(state["components"]), "canGenerateStrategy": learned["available"],
                 "canGenerateRobot": False, "canEdit": False,
-                "reasons": [b["message"] for b in state["blockers"]] + [
-                    "Strategy generation, complete robot recipes and design edits are not implemented in this increment"]}
+                "reasons": [b["message"] for b in state["blockers"]] +
+                           ([] if learned["available"] else [learned.get("reason", "The saved strategy runtime is unavailable")]) + [
+                    "Complete authentic robot generation requires qualified components and a supported assembly recipe"]}
 
     @app.get("/api/assets/{mesh_hash}.glb")
     def asset(mesh_hash: str, request: Request):
