@@ -1,0 +1,1442 @@
+{
+  "performanceDomain": "abstract_simulation_only",
+  "policyEvaluation": "deterministic_argmax_of_trained_masked_policy",
+  "testCases": [
+    {
+      "capability_seed": 2000000000,
+      "episode_seed": 3000000000,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000000,
+      "episode_seed": 3000000001,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000000,
+      "episode_seed": 3000000002,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000001,
+      "episode_seed": 3000000100,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000001,
+      "episode_seed": 3000000101,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000001,
+      "episode_seed": 3000000102,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000002,
+      "episode_seed": 3000000200,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000002,
+      "episode_seed": 3000000201,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000002,
+      "episode_seed": 3000000202,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000003,
+      "episode_seed": 3000000300,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000003,
+      "episode_seed": 3000000301,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000003,
+      "episode_seed": 3000000302,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000004,
+      "episode_seed": 3000000400,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000004,
+      "episode_seed": 3000000401,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000004,
+      "episode_seed": 3000000402,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000005,
+      "episode_seed": 3000000500,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000005,
+      "episode_seed": 3000000501,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000005,
+      "episode_seed": 3000000502,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000006,
+      "episode_seed": 3000000600,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000006,
+      "episode_seed": 3000000601,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000006,
+      "episode_seed": 3000000602,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000007,
+      "episode_seed": 3000000700,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000007,
+      "episode_seed": 3000000701,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000007,
+      "episode_seed": 3000000702,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000008,
+      "episode_seed": 3000000800,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000008,
+      "episode_seed": 3000000801,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000008,
+      "episode_seed": 3000000802,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000009,
+      "episode_seed": 3000000900,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000009,
+      "episode_seed": 3000000901,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000009,
+      "episode_seed": 3000000902,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000010,
+      "episode_seed": 3000001000,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000010,
+      "episode_seed": 3000001001,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000010,
+      "episode_seed": 3000001002,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000011,
+      "episode_seed": 3000001100,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000011,
+      "episode_seed": 3000001101,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000011,
+      "episode_seed": 3000001102,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000012,
+      "episode_seed": 3000001200,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000012,
+      "episode_seed": 3000001201,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000012,
+      "episode_seed": 3000001202,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000013,
+      "episode_seed": 3000001300,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000013,
+      "episode_seed": 3000001301,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000013,
+      "episode_seed": 3000001302,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000014,
+      "episode_seed": 3000001400,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000014,
+      "episode_seed": 3000001401,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000014,
+      "episode_seed": 3000001402,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000015,
+      "episode_seed": 3000001500,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000015,
+      "episode_seed": 3000001501,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000015,
+      "episode_seed": 3000001502,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000016,
+      "episode_seed": 3000001600,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000016,
+      "episode_seed": 3000001601,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000016,
+      "episode_seed": 3000001602,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000017,
+      "episode_seed": 3000001700,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000017,
+      "episode_seed": 3000001701,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000017,
+      "episode_seed": 3000001702,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000018,
+      "episode_seed": 3000001800,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000018,
+      "episode_seed": 3000001801,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000018,
+      "episode_seed": 3000001802,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000019,
+      "episode_seed": 3000001900,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000019,
+      "episode_seed": 3000001901,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000019,
+      "episode_seed": 3000001902,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000020,
+      "episode_seed": 3000002000,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000020,
+      "episode_seed": 3000002001,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000020,
+      "episode_seed": 3000002002,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000021,
+      "episode_seed": 3000002100,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000021,
+      "episode_seed": 3000002101,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000021,
+      "episode_seed": 3000002102,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000022,
+      "episode_seed": 3000002200,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000022,
+      "episode_seed": 3000002201,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000022,
+      "episode_seed": 3000002202,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000023,
+      "episode_seed": 3000002300,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000023,
+      "episode_seed": 3000002301,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000023,
+      "episode_seed": 3000002302,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000024,
+      "episode_seed": 3000002400,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000024,
+      "episode_seed": 3000002401,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000024,
+      "episode_seed": 3000002402,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000025,
+      "episode_seed": 3000002500,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000025,
+      "episode_seed": 3000002501,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000025,
+      "episode_seed": 3000002502,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000026,
+      "episode_seed": 3000002600,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000026,
+      "episode_seed": 3000002601,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000026,
+      "episode_seed": 3000002602,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000027,
+      "episode_seed": 3000002700,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000027,
+      "episode_seed": 3000002701,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000027,
+      "episode_seed": 3000002702,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000028,
+      "episode_seed": 3000002800,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000028,
+      "episode_seed": 3000002801,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000028,
+      "episode_seed": 3000002802,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000029,
+      "episode_seed": 3000002900,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000029,
+      "episode_seed": 3000002901,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000029,
+      "episode_seed": 3000002902,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000030,
+      "episode_seed": 3000003000,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000030,
+      "episode_seed": 3000003001,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000030,
+      "episode_seed": 3000003002,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000031,
+      "episode_seed": 3000003100,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000031,
+      "episode_seed": 3000003101,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000031,
+      "episode_seed": 3000003102,
+      "split": "held_out_distribution",
+      "concentration": 2.0
+    },
+    {
+      "capability_seed": 2000000032,
+      "episode_seed": 3000003200,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000032,
+      "episode_seed": 3000003201,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000032,
+      "episode_seed": 3000003202,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000033,
+      "episode_seed": 3000003300,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000033,
+      "episode_seed": 3000003301,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000033,
+      "episode_seed": 3000003302,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000034,
+      "episode_seed": 3000003400,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000034,
+      "episode_seed": 3000003401,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000034,
+      "episode_seed": 3000003402,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000035,
+      "episode_seed": 3000003500,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000035,
+      "episode_seed": 3000003501,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000035,
+      "episode_seed": 3000003502,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000036,
+      "episode_seed": 3000003600,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000036,
+      "episode_seed": 3000003601,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000036,
+      "episode_seed": 3000003602,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000037,
+      "episode_seed": 3000003700,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000037,
+      "episode_seed": 3000003701,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000037,
+      "episode_seed": 3000003702,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000038,
+      "episode_seed": 3000003800,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000038,
+      "episode_seed": 3000003801,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000038,
+      "episode_seed": 3000003802,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000039,
+      "episode_seed": 3000003900,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000039,
+      "episode_seed": 3000003901,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000039,
+      "episode_seed": 3000003902,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000040,
+      "episode_seed": 3000004000,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000040,
+      "episode_seed": 3000004001,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000040,
+      "episode_seed": 3000004002,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000041,
+      "episode_seed": 3000004100,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000041,
+      "episode_seed": 3000004101,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000041,
+      "episode_seed": 3000004102,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000042,
+      "episode_seed": 3000004200,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000042,
+      "episode_seed": 3000004201,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000042,
+      "episode_seed": 3000004202,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000043,
+      "episode_seed": 3000004300,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000043,
+      "episode_seed": 3000004301,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000043,
+      "episode_seed": 3000004302,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000044,
+      "episode_seed": 3000004400,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000044,
+      "episode_seed": 3000004401,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000044,
+      "episode_seed": 3000004402,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000045,
+      "episode_seed": 3000004500,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000045,
+      "episode_seed": 3000004501,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000045,
+      "episode_seed": 3000004502,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000046,
+      "episode_seed": 3000004600,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000046,
+      "episode_seed": 3000004601,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000046,
+      "episode_seed": 3000004602,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000047,
+      "episode_seed": 3000004700,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000047,
+      "episode_seed": 3000004701,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000047,
+      "episode_seed": 3000004702,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000048,
+      "episode_seed": 3000004800,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000048,
+      "episode_seed": 3000004801,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000048,
+      "episode_seed": 3000004802,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000049,
+      "episode_seed": 3000004900,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000049,
+      "episode_seed": 3000004901,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000049,
+      "episode_seed": 3000004902,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000050,
+      "episode_seed": 3000005000,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000050,
+      "episode_seed": 3000005001,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000050,
+      "episode_seed": 3000005002,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000051,
+      "episode_seed": 3000005100,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000051,
+      "episode_seed": 3000005101,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000051,
+      "episode_seed": 3000005102,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000052,
+      "episode_seed": 3000005200,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000052,
+      "episode_seed": 3000005201,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000052,
+      "episode_seed": 3000005202,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000053,
+      "episode_seed": 3000005300,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000053,
+      "episode_seed": 3000005301,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000053,
+      "episode_seed": 3000005302,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000054,
+      "episode_seed": 3000005400,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000054,
+      "episode_seed": 3000005401,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000054,
+      "episode_seed": 3000005402,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000055,
+      "episode_seed": 3000005500,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000055,
+      "episode_seed": 3000005501,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000055,
+      "episode_seed": 3000005502,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000056,
+      "episode_seed": 3000005600,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000056,
+      "episode_seed": 3000005601,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000056,
+      "episode_seed": 3000005602,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000057,
+      "episode_seed": 3000005700,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000057,
+      "episode_seed": 3000005701,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000057,
+      "episode_seed": 3000005702,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000058,
+      "episode_seed": 3000005800,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000058,
+      "episode_seed": 3000005801,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000058,
+      "episode_seed": 3000005802,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000059,
+      "episode_seed": 3000005900,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000059,
+      "episode_seed": 3000005901,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000059,
+      "episode_seed": 3000005902,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000060,
+      "episode_seed": 3000006000,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000060,
+      "episode_seed": 3000006001,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000060,
+      "episode_seed": 3000006002,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000061,
+      "episode_seed": 3000006100,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000061,
+      "episode_seed": 3000006101,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000061,
+      "episode_seed": 3000006102,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000062,
+      "episode_seed": 3000006200,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000062,
+      "episode_seed": 3000006201,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000062,
+      "episode_seed": 3000006202,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000063,
+      "episode_seed": 3000006300,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000063,
+      "episode_seed": 3000006301,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    },
+    {
+      "capability_seed": 2000000063,
+      "episode_seed": 3000006302,
+      "split": "held_out_budget_corners",
+      "concentration": 0.65
+    }
+  ],
+  "checkpoints": [
+    {
+      "name": "ppo_seed_17",
+      "path": "runs/seed-17/checkpoint.pt",
+      "steps": 262144,
+      "gradientUpdates": 4096,
+      "parameterHash": "b9d0ff5931f9a5c35b2fb407d5051ee08a698a83ad7cfc8537d1967bd60eb5f1",
+      "initialParameterHash": "5794c972cd0e36146d0900d6ca822ed8245fcd1fc7b7c65206413f8737d14ae5",
+      "config": {
+        "seed": 17,
+        "total_steps": 262144,
+        "environments": 16,
+        "rollout_steps": 128,
+        "hidden_size": 64,
+        "learning_rate": 0.0003,
+        "epochs": 4,
+        "minibatch_size": 256,
+        "gamma": 1.0,
+        "gae_lambda": 0.95,
+        "clip_ratio": 0.2,
+        "entropy_coefficient": 0.015,
+        "value_coefficient": 0.5,
+        "max_gradient_norm": 0.5,
+        "reward_scale": 0.1
+      }
+    },
+    {
+      "name": "ppo_seed_29",
+      "path": "runs/seed-29/checkpoint.pt",
+      "steps": 262144,
+      "gradientUpdates": 4096,
+      "parameterHash": "e48d6bbcaa7a90a5db8eeac1fe052af8311d4188724e40fa145e6328ed6c9399",
+      "initialParameterHash": "422a990ed66aedd0037f456db1c73ccf28c10c7f918bab507e260caf3c655a77",
+      "config": {
+        "seed": 29,
+        "total_steps": 262144,
+        "environments": 16,
+        "rollout_steps": 128,
+        "hidden_size": 64,
+        "learning_rate": 0.0003,
+        "epochs": 4,
+        "minibatch_size": 256,
+        "gamma": 1.0,
+        "gae_lambda": 0.95,
+        "clip_ratio": 0.2,
+        "entropy_coefficient": 0.015,
+        "value_coefficient": 0.5,
+        "max_gradient_norm": 0.5,
+        "reward_scale": 0.1
+      }
+    },
+    {
+      "name": "ppo_seed_43",
+      "path": "runs/seed-43/checkpoint.pt",
+      "steps": 262144,
+      "gradientUpdates": 4096,
+      "parameterHash": "94c4ce65d3438fc107c0df3ab676604917dc8fec7fdbec405d30befaf9c56715",
+      "initialParameterHash": "ca13d79596f44c5ce168b8cbec2edaeb2813e33a5459b990036f00a5206e9490",
+      "config": {
+        "seed": 43,
+        "total_steps": 262144,
+        "environments": 16,
+        "rollout_steps": 128,
+        "hidden_size": 64,
+        "learning_rate": 0.0003,
+        "epochs": 4,
+        "minibatch_size": 256,
+        "gamma": 1.0,
+        "gae_lambda": 0.95,
+        "clip_ratio": 0.2,
+        "entropy_coefficient": 0.015,
+        "value_coefficient": 0.5,
+        "max_gradient_norm": 0.5,
+        "reward_scale": 0.1
+      }
+    }
+  ],
+  "confidenceInterval": "95% percentile bootstrap over held-out capability configurations; repeated episode seeds clustered",
+  "policies": {
+    "random": {
+      "episodes": 192,
+      "capabilityConfigurations": 64,
+      "meanScore": 3.453125,
+      "scoreStd": 4.317827702411055,
+      "meanScore95CI": [
+        2.9009114583333333,
+        4.062630208333332
+      ],
+      "midfieldFraction": 0.1875,
+      "meanPathLengthM": 79.83941408082329,
+      "meanScoreBySplit": {
+        "held_out_budget_corners": 3.5833333333333335,
+        "held_out_distribution": 3.3229166666666665
+      }
+    },
+    "heuristic": {
+      "episodes": 192,
+      "capabilityConfigurations": 64,
+      "meanScore": 32.296875,
+      "scoreStd": 8.654261391613671,
+      "meanScore95CI": [
+        30.733723958333332,
+        33.912109375
+      ],
+      "midfieldFraction": 1.0,
+      "meanPathLengthM": 11.753401612504973,
+      "meanScoreBySplit": {
+        "held_out_budget_corners": 30.5,
+        "held_out_distribution": 34.09375
+      }
+    },
+    "ppo_seed_17": {
+      "episodes": 192,
+      "capabilityConfigurations": 64,
+      "meanScore": 38.151041666666664,
+      "scoreStd": 7.288196719006051,
+      "meanScore95CI": [
+        36.51028645833333,
+        39.703125
+      ],
+      "midfieldFraction": 0.78125,
+      "meanPathLengthM": 15.914534115834764,
+      "meanScoreBySplit": {
+        "held_out_budget_corners": 35.8125,
+        "held_out_distribution": 40.489583333333336
+      }
+    },
+    "untrained_seed_17": {
+      "episodes": 192,
+      "capabilityConfigurations": 64,
+      "meanScore": 3.75,
+      "scoreStd": 3.992179855667828,
+      "meanScore95CI": [
+        2.875,
+        4.625
+      ],
+      "midfieldFraction": 0.46875,
+      "meanPathLengthM": 58.343951947334894,
+      "meanScoreBySplit": {
+        "held_out_budget_corners": 3.6666666666666665,
+        "held_out_distribution": 3.8333333333333335
+      }
+    },
+    "ppo_seed_29": {
+      "episodes": 192,
+      "capabilityConfigurations": 64,
+      "meanScore": 38.463541666666664,
+      "scoreStd": 6.221495328557587,
+      "meanScore95CI": [
+        37.03098958333333,
+        39.838671875
+      ],
+      "midfieldFraction": 0.8854166666666666,
+      "meanPathLengthM": 15.464254721918616,
+      "meanScoreBySplit": {
+        "held_out_budget_corners": 36.385416666666664,
+        "held_out_distribution": 40.541666666666664
+      }
+    },
+    "untrained_seed_29": {
+      "episodes": 192,
+      "capabilityConfigurations": 64,
+      "meanScore": 0.0,
+      "scoreStd": 0.0,
+      "meanScore95CI": [
+        0.0,
+        0.0
+      ],
+      "midfieldFraction": 0.0,
+      "meanPathLengthM": 101.81394008035238,
+      "meanScoreBySplit": {
+        "held_out_budget_corners": 0.0,
+        "held_out_distribution": 0.0
+      }
+    },
+    "ppo_seed_43": {
+      "episodes": 192,
+      "capabilityConfigurations": 64,
+      "meanScore": 38.25,
+      "scoreStd": 7.207490316793125,
+      "meanScore95CI": [
+        36.66588541666666,
+        39.8125
+      ],
+      "midfieldFraction": 0.796875,
+      "meanPathLengthM": 15.903476627543023,
+      "meanScoreBySplit": {
+        "held_out_budget_corners": 35.875,
+        "held_out_distribution": 40.625
+      }
+    },
+    "untrained_seed_43": {
+      "episodes": 192,
+      "capabilityConfigurations": 64,
+      "meanScore": 0.0,
+      "scoreStd": 0.0,
+      "meanScore95CI": [
+        0.0,
+        0.0
+      ],
+      "midfieldFraction": 0.0,
+      "meanPathLengthM": 109.88740578358113,
+      "meanScoreBySplit": {
+        "held_out_budget_corners": 0.0,
+        "held_out_distribution": 0.0
+      }
+    }
+  },
+  "pairedComparisons": {
+    "ppo_seed_17": {
+      "random": {
+        "meanDifference": 34.697916666666664,
+        "difference95CI": [
+          32.947656249999994,
+          36.391276041666664
+        ]
+      },
+      "heuristic": {
+        "meanDifference": 5.854166666666667,
+        "difference95CI": [
+          4.551953125000001,
+          7.151302083333332
+        ]
+      },
+      "untrained_seed_17": {
+        "meanDifference": 34.401041666666664,
+        "difference95CI": [
+          32.61966145833334,
+          36.260546875
+        ]
+      }
+    },
+    "ppo_seed_29": {
+      "random": {
+        "meanDifference": 35.010416666666664,
+        "difference95CI": [
+          33.478125,
+          36.52083333333333
+        ]
+      },
+      "heuristic": {
+        "meanDifference": 6.166666666666667,
+        "difference95CI": [
+          4.942708333333333,
+          7.395833333333332
+        ]
+      },
+      "untrained_seed_29": {
+        "meanDifference": 38.463541666666664,
+        "difference95CI": [
+          37.03098958333333,
+          39.838671875
+        ]
+      }
+    },
+    "ppo_seed_43": {
+      "random": {
+        "meanDifference": 34.796875,
+        "difference95CI": [
+          33.078125,
+          36.48971354166667
+        ]
+      },
+      "heuristic": {
+        "meanDifference": 5.953125,
+        "difference95CI": [
+          4.697916666666667,
+          7.213671874999999
+        ]
+      },
+      "untrained_seed_43": {
+        "meanDifference": 38.25,
+        "difference95CI": [
+          36.66588541666666,
+          39.8125
+        ]
+      }
+    }
+  },
+  "limitations": [
+    "A bounded rule-derived abstraction, not the full game or physics",
+    "Capability budgets are abstract, not mechanically certified",
+    "No real robot or match performance validation"
+  ]
+}

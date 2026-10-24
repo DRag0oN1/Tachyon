@@ -1,0 +1,91 @@
+{
+  "name": "override_abstract_strategy_v2_cups",
+  "abstraction_notice": "Bounded strategy-only research model. Not official field geometry, a complete game simulator, CAD-conditioned capabilities, or evidence of a physically qualified VEX robot.",
+  "official_facts": {
+    "source_url": "https://www.vexrobotics.com/v5/competition",
+    "manual_source_url": "https://manuals.vex.com/v5/override/v2.1/game/?view=core",
+    "rule_sources": {
+      "SG6": "https://manuals.vex.com/v5/override/v2.1/game/?view=core#SG6",
+      "SC2": "https://manuals.vex.com/v5/override/v2.1/game/?view=core#SC2",
+      "SC3": "https://manuals.vex.com/v5/override/v2.1/game/?view=core#SC3",
+      "SC4": "https://manuals.vex.com/v5/override/v2.1/game/?view=core#SC4",
+      "SC5": "https://manuals.vex.com/v5/override/v2.1/game/?view=core#SC5"
+    },
+    "manual_version": "2.1",
+    "manual_release_date": "2026-10-08",
+    "verified_date": "2026-10-24",
+    "driver_seconds": 105.0,
+    "field_side_ft": 12.0,
+    "field_side_m": 3.6576,
+    "alliance_pin_half_points": 5,
+    "owned_yellow_pin_half_points": 10,
+    "terminal_midfield_points": 8,
+    "yellow_ownership_rule": "SC5: yellow scored pin halves in a quadrant goal belong to the alliance owning that quadrant's toggle.",
+    "possession_rule": "SG6: possession is limited to one Pin and one Cup independently.",
+    "placement_rule": "SC2: at most one pin half per goal or cup half; successive pins require cups.",
+    "scoring_unit": "SC3: each visible half of a placed pin is evaluated by color; this model counts exactly one visible half per pin token."
+  },
+  "excluded": ["autonomous", "alliance teammates", "contact legality", "physical dynamics", "CAD qualification", "full pin-half visibility and cup-orientation simulation"],
+  "assumptions": {
+    "notice": "Every coordinate, goal height/capacity, stock count, start position, timing/noise model, ownership initialization, and resource budget below is an authored abstract assumption, not official geometry or validated engineering.",
+    "max_steps": 256,
+    "wait_seconds": 0.75,
+    "park_window_seconds": 15.0,
+    "toggle_seconds": 1.0,
+    "start_xy_m": [0.2, 0.2],
+    "sites": [
+      {"name": "supply0", "xy_m": [0.45, 0.6]},
+      {"name": "supply1", "xy_m": [2.8, 2.7]},
+      {"name": "goal0", "xy_m": [0.8, 1.1]},
+      {"name": "goal1", "xy_m": [2.3, 2.3]},
+      {"name": "toggle0", "xy_m": [0.4, 1.8]},
+      {"name": "toggle1", "xy_m": [3.0, 1.8]},
+      {"name": "midfield", "xy_m": [1.8, 1.8]}
+    ],
+    "supplies": [
+      {"site_index": 0, "alliance": 8, "yellow": 2, "cups": 6},
+      {"site_index": 1, "alliance": 4, "yellow": 8, "cups": 6}
+    ],
+    "goals": [
+      {"site_index": 2, "label": "low", "base_height_m": 0.28, "height_per_pin_m": 0.012, "capacity": 8, "toggle_index": 0},
+      {"site_index": 3, "label": "elevated", "base_height_m": 0.58, "height_per_pin_m": 0.015, "capacity": 10, "toggle_index": 1}
+    ],
+    "toggles": [
+      {"site_index": 4, "initial_owner": 0, "opponent_recapture_rate_per_s": 0.025},
+      {"site_index": 5, "initial_owner": 0, "opponent_recapture_rate_per_s": 0.035}
+    ],
+    "capability_model": {
+      "notice": "Sample once before the episode from a drive/handling/lift Dirichlet simplex. This is an abstract resource tradeoff, not a VEX hardware feasibility claim.",
+      "dirichlet_concentration": 2.0,
+      "drive_speed_m_s": "0.65 + 2.0 * drive",
+      "acquisition_seconds": "3.2 - 2.0 * handling",
+      "placement_seconds": "2.5 - 1.5 * handling",
+      "acquisition_success_probability": "0.70 + 0.28 * handling",
+      "placement_success_probability": "0.70 + 0.28 * handling + 0.02 * lift",
+      "movement_success_probability": "0.94 + 0.05 * drive",
+      "toggle_success_probability": "0.85 + 0.10 * handling + 0.05 * lift",
+      "payload_capacity": "1 pin, independently of a maximum of 1 cup (SG6)",
+      "max_reach_m": "0.32 + 0.90 * lift",
+      "turn_seconds": "0.20 + 0.50 * (1 - drive)"
+    },
+    "noise": {
+      "duration_uniform_fraction": 0.10,
+      "failed_move_progress_fraction": [0.10, 0.65],
+      "failed_acquisition_preserves_stock": true,
+      "failed_placement_preserves_inventory": true,
+      "opponent_process": "Independent homogeneous Poisson recaptures per toggle; pre-sampled with a separate RNG stream before the episode, including events while neutral/opponent-owned.",
+      "event_order": "Process recaptures through action end time first, then apply a completed successful player action."
+    },
+    "semantics": {
+      "goal_height": "base_height_m + height_per_pin_m * current_total_pin_count; test reach before each placement; no height bonus",
+      "pin_token": "One legal pin oriented so exactly one selected alliance/yellow half is counted. The other half is ignored. This is a bounded SC3 scoring abstraction, not a claim to simulate all possible half scoring.",
+      "cup_stack": "First pin may enter an empty goal. Every further pin requires cup_ready at that goal; pin placement clears cup_ready. A cup may be placed only on a nonempty stack without a ready cup. Cup placement costs placement time and success probability, earns no direct points, and preserves previously counted halves through an assumed correct clear-side orientation. No cup/pin geometry or stability is verified.",
+      "cup_inventory": "At most one cup independently of at most one pin; each supply starts with six cups. Cups use acquisition timing/probability. Cup and pin placement both require goal reach and remaining pin capacity.",
+      "movement": "Straight-line travel with turn overhead. Failed moves progress by a sampled fraction; deadline truncation preserves only time-feasible progress after turning.",
+      "midfield": "Exact abstract site membership. Award once at any terminal state when at midfield. park_and_wait is available there in the final 15 seconds and waits through all remaining recaptures.",
+      "invalid_action": "Consumes one wait interval and one step, with no player effect. Opponent recaptures and terminal scoring still apply.",
+      "horizon": "At max_steps, advance the remaining match clock without player action before terminal scoring, so terminal points and ownership are evaluated at 105 seconds.",
+      "reward": "Actual modeled score_after minus score_before, including losses of yellow ownership and terminal midfield points. No shaping or reward scaling."
+    }
+  }
+}

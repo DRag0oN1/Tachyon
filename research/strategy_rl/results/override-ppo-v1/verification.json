@@ -1,0 +1,14 @@
+{
+  "performanceDomain": "abstract_simulation_only",
+  "artifactHashesVerified": 33,
+  "trainedCheckpointGatesPassed": 3,
+  "untrainedCheckpointsRejected": 3,
+  "completePublicInferenceEpisodesMatched": 3,
+  "policiesWithRecomputedStatistics": 8,
+  "exactHeldOutReplays": 1536,
+  "fullTrainingReproductionHashMatched": true,
+  "strategyExportsReproduced": 1,
+  "architectureContractsMatched": 1,
+  "productionAppIntegrated": false,
+  "cadGenerated": false
+}

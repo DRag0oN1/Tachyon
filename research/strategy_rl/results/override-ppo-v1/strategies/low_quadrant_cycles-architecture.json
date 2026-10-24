@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "strategyId": "ppo-strategy-low_quadrant_cycles",
+  "performanceDomain": "abstract_simulation_only",
+  "generationMethod": "deterministic_realization_of_learned_capability_requirements",
+  "drivetrain": {
+    "type": "linked_geared_differential",
+    "driveMotors": 2,
+    "drivenWheels": 4,
+    "targetSpeedMps": 1.3226215869049116,
+    "nominalMotorRpmAssumption": 200.0,
+    "wheelToMotorSpeedRatio": 1.2431,
+    "qualification": "torque_and_traction_unverified"
+  },
+  "intake": {
+    "type": "guided_opposed_rollers",
+    "targetAcquisitionSeconds": 2.459102300523811,
+    "pinCapacity": 1
+  },
+  "transfer": {
+    "type": "single_pin_gated_handoff",
+    "independentCupPath": true
+  },
+  "scoring": {
+    "type": "four_bar_pin_gripper",
+    "targetReachM": 0.352,
+    "minimumModeledReachM": 0.35200000000000004,
+    "cupHandling": "independent_single_cup_cradle"
+  },
+  "geometryIntent": {
+    "classification": "conceptual_layout_envelope_not_CAD",
+    "units": "metres",
+    "chassisWidthM": 0.32,
+    "chassisLengthM": 0.36,
+    "wheelDiameterM": 0.1016,
+    "wheelCentersM": [
+      [
+        -0.16,
+        0.0508,
+        -0.1368
+      ],
+      [
+        -0.16,
+        0.0508,
+        0.1368
+      ],
+      [
+        0.16,
+        0.0508,
+        -0.1368
+      ],
+      [
+        0.16,
+        0.0508,
+        0.1368
+      ]
+    ],
+    "scoringBaseM": [
+      0.0,
+      0.1,
+      0.07919999999999999
+    ],
+    "intakeMouthWidthM": 0.18,
+    "liftTravelM": 0.0,
+    "fourBarLinkLengthM": 0.2965
+  },
+  "requiredComponentRoles": [
+    "structural_channels",
+    "paired_geared_drive",
+    "wheels",
+    "shafts",
+    "bearings",
+    "fasteners",
+    "pin_gripper",
+    "cup_cradle",
+    "parallel_links",
+    "pivot_shafts"
+  ],
+  "cadStatus": "requires_qualified_components_and_complete_recipe",
+  "completeRobot": false,
+  "physicalPerformanceValidated": false,
+  "remainingChecks": [
+    "Authentic component resolution and licenses",
+    "Mounts and connection closure",
+    "Actuator and transmission integration",
+    "Object contact and cup orientation",
+    "Collision, stability and drivetrain effort",
+    "Full competition legality"
+  ],
+  "id": "architecture-3e859cc3aad671f7fed1"
+}

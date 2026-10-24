@@ -1,0 +1,9 @@
+{
+  "performanceDomain": "abstract_simulation_only",
+  "originalEvaluationReportSha256": "fa0b6db89c19ba9ec2f1918ebc43246a5c6e765b48828281ec8e447997a961f9",
+  "evaluationReportPackagingChange": "Only checkpoint paths made relative to bundle root; all case definitions, scores, metrics and comparisons unchanged",
+  "rolloutPackaging": "Lossless gzip of original JSONL bytes; zero timestamp for reproducible archives",
+  "trainingArtifacts": "Unmodified locally generated checkpoint, optimizer and training log files",
+  "replication": "Full independent repetition of seed 17; not a fourth independent training seed",
+  "noCadOrPrivateInputs": true
+}

@@ -1,0 +1,2373 @@
+{
+  "schemaVersion": 1,
+  "id": "ppo-strategy-low_quadrant_cycles",
+  "performanceDomain": "abstract_simulation_only",
+  "scenario": "override_abstract_strategy_v2_cups",
+  "competition": {
+    "name": "V5 Override",
+    "version": "2.1",
+    "scope": "two abstract quadrant stack interfaces, not the central midfield goal"
+  },
+  "evidence": {
+    "origin": "trained_neural_ppo_rollouts",
+    "episodes": 576,
+    "capabilityConfigurations": 64,
+    "trainingSeeds": [
+      "ppo_seed_17",
+      "ppo_seed_29",
+      "ppo_seed_43"
+    ],
+    "checkpointParameterHashes": [
+      "94c4ce65d3438fc107c0df3ab676604917dc8fec7fdbec405d30befaf9c56715",
+      "b9d0ff5931f9a5c35b2fb407d5051ee08a698a83ad7cfc8537d1967bd60eb5f1",
+      "e48d6bbcaa7a90a5db8eeac1fe052af8311d4188724e40fa145e6328ed6c9399"
+    ],
+    "meanScore": 38.28819444444444,
+    "selection": "Observed goal-choice family; target envelopes use its upper score quartile, not a causal minimum search"
+  },
+  "preferredScoringObjectives": [
+    {
+      "objective": "alliance_pin_halves",
+      "meanModeledPoints": 31.71875
+    },
+    {
+      "objective": "terminal_midfield",
+      "meanModeledPoints": 6.569444444444445
+    },
+    {
+      "objective": "owned_yellow_pin_halves",
+      "meanModeledPoints": 0.0
+    }
+  ],
+  "actionPriorities": [
+    {
+      "action": "move_to_goal0",
+      "observedCount": 6750,
+      "frequency": 0.2082240799580467
+    },
+    {
+      "action": "move_to_supply0",
+      "observedCount": 6302,
+      "frequency": 0.19440417065120152
+    },
+    {
+      "action": "acquire_alliance",
+      "observedCount": 4942,
+      "frequency": 0.15245087454113582
+    },
+    {
+      "action": "place_alliance",
+      "observedCount": 4559,
+      "frequency": 0.14063608600425703
+    },
+    {
+      "action": "acquire_cup",
+      "observedCount": 4306,
+      "frequency": 0.13283153900731098
+    },
+    {
+      "action": "place_cup",
+      "observedCount": 4015,
+      "frequency": 0.12385476756023074
+    },
+    {
+      "action": "move_to_midfield",
+      "observedCount": 1070,
+      "frequency": 0.03300737267483111
+    },
+    {
+      "action": "park_and_wait",
+      "observedCount": 473,
+      "frequency": 0.014591109602986088
+    }
+  ],
+  "cycleTransitions": [
+    {
+      "from": "acquire_cup",
+      "to": "move_to_goal0",
+      "observedCount": 3031
+    },
+    {
+      "from": "place_cup",
+      "to": "move_to_supply0",
+      "observedCount": 3001
+    },
+    {
+      "from": "move_to_goal0",
+      "to": "place_alliance",
+      "observedCount": 2964
+    },
+    {
+      "from": "move_to_supply0",
+      "to": "acquire_alliance",
+      "observedCount": 2952
+    },
+    {
+      "from": "place_alliance",
+      "to": "place_cup",
+      "observedCount": 2618
+    },
+    {
+      "from": "acquire_alliance",
+      "to": "acquire_cup",
+      "observedCount": 2462
+    },
+    {
+      "from": "move_to_supply0",
+      "to": "move_to_goal0",
+      "observedCount": 2114
+    },
+    {
+      "from": "move_to_goal0",
+      "to": "move_to_supply0",
+      "observedCount": 2004
+    },
+    {
+      "from": "move_to_goal0",
+      "to": "move_to_midfield",
+      "observedCount": 649
+    },
+    {
+      "from": "acquire_alliance",
+      "to": "move_to_goal0",
+      "observedCount": 634
+    },
+    {
+      "from": "move_to_midfield",
+      "to": "move_to_goal0",
+      "observedCount": 481
+    },
+    {
+      "from": "move_to_midfield",
+      "to": "park_and_wait",
+      "observedCount": 473
+    },
+    {
+      "from": "place_alliance",
+      "to": "move_to_midfield",
+      "observedCount": 220
+    },
+    {
+      "from": "place_alliance",
+      "to": "move_to_supply0",
+      "observedCount": 163
+    },
+    {
+      "from": "acquire_cup",
+      "to": "acquire_alliance",
+      "observedCount": 114
+    }
+  ],
+  "movement": {
+    "meanPathLengthM": 15.760755155098801,
+    "successfulSiteVisits": {
+      "move_to_supply0": 6062,
+      "move_to_goal0": 6441,
+      "move_to_midfield": 994
+    },
+    "layoutIsAbstract": true
+  },
+  "representativeRollout": {
+    "policy": "ppo_seed_17",
+    "capabilitySeed": 2000000000,
+    "episodeSeed": 3000000001,
+    "modeledScore": 43.0,
+    "capabilities": {
+      "allocation": {
+        "drive": 0.33631079345245585,
+        "handling": 0.37044884973809455,
+        "lift": 0.29324035680944976
+      },
+      "drive_allocation": 0.33631079345245585,
+      "handling_allocation": 0.37044884973809455,
+      "lift_allocation": 0.29324035680944976,
+      "drive_speed_m_s": 1.3226215869049116,
+      "acquisition_seconds": 2.459102300523811,
+      "placement_seconds": 1.9443267253928582,
+      "acquisition_success_probability": 0.8037256779266664,
+      "placement_success_probability": 0.8095904850628554,
+      "movement_success_probability": 0.9568155396726228,
+      "toggle_success_probability": 0.9017069028142819,
+      "payload_capacity": 1,
+      "max_reach_m": 0.5839163211285048,
+      "turn_seconds": 0.531844603273772
+    },
+    "events": [
+      {
+        "action": "move_to_supply0",
+        "action_id": 0,
+        "start_s": 0.0,
+        "end_s": 0.9579936163755692,
+        "from_xy": [
+          0.2,
+          0.2
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 0.0,
+        "score_after": 0.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": -1,
+          "target_site_index": 0,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 0.9579936163755692,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 0.9579936163755692,
+        "end_s": 3.515695238277158,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 0.0,
+        "score_after": 0.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.5577016219015887,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 3.515695238277158,
+        "end_s": 5.828589000482159,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": false,
+        "score_before": 0.0,
+        "score_after": 0.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 2.3128937622050016,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": [
+            {
+              "time_s": 5.037130940060388,
+              "toggle_index": 1,
+              "owner_before": 0,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 5.828589000482159,
+        "end_s": 8.25656913069361,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": false,
+        "score_before": 0.0,
+        "score_after": 0.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 2.4279801302114508,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": [
+            {
+              "time_s": 7.543047430472534,
+              "toggle_index": 1,
+              "owner_before": -1,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 8.25656913069361,
+        "end_s": 10.76142155072519,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": false,
+        "score_before": 0.0,
+        "score_after": 0.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 2.5048524200315807,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 10.76142155072519,
+        "end_s": 13.241764603132774,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 0.0,
+        "score_after": 0.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.4803430524075836,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_goal0",
+        "action_id": 2,
+        "start_s": 13.241764603132774,
+        "end_s": 14.218817612550648,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 0.0,
+        "score_after": 0.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "target_site_index": 2,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 0.977053009417874,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 14.218817612550648,
+        "end_s": 16.036135773725576,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 0.0,
+        "score_after": 5.0,
+        "reward": 5.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": 0,
+        "goal_height_m": 0.28,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 1.817318161174926,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_cup",
+        "action_id": 15,
+        "start_s": 16.036135773725576,
+        "end_s": 18.154643687724803,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 5.0,
+        "score_after": 5.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 0,
+        "goal_index": 0,
+        "goal_height_m": 0.29200000000000004,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 2.1185079139992262,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_supply0",
+        "action_id": 0,
+        "start_s": 18.154643687724803,
+        "end_s": 19.18408467485251,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 5.0,
+        "score_after": 5.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "target_site_index": 0,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 1.0294409871277053,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 19.18408467485251,
+        "end_s": 21.719903582537775,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": false,
+        "score_before": 5.0,
+        "score_after": 5.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 2.535818907685265,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": [
+            {
+              "time_s": 21.39086446528609,
+              "toggle_index": 0,
+              "owner_before": 0,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 21.719903582537775,
+        "end_s": 24.018655879208975,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": false,
+        "score_before": 5.0,
+        "score_after": 5.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 2.2987522966712004,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": [
+            {
+              "time_s": 23.603220937604284,
+              "toggle_index": 0,
+              "owner_before": -1,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 24.018655879208975,
+        "end_s": 26.620702450998962,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 5.0,
+        "score_after": 5.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.6020465717899857,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 26.620702450998962,
+        "end_s": 29.092588114340018,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 5.0,
+        "score_after": 5.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.471885663341055,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_goal0",
+        "action_id": 2,
+        "start_s": 29.092588114340018,
+        "end_s": 30.019441989593954,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 5.0,
+        "score_after": 5.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "target_site_index": 2,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 0.9268538752539355,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 30.019441989593954,
+        "end_s": 32.12973519658177,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": false,
+        "score_before": 5.0,
+        "score_after": 5.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": 0,
+        "goal_height_m": 0.29200000000000004,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 2.1102932069878175,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 32.12973519658177,
+        "end_s": 33.90621060802077,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 5.0,
+        "score_after": 10.0,
+        "reward": 5.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": 0,
+        "goal_height_m": 0.29200000000000004,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 1.7764754114390051,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_cup",
+        "action_id": 15,
+        "start_s": 33.90621060802077,
+        "end_s": 35.83903686613973,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 10.0,
+        "score_after": 10.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 0,
+        "goal_index": 0,
+        "goal_height_m": 0.30400000000000005,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 1.9328262581189597,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_supply0",
+        "action_id": 0,
+        "start_s": 35.83903686613973,
+        "end_s": 36.879872622371,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 10.0,
+        "score_after": 10.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "target_site_index": 0,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 1.0408357562312747,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 36.879872622371,
+        "end_s": 39.338395243556306,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 10.0,
+        "score_after": 10.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.4585226211853017,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 39.338395243556306,
+        "end_s": 41.941476200462034,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 10.0,
+        "score_after": 10.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.6030809569057283,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_goal0",
+        "action_id": 2,
+        "start_s": 41.941476200462034,
+        "end_s": 42.91285723282322,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 10.0,
+        "score_after": 10.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "target_site_index": 2,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 0.9713810323611859,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 42.91285723282322,
+        "end_s": 44.961395946190365,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 10.0,
+        "score_after": 15.0,
+        "reward": 5.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": 0,
+        "goal_height_m": 0.30400000000000005,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 2.048538713367142,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_cup",
+        "action_id": 15,
+        "start_s": 44.961395946190365,
+        "end_s": 46.88242076382423,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 15.0,
+        "score_after": 15.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 0,
+        "goal_index": 0,
+        "goal_height_m": 0.31600000000000006,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 1.9210248176338673,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_supply0",
+        "action_id": 0,
+        "start_s": 46.88242076382423,
+        "end_s": 47.8048208452625,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 15.0,
+        "score_after": 15.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "target_site_index": 0,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 0.9224000814382682,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 47.8048208452625,
+        "end_s": 50.40582995664337,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 15.0,
+        "score_after": 15.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.6010091113808786,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 50.40582995664337,
+        "end_s": 52.75337021734987,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 15.0,
+        "score_after": 15.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.347540260706492,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_goal0",
+        "action_id": 2,
+        "start_s": 52.75337021734987,
+        "end_s": 53.81186142335137,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 15.0,
+        "score_after": 15.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "target_site_index": 2,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 1.058491206001499,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 53.81186142335137,
+        "end_s": 55.8260529075382,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 15.0,
+        "score_after": 20.0,
+        "reward": 5.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": 0,
+        "goal_height_m": 0.31600000000000006,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 2.014191484186828,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": [
+            {
+              "time_s": 54.202006903724254,
+              "toggle_index": 0,
+              "owner_before": -1,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "place_cup",
+        "action_id": 15,
+        "start_s": 55.8260529075382,
+        "end_s": 57.73152869269262,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 20.0,
+        "score_after": 20.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 0,
+        "goal_index": 0,
+        "goal_height_m": 0.328,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 1.9054757851544226,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_supply0",
+        "action_id": 0,
+        "start_s": 57.73152869269262,
+        "end_s": 58.80211176370544,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 20.0,
+        "score_after": 20.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "target_site_index": 0,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 1.0705830710128166,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 58.80211176370544,
+        "end_s": 61.451777029038034,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": false,
+        "score_before": 20.0,
+        "score_after": 20.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 2.649665265332591,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 61.451777029038034,
+        "end_s": 64.0811402258046,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 20.0,
+        "score_after": 20.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.629363196766572,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": [
+            {
+              "time_s": 61.77965776760747,
+              "toggle_index": 0,
+              "owner_before": -1,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 64.0811402258046,
+        "end_s": 66.30883715625359,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 20.0,
+        "score_after": 20.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.2276969304489818,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": [
+            {
+              "time_s": 64.62950575546532,
+              "toggle_index": 0,
+              "owner_before": -1,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "move_to_goal0",
+        "action_id": 2,
+        "start_s": 66.30883715625359,
+        "end_s": 67.24782795418149,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 20.0,
+        "score_after": 20.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "target_site_index": 2,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 0.9389907979279019,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 67.24782795418149,
+        "end_s": 69.12876987002792,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 20.0,
+        "score_after": 25.0,
+        "reward": 5.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": 0,
+        "goal_height_m": 0.328,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 1.880941915846435,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": [
+            {
+              "time_s": 68.44720434379592,
+              "toggle_index": 1,
+              "owner_before": -1,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "place_cup",
+        "action_id": 15,
+        "start_s": 69.12876987002792,
+        "end_s": 71.15929975676245,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 25.0,
+        "score_after": 25.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 0,
+        "goal_index": 0,
+        "goal_height_m": 0.34,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 2.030529886734525,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_supply0",
+        "action_id": 0,
+        "start_s": 71.15929975676245,
+        "end_s": 72.19055393020041,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.6962466072311491,
+          0.95178086747307
+        ],
+        "success": false,
+        "score_before": 25.0,
+        "score_after": 25.0,
+        "reward": 0.0,
+        "location_index": -1,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "target_site_index": 0,
+          "movement_fraction": 0.29643826505386006,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 1.031254173437959,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_supply0",
+        "action_id": 0,
+        "start_s": 72.19055393020041,
+        "end_s": 73.03693833035982,
+        "from_xy": [
+          0.6962466072311491,
+          0.95178086747307
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 25.0,
+        "score_after": 25.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": -1,
+          "target_site_index": 0,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 0.8463844001594103,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 73.03693833035982,
+        "end_s": 75.32226337218407,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 25.0,
+        "score_after": 25.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.285325041824244,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": [
+            {
+              "time_s": 73.25787978437839,
+              "toggle_index": 1,
+              "owner_before": -1,
+              "owner_after": -1
+            }
+          ]
+        }
+      },
+      {
+        "action": "acquire_cup",
+        "action_id": 14,
+        "start_s": 75.32226337218407,
+        "end_s": 78.01355686073171,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 25.0,
+        "score_after": 25.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.6912934885476494,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_goal0",
+        "action_id": 2,
+        "start_s": 78.01355686073171,
+        "end_s": 79.10312413010664,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 25.0,
+        "score_after": 25.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "target_site_index": 2,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 1.0895672693749232,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 79.10312413010664,
+        "end_s": 81.10818684065808,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 25.0,
+        "score_after": 30.0,
+        "reward": 5.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 1,
+        "goal_index": 0,
+        "goal_height_m": 0.34,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 2.005062710551447,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_cup",
+        "action_id": 15,
+        "start_s": 81.10818684065808,
+        "end_s": 82.8639448299137,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 30.0,
+        "score_after": 30.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 1,
+        "inventory_cup_after": 0,
+        "goal_index": 0,
+        "goal_height_m": 0.35200000000000004,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 1.7557579892556305,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_supply0",
+        "action_id": 0,
+        "start_s": 82.8639448299137,
+        "end_s": 83.94435292294891,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 30.0,
+        "score_after": 30.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "target_site_index": 0,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 1.080408093035207,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "acquire_alliance",
+        "action_id": 7,
+        "start_s": 83.94435292294891,
+        "end_s": 86.24263527185073,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.45,
+          0.6
+        ],
+        "success": true,
+        "score_before": 30.0,
+        "score_after": 30.0,
+        "reward": 0.0,
+        "location_index": 0,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "planned_duration_s": 2.298282348901825,
+          "completed": true,
+          "success_probability": 0.8037256779266664,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_goal0",
+        "action_id": 2,
+        "start_s": 86.24263527185073,
+        "end_s": 87.3338030378438,
+        "from_xy": [
+          0.45,
+          0.6
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 30.0,
+        "score_after": 30.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 0,
+          "target_site_index": 2,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 1.0911677659930616,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 87.3338030378438,
+        "end_s": 89.22424783602924,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": false,
+        "score_before": 30.0,
+        "score_after": 30.0,
+        "reward": 0.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          1,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": 0,
+        "goal_height_m": 0.35200000000000004,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "failure_reason": "stochastic_failure",
+          "planned_duration_s": 1.8904447981854462,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "place_alliance",
+        "action_id": 9,
+        "start_s": 89.22424783602924,
+        "end_s": 91.09474022030696,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          0.8,
+          1.1
+        ],
+        "success": true,
+        "score_before": 30.0,
+        "score_after": 35.0,
+        "reward": 5.0,
+        "location_index": 2,
+        "inventory_before": [
+          1,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": 0,
+        "goal_height_m": 0.35200000000000004,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "planned_duration_s": 1.8704923842777297,
+          "completed": true,
+          "success_probability": 0.8095904850628554,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "move_to_midfield",
+        "action_id": 6,
+        "start_s": 91.09474022030696,
+        "end_s": 92.56868308843568,
+        "from_xy": [
+          0.8,
+          1.1
+        ],
+        "to_xy": [
+          1.8,
+          1.8
+        ],
+        "success": true,
+        "score_before": 35.0,
+        "score_after": 35.0,
+        "reward": 0.0,
+        "location_index": 6,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 2,
+          "target_site_index": 6,
+          "movement_fraction": 1.0,
+          "planned_duration_s": 1.4739428681287101,
+          "completed": true,
+          "success_probability": 0.9568155396726228,
+          "opponent_recaptures": []
+        }
+      },
+      {
+        "action": "park_and_wait",
+        "action_id": 13,
+        "start_s": 92.56868308843568,
+        "end_s": 105.0,
+        "from_xy": [
+          1.8,
+          1.8
+        ],
+        "to_xy": [
+          1.8,
+          1.8
+        ],
+        "success": true,
+        "score_before": 35.0,
+        "score_after": 43.0,
+        "reward": 8.0,
+        "location_index": 6,
+        "inventory_before": [
+          0,
+          0
+        ],
+        "inventory_after": [
+          0,
+          0
+        ],
+        "inventory_cup_before": 0,
+        "inventory_cup_after": 0,
+        "goal_index": null,
+        "goal_height_m": null,
+        "details": {
+          "valid_action": true,
+          "location_before": 6,
+          "planned_duration_s": 12.431316911564323,
+          "completed": true,
+          "success_probability": 1.0,
+          "termination_reason": "park_and_wait",
+          "opponent_recaptures": []
+        }
+      }
+    ]
+  },
+  "capabilityRequirements": {
+    "hardMinimums": {
+      "reachM": 0.35200000000000004,
+      "pinCapacity": 1,
+      "cupCapacity": 1
+    },
+    "minimumScope": "Geometric reach and possession requirements of the representative simulated sequence only",
+    "jointReferenceCapabilities": {
+      "allocation": {
+        "drive": 0.33631079345245585,
+        "handling": 0.37044884973809455,
+        "lift": 0.29324035680944976
+      },
+      "drive_allocation": 0.33631079345245585,
+      "handling_allocation": 0.37044884973809455,
+      "lift_allocation": 0.29324035680944976,
+      "drive_speed_m_s": 1.3226215869049116,
+      "acquisition_seconds": 2.459102300523811,
+      "placement_seconds": 1.9443267253928582,
+      "acquisition_success_probability": 0.8037256779266664,
+      "placement_success_probability": 0.8095904850628554,
+      "movement_success_probability": 0.9568155396726228,
+      "toggle_success_probability": 0.9017069028142819,
+      "payload_capacity": 1,
+      "max_reach_m": 0.5839163211285048,
+      "turn_seconds": 0.531844603273772
+    },
+    "targetBasis": "One observed feasible capability sample; no independent mixing of marginal best features",
+    "targets": {
+      "driveSpeedMps": 1.3226215869049116,
+      "reachM": 0.35200000000000004,
+      "acquisitionSeconds": 2.459102300523811,
+      "placementSeconds": 1.9443267253928582,
+      "acquisitionSuccessProbability": 0.8037256779266664,
+      "placementSuccessProbability": 0.8095904850628554
+    },
+    "empiricalBudgetEnvelope": {
+      "drive": {
+        "p25": 0.19919723127239847,
+        "median": 0.30783277135282294,
+        "p75": 0.424512402314883
+      },
+      "handling": {
+        "p25": 0.280027246410305,
+        "median": 0.3993293793538601,
+        "p75": 0.568850723306849
+      },
+      "lift": {
+        "p25": 0.1566867569906651,
+        "median": 0.20263428859350238,
+        "p75": 0.3031132671244934
+      }
+    }
+  },
+  "mechanismRequirements": [
+    "single_pin_acquisition",
+    "pin_half_orientation_retention",
+    "single_pin_transfer",
+    "scoring_reach",
+    "independent_single_cup_retention",
+    "cup_interface_preparation"
+  ],
+  "observedTradeoffs": {
+    "meanCupPreparationSeconds": 33.3130626715354,
+    "meanToggleActionSeconds": 0.0,
+    "meanObservedScoreLost": 0.0,
+    "midfieldFinishFraction": 0.8211805555555556,
+    "elevatedPlacementFraction": 0.0
+  },
+  "tradeoffs": [
+    "Drive, handling and reach share the sampled abstract budget; hardware feasibility remains unverified",
+    "Yellow-half scores depend on retaining toggle ownership at the episode end",
+    "Cup preparation costs time without immediate points, but enables another Pin placement",
+    "Midfield positioning trades remaining scoring time against eight modeled terminal points"
+  ],
+  "limitations": [
+    "Not real robot or match performance",
+    "Assumed positions, reach heights and action dynamics",
+    "One visible scoring half per Pin, with idealized Cup orientation",
+    "No validated CAD geometry or mechanism capability"
+  ]
+}

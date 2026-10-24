@@ -1,0 +1,8 @@
+{
+  "seed": 17,
+  "steps": 262144,
+  "exactParameterHashMatch": true,
+  "parameterHash": "b9d0ff5931f9a5c35b2fb407d5051ee08a698a83ad7cfc8537d1967bd60eb5f1",
+  "gradientUpdates": 4096,
+  "method": "Complete CPU training repeated from seed; all neural parameters match exactly"
+}

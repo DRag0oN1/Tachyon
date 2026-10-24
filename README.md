@@ -30,6 +30,18 @@ The running converter/render checks use an original **Tachyon-authored non-VEX
 test fixture**. It is labeled in the app and cannot count as authentic VEX CAD,
 a complete robot, generated strategy or a supported mechanism edit.
 
+## Isolated strategy-first RL
+
+An independent [PyTorch PPO experiment](research/strategy_rl/README.md) now
+discovers abstract strategies before planning robot architecture. Three training
+seeds completed 786,432 simulated decisions and 12,288 gradient updates. The
+[preserved report](research/strategy_rl/results/override-ppo-v1/REPORT.md) includes
+checkpoints, held-out random/heuristic controls, reproducible traces and a
+strategy-driven architecture proposal. One learned family is supported; no second
+design or generated CAD is claimed. All results are abstract simulated strategy
+performance. This subsystem is separate from the app and its Python environment;
+production integration remains disabled.
+
 ## Install and run locally
 
 Requires Python 3.12 and Node >=22.12. The verified environment is macOS arm64;
@@ -112,7 +124,8 @@ Browser recordings/traces are disabled and screenshots are restricted to the
 original calibration fixture or empty workspace. Evidence stays local.
 
 Model configuration is server-side only. No provider credentials are currently
-configured or required for source inspection. No live inference has been verified.
+configured or required for source inspection. No external model-provider
+inference has been verified in the application.
 Keep actual credentials out of frontend variables, browser storage and Git.
 
 ## Project documents

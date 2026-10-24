@@ -23,6 +23,19 @@ this conditional local pipeline; it grants no CAD rights or readiness status.
 
 ## How This Works, In Plain Language
 
+**Learner-directed strategy-first extension (2026-10-24):** strategy discovery
+now begins with a bounded rule-derived abstract game and a genuinely trained
+PyTorch PPO actor–critic across sampled capabilities, before any robot design.
+Rollouts produce a structured Strategy Specification for the architecture
+planner. An LLM must not be presented as the learned optimizer. This experimental
+path lives separately under `research/strategy_rl`; it is not enabled in the app.
+See [implementation and evidence](../docs/strategy-first-rl.md). The existing app,
+CAD rights gates, themes and mobile workspace are preserved. Only one strategy
+family is currently supported by training evidence; the two-design product
+requirement remains unmet rather than being demonstrated with invented results.
+The earlier LLM-oriented application contracts below describe the existing
+integration plan, not a completed implementation or the RL strategy source.
+
 The browser is the design workspace. A small Python application reads the
 competition PDF, keeps page references, and asks an AI model for strategies and
 two robot architecture proposals. The AI chooses from the mechanisms Tachyon

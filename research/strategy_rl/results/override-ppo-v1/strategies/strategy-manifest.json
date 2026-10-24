@@ -1,0 +1,43 @@
+{
+  "performanceDomain": "abstract_simulation_only",
+  "supportedFamilies": [
+    {
+      "family": "low_quadrant_cycles",
+      "strategyId": "ppo-strategy-low_quadrant_cycles",
+      "architectureId": "architecture-3e859cc3aad671f7fed1",
+      "support": {
+        "episodes": 576,
+        "capabilityConfigurations": 64,
+        "trainingSeeds": 3
+      }
+    }
+  ],
+  "unsubstantiatedFamilies": [
+    {
+      "family": "elevated_quadrant_cycles",
+      "support": {
+        "episodes": 0,
+        "capabilityConfigurations": 0,
+        "trainingSeeds": 0
+      },
+      "reason": "Insufficient replicated rollout support; no discovered architecture emitted"
+    }
+  ],
+  "otherObservedFamilies": {},
+  "twoDistinctArchitecturesSupported": false,
+  "cadGenerated": false,
+  "frontendIntegrated": false,
+  "feedbackInterface": {
+    "schemaVersion": 1,
+    "robotDesignId": "generated-design-id",
+    "source": "estimated",
+    "capabilities": {
+      "driveSpeedMps": 1.0,
+      "acquisitionSeconds": 2.0,
+      "placementSeconds": 2.0,
+      "reachM": 0.5
+    },
+    "abstractBudgetCalibrationRequired": true,
+    "automaticTrainingLoopImplemented": false
+  }
+}
