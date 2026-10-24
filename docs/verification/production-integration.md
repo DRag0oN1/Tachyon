@@ -1,5 +1,9 @@
 # Production integration verification — 2026-10-24
 
+Implementation checkpoint: **`3179b89`**, based on the preserved bridge `eb1265c`.
+The follow-up documentation commit records Slice 1 completion and these results;
+it adds no code, geometry or training changes.
+
 `5-build` remains active in fast mode. This record describes executed software,
 not full-robot or physical-match acceptance. No policy was retrained, no existing
 checkpoint replaced, and no private robotics implementation incorporated.
@@ -163,7 +167,8 @@ mobile SHIFT and the updated mobile sketches were visually inspected.
 geometry depictions. Manufacturer screenshots remain local, unpublished and
 subject to separate depiction rights. Browser videos/traces are disabled.
 
-The formal checklist revision records the learner-directed saved-PPO substitution
+The source-import/inspection slice is complete from authentic motor evidence;
+the complete-robot slices remain unchecked. The formal checklist revision records the learner-directed saved-PPO substitution
 and dependency sequencing; it does not waive complete robots or change the P0
 boundary. Full P0 hands-on review, final review, learning wrap-up and shipping
 remain incomplete. This increment is a usable production connection with explicit

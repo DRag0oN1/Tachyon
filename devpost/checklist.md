@@ -32,7 +32,7 @@ all P0 obligations, while full completion also requires the remaining criteria.
 
 ## Slices
 
-- [ ] **1. Register local CAD and inspect its real component geometry**
+- [x] **1. Register local CAD and inspect its real component geometry**
   Becomes usable: Start Tachyon locally, see Home with the two independent entry actions and truthful availability, register supplied STEP through the local CLI, and inspect a permitted component in the full-screen viewer with identity/source information. Missing permission or geometry produces an actionable unavailable state instead of a substitute robot.
   Why now: Proves the critical source → permission check → conversion → authenticated asset API → actual browser rendering path before building robot or AI claims around it. Bootstrapping belongs inside this working increment.
   PRD ref: `prd.md > Home and First Use`, `CAD Workspace Composition`, `F4 — Authentic Components and Connected Conceptual Assemblies`, `F5 — Interactive CAD Inspection`, `F8 — SNAP, SHIFT, and Reduced Motion`, `F10 — Mobile, Accessibility, and Input Behavior`, `F11 — Workspace Continuity and Honest Availability`.
@@ -134,6 +134,8 @@ Activity mode: Planned focused investigation for the learner's existing technica
 experience; use the finished app and real code, not a redundant introductory tour.
 
 ## Revisions
+
+- **Verified Slice 1 completion, saved in `3179b89`:** genuine multi-component V5 motor STEP import, source/world-scale checks, native hierarchy, individual-part picking, focus/reset/up-axis, protected local GLB serving and SNAP/SHIFT desktop/mobile rendering passed. The full backend/frontend/build and actual-source browser commands ran. Mark only the import/inspection slice complete; the Clawbot remains a reference, complete generated robots remain absent, and physical-phone/LAN/publication are separate open checks. The planned fast-mode learner review stays after the full P0 journey, not inferred from automated evidence. The same commit preserves the pre-existing uncommitted CAD foundations and saves tested independent production integration; it does not complete slices 2–6.
 
 - **2026-10-24 production integration, learner-directed:** consume the existing PPO/StrategySpec v2 and actual bridge proposals, rather than adding another strategy architecture or retraining. For the supported Override scenario, real frozen neural inference replaces the earlier provider-call prerequisite. Two engineering alternatives implement the one evidenced learned family; STRAT-1 is amended in the PRD accordingly. No complete-robot or authentic-CAD gate is waived, and the 22 P0 identities remain unchanged.
 - **Dependency/verification adjustment:** the learner explicitly authorized independent implementation while external CAD qualification is unresolved. Strategy UI, private graph/revision code and browser evidence therefore progressed alongside the open authentic-robot gate. Slice 1 verification now uses the full backend suite and `@authentic-reference` against the actual motor; later tests use `@production-strategy` and `@production-revision`. These replace obsolete planned filenames with actual test locations, without promoting a non-VEX fixture into complete-robot evidence.
