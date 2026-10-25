@@ -6,6 +6,16 @@ from ..errors import TachyonError
 from ..models import SourceSelection
 
 
+def native_bounds_mm(shape):
+    """Measure BRep surfaces independently of previously cached triangulation."""
+    from OCP.Bnd import Bnd_Box
+    from OCP.BRepBndLib import BRepBndLib
+    box=Bnd_Box()
+    BRepBndLib.AddOptimal_s(shape.wrapped,box,False,False)
+    xmin,ymin,zmin,xmax,ymax,zmax=box.Get()
+    return [[xmin,ymin,zmin],[xmax,ymax,zmax]]
+
+
 def select_source_definition(assembly, selection: SourceSelection):
     """Copy one definition tree in its native frame, retaining the original BReps.
 

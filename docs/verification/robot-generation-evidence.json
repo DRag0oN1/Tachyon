@@ -1,0 +1,64 @@
+{
+  "authoringProbe": {
+    "bindingsPerEndpoint": 12,
+    "changedJoints": 30,
+    "domain": "metadata_only_test_definitions_no_CAD_assets",
+    "endpointClosure": "passing",
+    "instances": 449,
+    "populatedRoles": 4,
+    "relationships": 576
+  },
+  "completeRobotVerified": false,
+  "date": "2026-10-25",
+  "localSources": {
+    "assemblyPlacement": "unverified",
+    "maximumBoundsErrorM": 1.1419148962407873e-05,
+    "nativeBRepValid": true,
+    "publicRedistribution": "unverified",
+    "selectedComponents": 27,
+    "unitSolidCounts": {
+      "vex_31": 4,
+      "vex_39": 73,
+      "vex_45": 89,
+      "vex_55": 16
+    }
+  },
+  "missingMechanisms": [
+    "pin_transfer",
+    "cup_cradle",
+    "stack_interface"
+  ],
+  "physicalPerformanceVerified": false,
+  "privateScreenshots": [
+    {
+      "name": "mobile-webkit-shift-source-selected-gripper-private.png",
+      "published": false,
+      "purpose": "selected factory tool inspection only, not a generated robot",
+      "sha256": "660a50f4ba3f27c9a033630a660124acbd34729bee908e9893df56eec2736bbf"
+    },
+    {
+      "name": "desktop-snap-source-selected-gripper-private.png",
+      "published": false,
+      "purpose": "selected factory tool inspection only, not a generated robot",
+      "sha256": "8258aa9a6fb8b6b4cc0cdf128955d57933b83d3001072e4352dbeb86fbc63b5b"
+    }
+  ],
+  "reproduction": {
+    "command": ".venv/bin/python tools/prepare_architecture_a.py --data-dir .local/robot-a-reproduction --measurements .local/robot-a-source-preparation/source_metrology.json",
+    "geometryPreparationErrors": [],
+    "matchesIndependentCompile": true,
+    "realizationStatus": "inactive",
+    "recipeHash": "167af69e225c8ec94f3bda62fed914d43cbb56543457209020eee44eb8f61d44",
+    "remainingSourceOperation": "assembly_placement",
+    "selectedComponentsPrepared": 27
+  },
+  "scope": "partial_architecture_A_and_source_inspection",
+  "verification": {
+    "RL": 102,
+    "backend": 655,
+    "browserCases": 6,
+    "build": "passing",
+    "frontend": 86,
+    "fullGeneratedRobotBrowserCase": "not_executed"
+  }
+}

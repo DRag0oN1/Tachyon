@@ -25,7 +25,7 @@ import json
 import math
 from typing import Annotated, Literal
 
-from pydantic import Field, ValidationError, model_validator
+from pydantic import Field, ValidationError, model_validator, model_serializer
 
 from . import assemblies as A, bindings as B, strategy_runtime as SR
 from .cad.catalog import Catalog
@@ -33,6 +33,7 @@ from .config import Settings
 from .errors import TachyonError
 from .models import Model, Operation, PreparedComponent, Vector3
 from .store import Store
+from .robot_qualification import RobotContract, qualify_robot
 
 
 MAX_RECIPE_BYTES = 1024 * 1024
@@ -45,7 +46,29 @@ Configuration = Literal["lower", "raised"]
 
 class MeasuredPorts(Model):
     source_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    catalog_fingerprint: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     ports: tuple[A.AttachmentPort, ...] = Field(min_length=1, max_length=128)
+
+
+class CoupledJoint(Model):
+    joint_id: Identifier
+    ratio: float
+    offset: float = 0.
+
+
+class EditGroup(Model):
+    id: Identifier
+    driver_joint_id: Identifier
+    members: tuple[Identifier, ...] = Field(min_length=1, max_length=512)
+    coupling: tuple[CoupledJoint, ...] = Field(min_length=1, max_length=32)
+
+    @model_validator(mode="after")
+    def unique(self):
+        if len(set(self.members)) != len(self.members) or len({c.joint_id for c in self.coupling}) != len(self.coupling):
+            raise ValueError("Coupled group members and joints must be unique")
+        if self.driver_joint_id not in {c.joint_id for c in self.coupling}:
+            raise ValueError("Coupled group must declare its driver joint")
+        return self
 
 
 class TemplateInstance(Model):
@@ -85,10 +108,27 @@ class Recipe(Model):
     template: AssemblyTemplate
     actions: tuple[B.ActionBinding, ...] = Field(default=(), max_length=32)
     configurations: dict[Configuration, Pose] = Field(min_length=1, max_length=2)
+    robot: RobotContract | None = None
+    edit_group: EditGroup | None = None
+
+    @model_serializer(mode="wrap")
+    def preserve_existing_recipe_identity(self, handler):
+        data = handler(self)
+        # New optional contracts must not change persisted v1 recipe hashes.
+        for key in ("robot", "editGroup", "edit_group"):
+            if data.get(key) is None:
+                data.pop(key, None)
+        for frames in data.get("portFrames", data.get("port_frames", {})).values():
+            for key in ("catalogFingerprint", "catalog_fingerprint"):
+                if frames.get(key) is None:
+                    frames.pop(key, None)
+        return data
 
     @model_validator(mode="after")
     def graph_contract(self):
         t = self.template
+        if self.robot is not None and self.alternative != self.robot.architecture:
+            raise ValueError("Robot hardware contract must describe this architecture alternative")
         for records in (t.instances, t.subsystems, t.relationships):
             if len({r.id for r in records}) != len(records):
                 raise ValueError("Duplicate template identity")
@@ -234,6 +274,10 @@ def _measured_definition(receipt, frames):
         raise TachyonError("MISSING_PORT_FRAMES", f"Measured full frames for existing ports are missing: {receipt.id}")
     if frames.source_sha256 != receipt.source_sha256:
         raise TachyonError("STALE_PORT_FRAMES", "Measured port frames refer to a different component source")
+    if frames.catalog_fingerprint is not None and frames.catalog_fingerprint != receipt.catalog_fingerprint:
+        raise TachyonError("STALE_PORT_FRAMES", "Measured frames no longer identify the same selected source component")
+    if getattr(receipt, "source_selection", None) is not None and frames.catalog_fingerprint is None:
+        raise TachyonError("STALE_PORT_FRAMES", "Selected source definitions require component-fingerprint-bound measured frames")
     registered = {p.id: p for p in receipt.ports}
     for port in frames.ports:
         actual = registered.get(port.id)
@@ -427,12 +471,25 @@ def edit_qualification(service, context, recipe, design_id):
         moving_anchor_joints = {r.id for r in revisions[0].assembly.relationships if reaches[0]["instanceId"] in r.moving_member_ids}
         if action.subsystem_id != "scorer" or not changed.intersection(action.joint_ids, moving_anchor_joints):
             raise TachyonError("SCORER_JOINT_BINDING_REQUIRED", "The reach anchor must belong to a scorer action bound to a changing joint")
-        if not changed.issubset(set(action.joint_ids) & moving_anchor_joints):
-            raise TachyonError("EDIT_SCOPE_VIOLATION", "Every changing joint must be bound to the scoring action and move its reach anchor")
         selected = next(a for a in links[0].actions if a.action_id == action.action_id)
         affected = {member for r in revisions[0].assembly.relationships if r.id in changed for member in r.moving_member_ids}
-        if not affected.issubset(selected.instance_ids):
-            raise TachyonError("EDIT_SCOPE_VIOLATION", "The height edit must not move instances outside the scoring action's declared members")
+        if recipe.edit_group is None:
+            if not changed.issubset(set(action.joint_ids) & moving_anchor_joints):
+                raise TachyonError("EDIT_SCOPE_VIOLATION", "Every changing joint must be bound to the scoring action and move its reach anchor")
+            if not affected.issubset(selected.instance_ids):
+                raise TachyonError("EDIT_SCOPE_VIOLATION", "The height edit must not move instances outside the scoring action's declared members")
+        else:
+            group = recipe.edit_group
+            nodes = {node.id: node for node in revisions[0].assembly.instances}
+            joint_ids = {item.joint_id for item in group.coupling}
+            if (not changed.issubset(joint_ids) or not joint_ids.issubset(action.joint_ids)
+                    or affected != set(group.members)
+                    or any(nodes[member].subsystem_id not in {"scorer", "cup_cradle", "stack_interface"} for member in group.members)):
+                raise TachyonError("EDIT_SCOPE_VIOLATION", "Coupled edits must name exactly the affected scoring mechanism and carried members")
+            for pose in recipe.configurations.values():
+                driver = pose.joint_positions[group.driver_joint_id]
+                if any(abs(pose.joint_positions[item.joint_id] - (item.ratio*driver+item.offset)) > 1e-8 for item in group.coupling):
+                    raise TachyonError("INVALID_JOINT_COUPLING", "Every endpoint must satisfy the declared mechanism coupling")
         if reaches[1]["heightM"] <= reaches[0]["heightM"] + 1e-8:
             raise TachyonError("RAISED_HEIGHT_REQUIRED", "The raised configuration must place the same tool anchor above the lower configuration in metres/Y-up")
         for revision, binding in zip(revisions, links):
@@ -592,19 +649,44 @@ class RealizationService:
             can_edit = False
             edit_gaps.append(missing("recipe", "DESIGN_HISTORY_LIMIT", "Undo an accepted edit before adding to this bounded design history"))
         report = service.validate(accepted)
-        gaps = [*_role_gaps(context, recipe), *edit_gaps,
-                missing("robot", "HARDWARE_QUALIFICATION_INCOMPLETE", "BOM completeness, supporting hardware, actuation, clearance and competition task capability remain unverified")]
+        robot_report = qualify_robot(accepted, recipe.robot, prepared_components=public) if recipe.robot else None
+        candidate_report = qualify_robot(candidate, recipe.robot, prepared_components=public) if recipe.robot and candidate else None
+        gaps = [*_role_gaps(context, recipe), *edit_gaps]
+        if robot_report:
+            gaps.extend(missing(m.role, m.code, m.message) for m in robot_report.missing)
+            if candidate_report:
+                gaps.extend(missing(m.role, "CANDIDATE_"+m.code, m.message) for m in candidate_report.missing)
+        else:
+            gaps.append(missing("robot", "HARDWARE_QUALIFICATION_INCOMPLETE", "BOM completeness, supporting hardware, actuation, clearance and competition task capability remain unverified"))
         fixture = any(c.geometry_class == "test_fixture" for c in accepted.assembly.components)
         reach = _reach(recipe, accepted, bindings)
         candidate_reach = _reach(recipe, candidate, candidate_bindings) if candidate else None
         target_reach = context.spec["capabilityRequirements"]["targets"]["reachM"]
-        if reach and reach["heightM"] < target_reach:
+        available_height = reach["heightM"] if reach else None
+        if recipe.robot:
+            # A lowered acquisition pose is not the mechanism's maximum reach.
+            # Recompute the registered raised endpoint rather than inventing a
+            # capability from the proposal's desired height.
+            try:
+                raised = build_pose(service, recipe, data["designId"], "raised") if "raised" in recipe.configurations else accepted
+                raised_reach = _reach(recipe, raised, _links(context, recipe, raised))
+                if raised_reach:
+                    available_height = max(available_height or 0., raised_reach["heightM"])
+            except (TachyonError, ValidationError):
+                # A rejected optional edit must not hide the valid accepted
+                # assembly. edit_qualification supplies its precise reason.
+                gaps.append(missing("scorer", "RAISED_ENDPOINT_INVALID", "The raised endpoint failed validation; the accepted assembly remains available"))
+        if available_height is not None and available_height < target_reach:
             gaps.append(missing("scorer", "MODELED_REACH_TARGET_UNMET",
                                 "The declared tool anchor is below the strategy's modeled height target; geometric height alone does not verify scoring capability"))
         if fixture:
             gaps.append(missing("robot", "TEST_FIXTURE_ONLY", "Original fixture assemblies exercise software; they do not pass authentic VEX robot acceptance"))
+        complete = bool(robot_report and robot_report.complete_robot and not fixture
+                        and (candidate_report is None or candidate_report.complete_robot)
+                        and not any(gap["code"]!="DESIGN_HISTORY_LIMIT" for gap in gaps)
+                        and available_height is not None and available_height >= target_reach)
         return {"designId": data["designId"], "architectureId": context.proposal["id"], "strategyId": context.spec["id"],
-                "status": "partial", "missing": gaps, "canEdit": can_edit, "revisionId": accepted.id,
+                "status": "ready" if complete else "partial", "missing": _dedupe(gaps), "canEdit": can_edit, "revisionId": accepted.id,
                 "accepted": accepted.json_data(), "candidate": candidate.json_data() if candidate else None,
                 "bindings": bindings.json_data(), "candidateBindings": candidate_bindings.json_data() if candidate else None,
                 "previous": data["undo"][-1]["revision"] if data["undo"] else None,
@@ -613,13 +695,16 @@ class RealizationService:
                 "candidateWorldTransforms": {key: list(value.matrix) for key, value in A.world_transforms(candidate.assembly).items()} if candidate else {},
                 "components": public, "annotations": _annotations(accepted, bindings),
                 "candidateAnnotations": _annotations(candidate, candidate_bindings) if candidate else [],
-                "qualification": {"completeRobot": False, "graphValid": True, "hardwareQualified": False,
+                "qualification": {"completeRobot": complete, "graphValid": True, "hardwareQualified": bool(robot_report and robot_report.hardware_qualified),
                                   "physicalPerformanceVerified": False, "capabilityStatus": "unverified", "testFixtureOnly": fixture,
                                   "blockers": list(report.blockers),
                                   "limitations": [text for text in report.limitations if "pose solver" not in text],
                                   "poseValidation": "Declared endpoints only; no continuous motion or collision certification",
                                   "reach": reach, "candidateReach": candidate_reach,
                                   "modeledReachTargetM": target_reach,
+                                  "availableEndpointHeightM": available_height,
+                                  "robotReport": robot_report.json_data() if robot_report else None,
+                                  "candidateRobotReport": candidate_report.json_data() if candidate_report else None,
                                   "anchorHeightMeetsModeledTarget": reach["heightM"] >= target_reach if reach else None,
                                   "heightComparisonBasis": "Declared metres/Y-up pose and abstract target only; physical floor, contact and scoring capability unverified"},
                 "plan": _plan(context, recipe)}

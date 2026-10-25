@@ -153,12 +153,18 @@ class NativeNode(Model):
 class ConversionReceipt(Model):
     tool: Literal["CadQuery"]
     version: str
-    linear_deflection_mm: float
+    linear_deflection_mm: float | None
+    # Older receipts carried the exporter parameter under a nominal mm name;
+    # that exporter used relative deflection. New receipts explicitly say so.
+    meshing_mode: Literal["relative"] = "relative"
+    relative_deflection: float = .05
     angular_deflection_rad: float
     frame: str
     max_bounds_error_m: float = Field(ge=0)
     display_mesh_only: Literal[True]
-    source_bounds_basis: Literal["native_measurement", "reviewed_registration_measurement"] = "native_measurement"
+    source_bounds_basis: Literal["native_measurement", "reviewed_registration_measurement", "native_extremum_support"] = "native_measurement"
+    conservative_source_bounds_mm: Bounds | None = None
+    source_extremum_error_mm: float | None = Field(default=None,gt=0)
 
 
 class PreparedComponent(SelectedSourceModel):

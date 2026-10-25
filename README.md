@@ -32,12 +32,16 @@ revision. Browser verification uses a separately authored **non-VEX STEP mechani
 explicitly labeled as a partial computational fixture. This proves the revision
 pipeline, not VEX robot or physical mechanism functionality.
 
-**The complete authentic robot journey remains incomplete.** The current VEX catalog
-contains reference-only assemblies without qualified part ports, role mappings or
-generation recipes; assembly-placement rights remain unverified. Full bills of
-materials, actuator paths, game-object interfaces and whole-robot clearance/task
-validation also remain unimplemented. Realization reports those gaps and preserves
-reference inspection. Other-competition PDF ingestion, broader editing and full
+**The complete authentic robot journey remains incomplete.** A new measured-source
+compiler creates architecture A's geared drive, paired powered four-bars, mounted
+Claw Kit tool, roller intake and control/power layout: 449 outer instances and 576
+relationships. Both endpoint graphs and 12 strategy bindings pass metadata checks;
+this does not establish a rendered or complete robot. Gated transfer, independent
+Cup handling, stack alignment, full mount/transmission qualification and physical
+task/clearance checks remain unfinished. Assembly-placement rights remain
+unverified in the supplied source records. Realization reports these gaps.
+The [generation increment](docs/verification/robot-generation.md) documents exact
+boundaries and preparation commands. Other-competition PDF ingestion, broader editing and full
 workspace layouts remain unfinished. See the
 [production verification](docs/verification/production-integration.md),
 [CAD source status](docs/cad-source-status.md) and

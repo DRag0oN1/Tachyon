@@ -9,7 +9,7 @@ it('compares supplied subsystems and labels alternatives as schematic engineerin
   expect(screen.getByRole('table')).toHaveTextContent('Linear elevator parallel gripper');
   expect(screen.getByRole('table')).toHaveTextContent('Opposed rollers with orientation guides');
   expect(screen.getByRole('img', { name: /not CAD/ })).toBeVisible();
-  expect(screen.getByText(/not two learned strategies/)).toBeVisible();
+  expect(screen.getByText(/mechanically different proposals for one learned family/)).toBeVisible();
   fireEvent.click(screen.getByRole('button', { name: /Check parts and realize concept/ }));
   expect(onRealize).toHaveBeenCalledWith(session.architectures[0].id);
   fireEvent.click(screen.getByRole('button', { name: /ALTERNATIVE B/ }));

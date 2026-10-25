@@ -146,7 +146,7 @@ export interface DesignSession {
   worldTransforms: Record<string, number[]>;
   candidateWorldTransforms: Record<string, number[]>;
   components: ComponentDefinition[];
-  qualification: { completeRobot: false; [key: string]: unknown };
+  qualification: { completeRobot: boolean; [key: string]: unknown };
   plan: Record<string, unknown>;
   [key: string]: unknown;
 }
@@ -212,7 +212,7 @@ export function parseStrategySession(v: unknown): StrategySession {
 export function parseDesignRealization(v: unknown): DesignRealization {
   if (!object(v) || !str(v.designId) || !str(v.architectureId) || !str(v.strategyId) || !['blocked', 'partial', 'ready'].includes(String(v.status)) ||
     typeof v.canEdit !== 'boolean' || !(v.revisionId === null || str(v.revisionId)) || !Array.isArray(v.missing) ||
-    v.missing.some(m => !object(m) || !str(m.role) || !str(m.code) || !str(m.message)) || !object(v.qualification) || v.qualification.completeRobot !== false || !object(v.plan)) throw new Error('The server returned an incompatible CAD realization response.');
+    v.missing.some(m => !object(m) || !str(m.role) || !str(m.code) || !str(m.message)) || !object(v.qualification) || typeof v.qualification.completeRobot !== 'boolean' || !object(v.plan)) throw new Error('The server returned an incompatible CAD realization response.');
   const matrix = (m: unknown) => Array.isArray(m) && m.length === 16 && m.every(number);
   for (const key of ['worldTransforms', 'candidateWorldTransforms']) if (!object(v[key]) || !Object.values(v[key]).every(matrix)) return invalid();
   for (const key of ['accepted', 'candidate']) {
@@ -231,6 +231,18 @@ export function parseDesignRealization(v: unknown): DesignRealization {
       !Array.isArray(b.actions) || b.actions.some(a => !object(a) || !str(a.actionId) || !strings(a.instanceIds) || !str(a.subsystemId) || !Array.isArray(a.anchors))) return invalid();
   }
   parseCatalog({ profile: 'user_provided_local', components: v.components, blockers: [] });
+  if (v.qualification.completeRobot && (v.status !== 'ready' || !object(v.accepted) ||
+    v.qualification.hardwareQualified !== true || v.qualification.physicalPerformanceVerified !== false ||
+    v.qualification.testFixtureOnly === true ||
+    (v.components as { geometryClass?: string }[]).some(c => c.geometryClass === 'test_fixture') ||
+    !object(v.qualification.robotReport) || v.qualification.robotReport.revisionId !== v.accepted.id ||
+    v.qualification.robotReport.engineeringHash !== v.accepted.engineeringHash ||
+    v.qualification.robotReport.completeRobot !== true ||
+    (v.candidate !== null && (!object(v.candidate) || !object(v.qualification.candidateRobotReport) ||
+      v.qualification.candidateRobotReport.revisionId !== v.candidate.id ||
+      v.qualification.candidateRobotReport.engineeringHash !== v.candidate.engineeringHash ||
+      v.qualification.candidateRobotReport.completeRobot !== true)))) return invalid();
+  if (v.status === 'ready' && !v.qualification.completeRobot) return invalid();
   if (v.canEdit && (v.status === 'blocked' || v.accepted === null || !str(v.revisionId))) return invalid();
   return v as unknown as DesignRealization;
 }

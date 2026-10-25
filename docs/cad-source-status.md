@@ -91,6 +91,14 @@ was obtained in this investigation.
 
 ## Rights by operation
 
+The 2026-10-25 source-selection increment prepares 27 exact native definitions
+from the hash-pinned user-supplied Clawbot file, preserving their own coordinates
+and child hierarchies. The supplied rights records remain unchanged: this is
+private local conversion/inspection, not an approval for assembly placement or
+distribution. A bounded user-attestation schema is implemented, but no real user
+attestation or new manufacturer grant has been recorded. See the
+[generation evidence and remaining restrictions](verification/robot-generation.md).
+
 | Operation | Current evidence | Tachyon policy for this build |
 | --- | --- | --- |
 | Acquire / store original | Qualified for the two hashes above by the narrow private-inspection terms interpretation. | Retain unchanged sources, source identity, terms and attribution. No bulk downloader or automatic mirror. |

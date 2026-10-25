@@ -277,6 +277,31 @@ def test_batch_reuses_import_but_keeps_distinct_local_geometry_and_selection_rec
     assert digest(workspace.source_path) == before
 
 
+def test_batch_records_a_failed_selector_and_still_prepares_independent_parts(selected_workspace):
+    workspace,components=selected_workspace.workspace,selected_workspace.components
+    bad=components[0].model_copy(update={"source_selection":SourceSelection(definition_label="0:999:1",expected_definition_name="missing")})
+    errors=[]
+    result=prepare_components(workspace.catalog(),[bad,components[1]],on_error=lambda c,e: errors.append((c.id,e.code)))
+    assert errors==[(bad.id,"SOURCE_SELECTION_NOT_FOUND")]
+    assert len(result)==1 and result[0]["id"]==components[1].id
+    assert workspace.catalog().prepared(components[1])["meshSha256"]==result[0]["meshSha256"]
+
+
+def test_reused_receipt_still_rechecks_source_bytes_and_conversion_rights(selected_workspace,monkeypatch):
+    catalog=selected_workspace.workspace.catalog();component=selected_workspace.components[0]
+    original=prepare_component(catalog,component)
+    def unexpected_import(path):
+        pytest.fail("A current cached receipt should not re-import unchanged geometry")
+    monkeypatch.setattr(native,"import_source",unexpected_import)
+    reused=prepare_components(catalog,[component],reuse_existing=True)[0]
+    from tachyon.models import PreparedComponent
+    assert PreparedComponent.model_validate(reused).mesh_sha256==original["meshSha256"]
+    assert "qualifiedOperations" not in reused
+    from tachyon.models import Operation
+    catalog.policy.records[component.source_sha256].operations[Operation.conversion].status="disallowed"
+    expect_error("SOURCE_NOT_QUALIFIED",lambda: prepare_components(catalog,[component],reuse_existing=True))
+
+
 def test_selected_preparation_validates_leaf_after_selection_even_for_reference(selected_workspace, native_definitions, monkeypatch):
     component = selected_workspace.components[0]
     leaf = next(n for n in native_definitions.objects.values() if n.name == "original_fixture_leaf")
