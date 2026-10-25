@@ -12,20 +12,43 @@ from .rights import sha256_file
 
 
 def prepare_component(catalog: Catalog, component):
+    return _prepare_component(catalog, component, {})
+
+
+def prepare_components(catalog: Catalog, components):
+    """Prepare a batch, importing each checked source hash at most once.
+
+    The cache is private to this call; callers cannot inject an assembly in
+    place of the registered bytes. Every component still passes source/rights
+    checks before reuse and a source hash check before writing its receipt.
+    """
+    imported_sources = {}
+    return [_prepare_component(catalog, component, imported_sources) for component in components]
+
+
+def _prepare_component(catalog: Catalog, component, imported_sources):
     source = catalog.source(component, PREPARE_OPERATIONS)  # fail before importing/converting any geometry
     import cadquery as cq
 
     try:
-        from .native import import_source
-        assembly = import_source(source)
+        from .native import import_source, select_source_definition
+        if component.source_sha256 not in imported_sources:
+            imported = import_source(source)
+            if sha256_file(source) != component.source_sha256:
+                raise TachyonError("SOURCE_HASH_MISMATCH", "Source changed during native import")
+            imported_sources[component.source_sha256] = imported
+        assembly = imported_sources[component.source_sha256]
+        if component.source_selection is not None:
+            assembly = select_source_definition(assembly, component.source_selection)
         shape = assembly.toCompound()
         solids = shape.Solids()
         from .validation import geometry_validation
-        validation = geometry_validation(assembly, shape, detailed=not component.reference_only)
-        if not solids or (not validation["nativeBrepValid"] and not component.reference_only):
+        whole_file_reference = component.reference_only and component.source_selection is None
+        validation = geometry_validation(assembly, shape, detailed=not whole_file_reference)
+        if not solids or (not validation["nativeBrepValid"] and not whole_file_reference):
             raise TachyonError("INVALID_GEOMETRY", "Source must contain valid solid component geometry")
         expected = component.expected_bounds_mm
-        if component.reference_only:
+        if whole_file_reference:
             # Explicit references retain the previously reviewed, source-hash-
             # bound measurements. Validate actual converted world vertices below.
             # Re-solving whole-assembly BSpline extrema adds minutes without
@@ -73,11 +96,13 @@ def prepare_component(catalog: Catalog, component):
             "declaredUse": "user_provided_local", "sourceBoundsMm": {"min": low.tolist(), "max": high.tolist()},
             "conversion": {"tool": "CadQuery", "version": cq.__version__, "linearDeflectionMm": 0.05,
                            "angularDeflectionRad": 0.1, "frame": "native STEP to mm; exporter Z-up to Y-up; explicit mm-to-m root conversion once",
-                           "sourceBoundsBasis": "reviewed_registration_measurement" if component.reference_only else "native_measurement",
+                           "sourceBoundsBasis": "reviewed_registration_measurement" if whole_file_reference else "native_measurement",
                            "maxBoundsErrorM": float(delta), "displayMeshOnly": True},
             "attribution": catalog.policy.records[component.source_sha256].attribution,
             "completeRobot": False, "referenceOnly": component.reference_only,
             "geometryValidation": {**validation, "qualifiedForRobotGeneration": validation["nativeBrepValid"] and not component.reference_only}}
+        if component.source_selection is not None:
+            record["sourceSelection"] = component.source_selection.json_data()
         write_json(catalog.receipt_path(component), record)
         return record
     except TachyonError:

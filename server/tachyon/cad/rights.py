@@ -35,6 +35,15 @@ class RightsPolicy:
                 decision.use_scope != "private_local_inspection" or operation not in (
                     Operation.acquisition_storage, Operation.conversion, Operation.loopback_display)):
                 raise TachyonError("RIGHTS_SCOPE_MISMATCH", "A private inspection interpretation cannot authorize assembly edits, LAN transmission or public distribution")
+            if decision.basis == "user_attestation":
+                # Software acceptance of a recorded user statement, not
+                # verification of a manufacturer license or rightsholder grant.
+                if decision.use_scope != "private_local_assembly" or operation not in (
+                        Operation.acquisition_storage, Operation.conversion,
+                        Operation.assembly_placement, Operation.loopback_display):
+                    raise TachyonError("RIGHTS_SCOPE_MISMATCH", "A user attestation is limited to private local assembly placement and inspection")
+                if not record.attribution.strip():
+                    raise TachyonError("RIGHTS_EVIDENCE_MISSING", "Source attribution is required for a user attestation")
             if not all((decision.rightsholder.strip(), decision.basis,
                         decision.reviewed_by.strip(), decision.reviewed_on,
                         decision.evidence_path, decision.evidence_sha256)):

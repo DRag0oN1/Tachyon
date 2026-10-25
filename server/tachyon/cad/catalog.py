@@ -19,14 +19,22 @@ LOCAL_OPERATIONS = [Operation.acquisition_storage, Operation.conversion,
 REGISTER_OPERATIONS = [Operation.acquisition_storage]
 PREPARE_OPERATIONS = [Operation.acquisition_storage, Operation.conversion]
 
+# Explicit converter identities: additive selection support must not invalidate
+# already prepared whole-file inspection references. The legacy value is the
+# SHA-256 of prepare.py/glb.py/native.py/validation.py before this extension.
+# Bump the relevant identity when its conversion behavior changes, not whenever
+# shared implementation files are edited. Dependency versions remain bound below.
+WHOLE_FILE_CONVERTER = "692216dbfc550bcb749a18e7196c684e616117e03e977377f6e118350bac5524"
+DEFINITION_CONVERTER = "native-definition-selection-v2"
 
-def write_json(path: Path, data):
+
+def write_json(path: Path, data, *, compact=False):
     path.parent.mkdir(parents=True, exist_ok=True)
     # Unique temporary files avoid following an attacker-controlled .tmp link.
     with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, delete=False) as stream:
         temp = Path(stream.name)
         try:
-            stream.write(json.dumps(data, indent=2, sort_keys=True) + "\n")
+            stream.write(json.dumps(data, indent=None if compact else 2, separators=(",", ":") if compact else None, sort_keys=True, allow_nan=False) + "\n")
             stream.close()
             temp.replace(path)
         finally:
@@ -82,11 +90,13 @@ class Catalog:
         return path
 
     def fingerprint(self, component):
-        implementation = hashlib.sha256()
-        for name in ("prepare.py", "glb.py", "native.py", "validation.py"):
-            implementation.update(Path(__file__).with_name(name).read_bytes())
-        identity = {"component": component.json_data(), "cadquery": version("cadquery"),
-                    "ocp": version("cadquery-ocp"), "converterCode": implementation.hexdigest()}
+        component_data = component.json_data()
+        if component.source_selection is None:
+            # An absent new optional field must serialize exactly as before.
+            component_data.pop("sourceSelection", None)
+        identity = {"component": component_data, "cadquery": version("cadquery"),
+                    "ocp": version("cadquery-ocp"),
+                    "converterCode": DEFINITION_CONVERTER if component.source_selection else WHOLE_FILE_CONVERTER}
         return hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
 
     def receipt_path(self, component):
@@ -127,6 +137,11 @@ class Catalog:
                 raise TachyonError("MESH_HASH_MISMATCH", "The prepared mesh is missing or its bytes changed")
             if data["sourceSha256"] != component.source_sha256 or data["catalogFingerprint"] != self.fingerprint(component):
                 raise TachyonError("STALE_MESH", "The source catalog changed; prepare the component again")
+            selection = component.source_selection.json_data() if component.source_selection else None
+            if data.get("sourceSelection") != selection:
+                raise TachyonError("STALE_MESH", "The mesh receipt no longer matches the registered native source selection")
+            if selection is None:
+                data.pop("sourceSelection", None)
             for key in ("id", "name", "sku", "originKind", "geometryClass", "sourceUrl", "ports", "referenceOnly"):
                 if data[key] != component.json_data()[key]:
                     raise TachyonError("STALE_MESH", "The mesh receipt no longer matches the registered component identity")

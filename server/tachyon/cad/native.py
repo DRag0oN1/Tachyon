@@ -1,6 +1,83 @@
 """Preserve one explicit STEP root; reject ambiguous source selection."""
 
+from copy import deepcopy
+
 from ..errors import TachyonError
+from ..models import SourceSelection
+
+
+def select_source_definition(assembly, selection: SourceSelection):
+    """Copy one definition tree in its native frame, retaining the original BReps.
+
+    Multiple occurrences of the same definition are one selection. Occurrence
+    and ancestor placements are deliberately excluded; the definition's own
+    shape (including any intrinsic location) remains unchanged. Subassembly
+    children keep their native hierarchy, locations and definition metadata.
+    They are never flattened into a replacement part BRep.
+    """
+    import cadquery as cq
+
+    matches = [node for node in assembly.objects.values()
+               if (selection.source_label is None or node.metadata.get("sourceLabel") == selection.source_label)
+               and (selection.definition_label is None or node.metadata.get("definitionLabel") == selection.definition_label)]
+    if not matches:
+        raise TachyonError("SOURCE_SELECTION_NOT_FOUND", "No native definition matches the registered source selection")
+    identities = {node.metadata.get("definitionLabel") for node in matches}
+    if len(identities) != 1 or None in identities:
+        raise TachyonError("AMBIGUOUS_SOURCE_SELECTION", "The source selection does not identify exactly one native definition")
+    if any(node.metadata.get("definitionName") != selection.expected_definition_name for node in matches):
+        raise TachyonError("SOURCE_SELECTION_MISMATCH", "The selected native definition name changed")
+    if any(not node.children and node.obj is None for node in matches):
+        raise TachyonError("INVALID_SOURCE_SELECTION", "The selected native definition has no geometry or children")
+
+    def definition_location(node):
+        if node.obj is not None:
+            # Leaf intrinsic location is already part of its BRep, while loc
+            # carries only the occurrence placement.
+            return cq.Location()
+        from OCP.gp import gp_Trsf
+        values = node.metadata.get("definitionLocation")
+        if values is None:
+            raise TachyonError("INVALID_SOURCE_SELECTION", "The native subassembly definition frame is missing")
+        transform = gp_Trsf()
+        transform.SetValues(*values)
+        return cq.Location(transform)
+
+    def same_location(left, right):
+        a, b = left.wrapped.Transformation(), right.wrapped.Transformation()
+        return all(abs(a.Value(i, j) - b.Value(i, j)) < 1e-10
+                   for i in range(1, 4) for j in range(1, 5))
+
+    def same_definition(left, right, *, root=True):
+        if (left.obj is None) != (right.obj is None) or len(left.children) != len(right.children):
+            return False
+        if any(left.metadata.get(key) != right.metadata.get(key)
+               for key in ("definitionLabel", "definitionName")):
+            return False
+        if not same_location(definition_location(left) if root else left.loc,
+                             definition_location(right) if root else right.loc):
+            return False
+        if left.obj is not None:
+            a = left.obj.val() if hasattr(left.obj, "val") else left.obj
+            b = right.obj.val() if hasattr(right.obj, "val") else right.obj
+            if not a.isEqual(b):
+                return False
+        return all(same_definition(a, b, root=False) for a, b in zip(left.children, right.children))
+
+    node = matches[0]
+    for other in matches[1:]:
+        if not same_definition(node, other):
+            raise TachyonError("AMBIGUOUS_SOURCE_SELECTION", "Occurrences disagree about the selected native definition geometry")
+    selected = cq.Assembly(node.obj, loc=definition_location(node),
+                           name=selection.expected_definition_name,
+                           color=node.color, metadata=deepcopy(node.metadata))
+    for child in node.children:
+        selected.add(child)
+    # CadQuery copies nodes/locations but shares metadata. Detach nested frame
+    # data too, while leaving the source BReps unmodified.
+    for child in selected.objects.values():
+        child.metadata = deepcopy(child.metadata)
+    return selected
 
 
 def import_source(path):
@@ -68,7 +145,11 @@ def _load_source_document(path, document):
                     "sourceName": name, "occurrenceName": occurrence_name,
                     "definitionName": definition_name}
         if tool.IsAssembly_s(definition):
-            node = cq.Assembly(name=name, loc=occurrence_location * cq.Location(tool.GetLocation_s(definition)), color=color, metadata=metadata)
+            definition_location = cq.Location(tool.GetLocation_s(definition))
+            transform = definition_location.wrapped.Transformation()
+            metadata["definitionLocation"] = [transform.Value(i, j)
+                                              for i in range(1, 4) for j in range(1, 5)]
+            node = cq.Assembly(name=name, loc=occurrence_location * definition_location, color=color, metadata=metadata)
             labels = TDF_LabelSequence()
             tool.GetComponents_s(definition, labels)
             # Index native sequences explicitly. CadQuery's face-metadata iterator

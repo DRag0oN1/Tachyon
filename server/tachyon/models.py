@@ -4,7 +4,7 @@ from datetime import date
 from enum import StrEnum
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 from pydantic.alias_generators import to_camel
 
 
@@ -45,10 +45,11 @@ class Bounds(Model):
 
 
 class Permission(Model):
+    """Operation qualification; a user attestation is not a verified asset license."""
     status: Literal["qualified", "unverified", "disallowed"] = "unverified"
     rightsholder: str = ""
-    basis: Literal["license", "written_permission", "self_authored", "terms_interpretation"] | None = None
-    use_scope: Literal["private_local_inspection"] | None = None
+    basis: Literal["license", "written_permission", "self_authored", "terms_interpretation", "user_attestation"] | None = None
+    use_scope: Literal["private_local_inspection", "private_local_assembly"] | None = None
     evidence_path: str = ""
     evidence_sha256: str = ""
     reviewed_by: str = ""
@@ -88,7 +89,34 @@ class InterfacePort(Model):
         return self
 
 
-class ComponentInput(Model):
+class SourceSelection(Model):
+    """Exact XCAF labels within the STEP identified by source_sha256."""
+    source_label: str | None = Field(default=None, pattern=r"^[0-9]+(?::[0-9]+)*$")
+    definition_label: str | None = Field(default=None, pattern=r"^[0-9]+(?::[0-9]+)*$")
+    expected_definition_name: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def identified(self):
+        if self.source_label is None and self.definition_label is None:
+            raise ValueError("A native source or definition label is required")
+        if not self.expected_definition_name.strip():
+            raise ValueError("The expected native definition name is required")
+        return self
+
+
+class SelectedSourceModel(Model):
+    source_selection: SourceSelection | None = None
+
+    @model_serializer(mode="wrap")
+    def omit_absent_selection(self, serialize):
+        data = serialize(self)
+        if self.source_selection is None:
+            data.pop("sourceSelection", None)
+            data.pop("source_selection", None)
+        return data
+
+
+class ComponentInput(SelectedSourceModel):
     id: str = Field(pattern=r"^[A-Za-z0-9_-]{1,100}$")
     name: str = Field(min_length=1)
     sku: str | None = None
@@ -133,7 +161,7 @@ class ConversionReceipt(Model):
     source_bounds_basis: Literal["native_measurement", "reviewed_registration_measurement"] = "native_measurement"
 
 
-class PreparedComponent(Model):
+class PreparedComponent(SelectedSourceModel):
     id: str
     name: str
     sku: str | None
