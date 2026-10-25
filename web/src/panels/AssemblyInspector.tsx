@@ -1,7 +1,8 @@
 import { readable, type DesignSession } from '../api/strategy';
 import { geometryLabel } from '../api/contracts';
+import { SUBSYSTEM_COLORS } from '../viewer/subsystemPalette';
 
-export function AssemblyInspector({session,selectedId,onSelect,onSource}:{session:DesignSession;selectedId:string|null;onSelect:(id:string)=>void;onSource:(componentId:string)=>void}) {
+export function AssemblyInspector({session,selectedId,onSelect,onSource,colorSubsystems=false,onColorSubsystems}:{session:DesignSession;selectedId:string|null;onSelect:(id:string)=>void;onSource:(componentId:string)=>void;colorSubsystems?:boolean;onColorSubsystems?:()=>void}) {
   const revision=session.candidate??session.accepted;
   if (!revision) return null;
   const nodes=revision.assembly.instances;
@@ -20,6 +21,7 @@ export function AssemblyInspector({session,selectedId,onSelect,onSource}:{sessio
     <span className="eyebrow">{session.candidate?'CANDIDATE POSE':'ACCEPTED POSE'}</span>
     <h2>Assembly components</h2>
     <p>{nodes.length} placed components · {revision.assembly.configurationId} configuration. The assembly remains partial; physical task capability is unverified.</p>
+    {onColorSubsystems&&<section><button className="secondary-button" aria-pressed={colorSubsystems} onClick={onColorSubsystems}>Color subsystems</button><ul className="subsystem-legend">{revision.assembly.subsystems.map(s=><li key={s.id}><span style={{display:'inline-block',width:10,height:10,marginRight:8,background:SUBSYSTEM_COLORS[s.id]??'#8b9dad'}}/>{readable(s.id)} · {nodes.filter(n=>n.subsystemId===s.id).length}</li>)}</ul></section>}
     <nav className="assembly-tree" aria-label="Assembly component hierarchy">{branch(null)}</nav>
     {node&&part&&<section className="assembly-part-details"><h3>{part.name}</h3><p>{geometryLabel(part)}</p>
       <dl><dt>Subsystem</dt><dd>{readable(node.subsystemId)}</dd><dt>Part identity</dt><dd>{part.sku??part.id}</dd><dt>Imported solids</dt><dd>{part.solidCount}</dd></dl>

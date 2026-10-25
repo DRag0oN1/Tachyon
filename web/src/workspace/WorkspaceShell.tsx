@@ -10,8 +10,10 @@ import { PanelHost } from '../panels/PanelHost';
 import { PreferencesPanel } from '../panels/PreferencesPanel';
 import { StrategyPanel } from '../panels/StrategyPanel';
 import { ArchitecturesPanel } from '../panels/ArchitecturesPanel';
+import { OperationPanel,useOperationPlayback } from '../panels/OperationPanel';
 import { Home } from '../screens/Home';
 import type { SceneStatus } from '../viewer/AssemblyScene';
+import type { DesignSceneStatus } from '../viewer/DesignAssemblyScene';
 import { ViewControls } from '../viewer/ViewControls';
 import { initialState, workspaceReducer, type Panel } from './reducer';
 import '../styles/strategy.css';
@@ -29,7 +31,7 @@ export function WorkspaceShell() {
   const [error, setError] = useState<string | null>(null);
   const [reload, setReload] = useState(0);
   const [assetAttempt, setAssetAttempt] = useState(0);
-  const [scene, setScene] = useState<SceneStatus>({ state: 'idle' });
+  const [scene, setScene] = useState<DesignSceneStatus>({ state: 'idle' });
   const [resetKey, setResetKey] = useState(0);
   const [focusKey, setFocusKey] = useState(0);
   const [upAxis, setUpAxis] = useState<'X' | 'Y' | 'Z'>('Z');
@@ -45,6 +47,8 @@ export function WorkspaceShell() {
   const [designWorking, setDesignWorking] = useState(false);
   const [realization, setRealization] = useState<RealizationState>({ state: 'idle' });
   const [designSession, setDesignSession] = useState<DesignSession | null>(null);
+  const [operation,setOperation]=useOperationPlayback();
+  const [colorSubsystems,setColorSubsystems]=useState(false);
   const [selectedDesignInstanceId, setSelectedDesignInstanceId] = useState<string | null>(null);
   const [canvasMode, setCanvasMode] = useState<'reference' | 'design'>('reference');
   const [panelWidth, setPanelWidth] = useState(480);
@@ -84,9 +88,27 @@ export function WorkspaceShell() {
   const renderable = component && connected && capabilities?.canInspect && isInspectable(component) ? component : undefined;
   const onSceneStatus = useCallback((s: SceneStatus) => setScene(s), []);
   const showDesign = canvasMode === 'design' && !!designSession?.accepted && !!designSession.components.length;
+  useEffect(()=>{if(!showDesign)setOperation(null);},[showDesign,setOperation]);
   const sourceRenderable = !showDesign ? renderable : undefined;
   const displayedRevision = designSession?.candidate ?? designSession?.accepted;
   const displayedBindings = designSession?.candidate ? designSession.candidateBindings : designSession?.bindings;
+  // Report every requested placement, including hardware; no presentation quota.
+  const displayedInstances = displayedRevision?.assembly.instances ?? [];
+  const displayedComponents = new Map(designSession?.components.map(c => [c.id, c]));
+  const unresolvedGeometryIds = displayedInstances.filter(node => {
+    const source = displayedComponents.get(node.componentId);
+    return !source || source.referenceOnly || !isInspectable(source);
+  }).map(node => node.id);
+  const geometryAssetCount = new Set(displayedInstances.map(node => node.componentId)).size;
+  const sceneResolution = scene.geometryResolution?.revisionId === displayedRevision?.id ? scene.geometryResolution : undefined;
+  const missingGeometryIds = sceneResolution?.missingInstanceIds ?? unresolvedGeometryIds;
+  const requestedPlacements = sceneResolution?.requestedInstanceCount ?? displayedInstances.length;
+  const resolvedPlacements = sceneResolution?.resolvedInstanceCount ?? displayedInstances.length - missingGeometryIds.length;
+  const loadedPlacements = sceneResolution?.loadedInstanceCount ?? (scene.state === 'ready' ? resolvedPlacements : 0);
+  const developmentCad = displayedInstances.some(node => {
+    const source = displayedComponents.get(node.componentId);
+    return source?.originKind === 'tachyon_authored' && source.geometryClass === 'test_fixture';
+  });
   const designInstance = displayedRevision?.assembly.instances.find(i => i.id === selectedDesignInstanceId);
   const reverseActions = displayedBindings?.revisionId === displayedRevision?.id && selectedDesignInstanceId
     ? displayedBindings?.actions.filter(a => a.instanceIds.includes(selectedDesignInstanceId)) ?? [] : [];
@@ -113,9 +135,11 @@ export function WorkspaceShell() {
     } else void generate(target);
   }
   function selectAction(actionId: string) {
+    if(!['acquire_cup','place_cup'].includes(actionId))setOperation(null);
     dispatch({ type: 'strategy-action', action: actionId }); setSelectedDesignInstanceId(null); setFocusKey(n => n + 1);
   }
   function acceptDesignResponse(next: DesignSession) {
+    setOperation(null);
     setDesignSession(next); setRealization({ state: 'loaded', architectureId: next.architectureId, result: next });
     setSelectedDesignInstanceId(null); setFocusKey(n => n + 1);
     if (next.accepted && next.components.length) {
@@ -140,6 +164,7 @@ export function WorkspaceShell() {
     : !showDesign ? 'Source inspection references cannot be edited. Return to the assembly revision to preview or apply a supported mechanism change.'
     : designSession.candidate ? 'Previewing a candidate revision. Apply accepts this exact candidate; Discard preserves the accepted revision.' : 'Supported edits: lower or raised scoring configuration. Preview before Apply.';
   async function edit(action: 'preview' | 'apply' | 'discard' | 'undo', configuration?: 'lower' | 'raised'): Promise<CommandResult> {
+    setOperation(null);
     const current = designSession;
     const canRestore = action === 'undo' && !!current?.previous && current.status !== 'blocked';
     if ((!current?.canEdit && !canRestore) || !current?.revisionId) return { message: editReason };
@@ -230,7 +255,7 @@ export function WorkspaceShell() {
     onKeyDown={e => { if (e.key === 'Escape') { if (state.assistantSize !== 'compact') dispatch({ type: 'assistant', size: 'compact' }); else panel(null); } }}>
     <div className="drafting-grid" aria-hidden="true" />
     {sourceRenderable && <Suspense fallback={<span className="sr-only">Loading CAD renderer</span>}><AssemblyScene key={`${sourceRenderable.id}-${sourceRenderable.meshSha256}-${assetAttempt}`} component={sourceRenderable} theme={state.preferences.theme} selection={state.selection} onSelect={select} onStatus={onSceneStatus} resetKey={resetKey} focusKey={focusKey} panelOpen={state.panel !== null} upAxis={upAxis} /></Suspense>}
-    {showDesign && designSession && <Suspense fallback={<span className="sr-only">Loading design renderer</span>}><DesignAssemblyScene key={`${designSession.designId}-${assetAttempt}`} session={designSession} theme={state.preferences.theme} activeActionId={state.selectedStrategyAction} selectedInstanceId={selectedDesignInstanceId} onSelectInstance={setSelectedDesignInstanceId} onStatus={onSceneStatus} resetKey={resetKey} focusKey={focusKey} panelOpen={state.panel !== null} /></Suspense>}
+    {showDesign && designSession && <Suspense fallback={<span className="sr-only">Loading design renderer</span>}><DesignAssemblyScene key={`${designSession.designId}-${assetAttempt}`} session={designSession} theme={state.preferences.theme} activeActionId={state.selectedStrategyAction} selectedInstanceId={selectedDesignInstanceId} onSelectInstance={setSelectedDesignInstanceId} onStatus={onSceneStatus} resetKey={resetKey} focusKey={focusKey} panelOpen={state.panel !== null} operation={operation} colorSubsystems={colorSubsystems} /></Suspense>}
     <div className="workspace-topline"><div className="workspace-context"><span className="context-mark" /><span>{showDesign ? `Design ${designSession?.designId}` : component ? component.name : strategySession ? readable(strategySession.strategyFamily) : 'Untitled workspace'}</span><span className="context-divider" /><span className="context-type">{showDesign ? designSession?.candidate ? 'Candidate preview' : 'Assembly revision' : component?.referenceOnly ? 'Imported reference' : component ? 'Source component' : 'Focus'}</span></div><span className="wordmark">TACHYON<span className="wordmark-symbol">↗</span></span></div>
     <AiCore size={state.assistantSize} onSize={size => dispatch({ type: 'assistant', size })} draft={state.commandDraft} onDraft={text => dispatch({ type: 'draft', text })} component={component} selection={showDesign ? null : state.selection} contextLabel={contextLabel} loading={loading || generating || designWorking} onComponents={() => panel('components')} command={command} onIntent={intent => { if (intent === 'showstrategy') openFlow('strategy'); else if (intent === 'showarchitectures') openFlow('architectures'); else { dispatch({ type: 'draft', text: 'Explain this selection' }); } }} controls={{
       canPreview: showDesign && !!designSession?.canEdit && !designSession.candidate,
@@ -247,17 +272,17 @@ export function WorkspaceShell() {
     </div>}
     {(sourceRenderable || showDesign) && scene.state !== 'ready' && <div className="scene-message" role={scene.state === 'failed' ? 'alert' : 'status'}><Icon name={scene.state === 'failed' ? 'info' : 'parts'} size={26} /><h2>{scene.state === 'failed' ? 'Source geometry could not be displayed' : 'Loading source geometry'}</h2><p>{scene.message ?? 'Fetching the protected GLB and checking its identity.'}</p>{scene.state === 'failed' && <button className="secondary-button" onClick={() => setAssetAttempt(n => n + 1)}>Retry geometry</button>}</div>}
     {sourceRenderable && <div className={`source-status ${sourceRenderable.geometryClass === 'test_fixture' ? 'is-fixture' : ''}`} role="status" data-testid="scene-status" data-state={scene.state} data-component-id={sourceRenderable.id} data-mesh-sha256={sourceRenderable.meshSha256} data-mesh-count={scene.meshCount ?? 0} data-render-bounds={scene.boundsM ? JSON.stringify(scene.boundsM) : undefined}>
-      <span className="status-dot" /><span>{geometryLabel(sourceRenderable)}</span><strong>{sourceRenderable.geometryClass === 'test_fixture' ? 'CONVERTER PROOF ONLY · NOT AUTHENTIC VEX' : sourceRenderable.referenceOnly || strategySession ? 'IMPORTED REFERENCE · NOT A GENERATED ROBOT' : 'SOURCE PART · NO ROBOT ASSEMBLY'}</strong>
+      <span className="status-dot" /><span>{geometryLabel(sourceRenderable)}</span><strong>{sourceRenderable.geometryClass === 'test_fixture' ? 'ORIGINAL DEVELOPMENT CAD · NOT AUTHENTIC VEX' : sourceRenderable.referenceOnly || strategySession ? 'IMPORTED REFERENCE · NOT A GENERATED ROBOT' : 'SOURCE PART · NO ROBOT ASSEMBLY'}</strong>
     </div>}
-    {showDesign && <div className={`source-status design-status ${designSession?.qualification.testFixtureOnly ? 'is-fixture' : ''}`} role="status" data-testid="design-status" data-state={scene.state} data-mesh-count={scene.meshCount ?? 0} data-render-bounds={scene.boundsM ? JSON.stringify(scene.boundsM) : undefined}><span className="status-dot" /><strong>{designSession?.qualification.testFixtureOnly ? 'Tachyon-authored non-VEX mechanism · NOT AUTHENTIC VEX / NOT COMPLETE ROBOT' : designSession?.qualification.completeRobot ? 'Generated conceptual VEX robot · physical performance unverified' : 'Partial assembly · physical capabilities unverified'}</strong><span>{designSession?.candidate ? 'CANDIDATE PREVIEW · NOT APPLIED' : 'ACCEPTED ASSEMBLY REVISION'}{state.preferences.mode === 'advanced' ? ` · ${displayedRevision?.id}` : ''}</span>{canvasMode === 'design' && renderable && <button className="text-action" onClick={() => setCanvasMode('reference')}>Inspect source reference</button>}</div>}
+    {showDesign && <div className={`source-status design-status ${developmentCad || designSession?.qualification.testFixtureOnly ? 'is-fixture' : ''}`} role="status" data-testid="design-status" data-state={scene.state} data-mesh-count={scene.meshCount ?? 0} data-requested-instance-count={requestedPlacements} data-resolved-instance-count={resolvedPlacements} data-loaded-instance-count={loadedPlacements} data-geometry-asset-count={geometryAssetCount} data-missing-instance-ids={JSON.stringify(missingGeometryIds)} data-render-bounds={scene.boundsM ? JSON.stringify(scene.boundsM) : undefined}><span className="status-dot" /><strong>{developmentCad || designSession?.qualification.testFixtureOnly ? designSession?.qualification.testFixtureOnly ? 'Original development CAD · Tachyon-authored non-VEX mechanism · NOT AUTHENTIC VEX / NOT COMPLETE ROBOT' : 'Original development CAD · NOT AUTHENTIC VEX · physical capabilities unverified' : designSession?.qualification.completeRobot ? 'Generated conceptual VEX robot · physical performance unverified' : 'Partial assembly · physical capabilities unverified'}</strong><span>{resolvedPlacements}/{requestedPlacements} placements resolve · {loadedPlacements} loaded · {geometryAssetCount} geometry assets{missingGeometryIds.length ? ` · Missing: ${missingGeometryIds.join(', ')}` : ''}</span><span>{designSession?.candidate ? 'CANDIDATE PREVIEW · NOT APPLIED' : 'ACCEPTED ASSEMBLY REVISION'}{state.preferences.mode === 'advanced' ? ` · ${displayedRevision?.id}` : ''}</span>{canvasMode === 'design' && renderable && <button className="text-action" onClick={() => setCanvasMode('reference')}>Inspect source reference</button>}</div>}
     {!showDesign && state.selection && <div className="selection-chip" data-component-id={state.selection.componentId} data-native-node-id={state.selection.nativeNodeId}><Icon name="parts" size={16} /><span><strong>{component?.name}</strong><small>{state.selection.meshName ?? component?.sku} · selected</small></span><button className="icon-button" aria-label="Inspect selection" onClick={() => panel('components')}><Icon name="info" size={16} /></button><button className="icon-button" aria-label="Clear selection" onClick={() => select(null)}><Icon name="close" size={16} /></button></div>}
     {showDesign && designInstance && <div className="selection-chip design-selection-chip"><Icon name="parts" size={16} /><span><strong>{readable(designInstance.subsystemId)}</strong><small>{designInstance.id} · displayed revision</small>{reverseActions.map(a => <button key={a.actionId} className="text-action" onClick={() => { selectAction(a.actionId); panel('strategy'); }}>{readable(a.actionId)}</button>)}</span><button className="icon-button" aria-label="Clear design selection" onClick={() => setSelectedDesignInstanceId(null)}><Icon name="close" size={16} /></button></div>}
     {state.panel && <PanelHost key={state.panel} title={panelTitle} subtitle={state.panel === 'home' ? 'COMPLICATEDLY SIMPLE' : state.panel === 'components' ? 'INSPECT / SOURCE / IDENTITY' : state.panel === 'strategy' ? 'RULES INTO ACTION' : state.panel === 'architectures' ? 'ONE STRATEGY, TWO APPROACHES' : 'MAKE IT YOURS'} onClose={() => panel(null)}>
       {strategyPanelOpen && <div className="strategy-panel-tools"><div className="strategy-panel-tabs"><button aria-pressed={state.panel === 'strategy'} onClick={() => openFlow('strategy')}>Strategy</button><button aria-pressed={state.panel === 'architectures'} onClick={() => openFlow('architectures')}>Architectures</button></div><label className="strategy-width-control">Panel width<input type="range" min="360" max="760" step="20" value={panelWidth} onChange={e => setPanelWidth(Number(e.target.value))} /></label>{designSession?.accepted && !showDesign && <button className="text-action" onClick={() => { setCanvasMode('design'); setScene({ state: 'loading' }); }}>Return to assembly revision</button>}</div>}
       {state.panel === 'home' && <Home catalog={catalog} capabilities={capabilities} onInspect={() => panel('components')} strategyStatus={strategyStatus} strategyLoading={strategyChecking} generating={generating} onGenerateStrategy={() => openFlow('strategy')} onCreateRobot={() => openFlow('architectures')} strategyError={strategyError} onRetryStrategy={() => setReload(n => n + 1)} />}
-      {state.panel === 'strategy' && <StrategyPanel session={strategySession} loading={generating} error={strategyError ?? (!strategyStatus?.available ? strategyStatus?.reason : null)} mode={state.preferences.mode} selectedActionId={state.selectedStrategyAction} onSelectAction={selectAction} onGenerate={() => void generate('strategy')} onArchitectures={() => openFlow('architectures')} available={!!strategyStatus?.available} assembly={showDesign?designSession:null} />}
+      {state.panel === 'strategy' && <>{showDesign&&designSession?.components.some(c=>c.id==='dev_cup_bridge')&&<OperationPanel session={designSession} playback={operation} onChange={setOperation}/>}<StrategyPanel session={strategySession} loading={generating} error={strategyError ?? (!strategyStatus?.available ? strategyStatus?.reason : null)} mode={state.preferences.mode} selectedActionId={state.selectedStrategyAction} onSelectAction={selectAction} onGenerate={() => void generate('strategy')} onArchitectures={() => openFlow('architectures')} available={!!strategyStatus?.available} assembly={showDesign?designSession:null} /></>}
       {state.panel === 'architectures' && <ArchitecturesPanel session={strategySession} loading={generating} error={strategyError ?? (!strategyStatus?.available ? strategyStatus?.reason : null)} mode={state.preferences.mode} selectedArchitectureId={state.selectedArchitectureId} selectedActionId={state.selectedStrategyAction} realization={realization} onSelectArchitecture={architectureId => dispatch({ type: 'architecture', architectureId })} onRealizeArchitecture={realizeArchitecture} onInspectReference={() => { setCanvasMode('reference'); panel('components'); }} onStrategy={() => panel('strategy')} onGenerate={() => void generate('architectures')} available={!!strategyStatus?.available} />}
-      {state.panel === 'components' && (showDesign && designSession ? <AssemblyInspector session={designSession} selectedId={selectedDesignInstanceId} onSelect={id=>{setSelectedDesignInstanceId(id);setFocusKey(n=>n+1);}} onSource={id=>{const source=catalog?.components.find(c=>c.id===id);if(source)openComponent(source);}}/> : <>{strategySession && <p className="strategy-notice">Source inspection reference only. This is not the selected architecture’s generated CAD.</p>}<ComponentsPanel catalog={catalog} activeId={state.activeComponentId} mode={state.preferences.mode} canInspect={connected && !!capabilities?.canInspect} onOpen={openComponent} onSelect={selectComponent} onSelectNode={(c, nativeNodeId, meshName) => select({ componentId: c.id, catalogMeshSha256: c.meshSha256, nativeNodeId, meshName })} /></>)}
+      {state.panel === 'components' && (showDesign && designSession ? <AssemblyInspector session={designSession} selectedId={selectedDesignInstanceId} onSelect={id=>{setSelectedDesignInstanceId(id);setFocusKey(n=>n+1);}} colorSubsystems={colorSubsystems} onColorSubsystems={()=>setColorSubsystems(x=>!x)} onSource={id=>{const source=catalog?.components.find(c=>c.id===id);if(source)openComponent(source);}}/> : <>{strategySession && <p className="strategy-notice">Source inspection reference only. This is not the selected architecture’s generated CAD.</p>}<ComponentsPanel catalog={catalog} activeId={state.activeComponentId} mode={state.preferences.mode} canInspect={connected && !!capabilities?.canInspect} onOpen={openComponent} onSelect={selectComponent} onSelectNode={(c, nativeNodeId, meshName) => select({ componentId: c.id, catalogMeshSha256: c.meshSha256, nativeNodeId, meshName })} /></>)}
       {state.panel === 'preferences' && <PreferencesPanel preferences={state.preferences} onChange={preferences} disabled={!connected} />}
     </PanelHost>}
     <div className="workspace-bottomline"><span className="gesture-hint"><Icon name="orbit" size={14} /> <span className="desktop-hint">Drag to orbit · Scroll to zoom · Right-drag to pan</span><span className="mobile-hint">Drag to orbit · Pinch to zoom · Two fingers to pan</span></span><span className="workspace-version">{health ? `LOCAL / ${health.version}` : 'LOCAL WORKSPACE'}<span className="unit-label">m</span></span></div>

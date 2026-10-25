@@ -1,11 +1,23 @@
 # CAD source qualification status
 
-Updated 2026-10-24 from the current implementation and private local receipts.
+Updated 2026-10-25 from the current implementation and private local receipts.
 The historical `4-spec` investigation is retained below. **Official manufacturer
 geometry is preferred; public redistribution/hosting of the investigated CAD
 remains unverified.** Original CAD and converted meshes stay in private storage,
 outside application bundles and commits. No new licensing research or permission
 request was performed for this update.
+
+The visible generated architecture-A development assembly now uses **35 newly
+authored, non-VEX STEP definitions**, not manufacturer geometry: 494 placements
+and 631 relationships through the production local pipeline. Its source records
+identify self-authorship and only local storage/conversion/placement/display;
+they do not fabricate manufacturer permission or qualify an authentic VEX robot.
+Source STEP, GLB and screenshots remain ignored/private. This is the learner's
+explicitly authorized development fallback. The VEX records and their separate
+unverified placement, modification, LAN, redistribution, hosting and public
+depiction scopes are unchanged. See the [actual rendering and interference
+report](verification/robot-generation.md); connected graph validation does not
+remove its known physical intersections.
 
 **Selected implementation approach: user-provided STEP, local processing, and
 operation-specific rights qualification.** Local inspection and public asset

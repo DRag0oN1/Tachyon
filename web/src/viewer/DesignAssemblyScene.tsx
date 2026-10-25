@@ -6,15 +6,20 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import type { Theme } from '../api/contracts';
 import { errorMessage } from '../api/client';
 import type { SceneStatus } from './AssemblyScene';
-import { disposeScene } from './loadComponent';
 import { frameCamera, highlightSelection } from './inspection';
-import { applyDesignPose, boundInstances, designInstances, designRevisionId, instanceAt, instanceBounds, loadDesignScene, type DesignSceneGraph, type DesignSceneSession } from './designSceneGraph';
+import { OperationScene } from './OperationScene';
+import type { OperationPlayback } from './operationKinematics';
+import { SUBSYSTEM_COLORS } from './subsystemPalette';
+import { applyDesignPose, boundInstances, designGeometryResolution, designInstances, designRevisionId, DesignSceneLoadError, disposeDesignScene, instanceAt, instanceBounds, loadDesignScene, type DesignGeometryResolution, type DesignSceneGraph, type DesignSceneSession } from './designSceneGraph';
+
+export type DesignSceneStatus = SceneStatus & { geometryResolution?: DesignGeometryResolution };
 
 interface Props {
   session: DesignSceneSession; theme: Theme; activeActionId: string | null;
   selectedInstanceId: string | null; onSelectInstance: (id: string | null) => void;
-  onStatus: (status: SceneStatus) => void;
+  onStatus: (status: DesignSceneStatus) => void;
   resetKey: number; focusKey: number; panelOpen: boolean;
+  operation?:OperationPlayback|null; colorSubsystems?:boolean;
 }
 export function DesignAssemblyScene(props: Props) {
   return <DesignBoundary session={props.session} onStatus={props.onStatus}><LoadedDesign {...props}/></DesignBoundary>;
@@ -33,15 +38,16 @@ function LoadedDesign(props: Props) {
   const [failed, setFailed] = useState(false);
   const status = useRef(props.onStatus); status.current = props.onStatus;
   const instances = designInstances(props.session);
-  const geometryKey = JSON.stringify([instances, props.session.components.map(c => [c.id,c.meshSha256])]);
+  const geometryKey = JSON.stringify([instances, props.session.components.map(c => [c.id,c.meshSha256,c.referenceOnly,c.rightsStatus,c.originKind,c.geometryClass])]);
   useEffect(() => {
     const abort = new AbortController(); let loaded: DesignSceneGraph | null = null;
-    setGraph(null); setFailed(false); status.current({ state: 'loading' });
+    setGraph(null); setFailed(false); status.current({ state: 'loading', geometryResolution: designGeometryResolution(props.session) });
     loadDesignScene(props.session, abort.signal).then(result => {
-      if (abort.signal.aborted) { disposeScene(result.scene); return; }
+      if (abort.signal.aborted) { disposeDesignScene(result); return; }
       loaded = result; setGraph(result);
-    }).catch(error => { if (!abort.signal.aborted) { setFailed(true); status.current({ state: 'failed', message: errorMessage(error) }); } });
-    return () => { abort.abort(); if (loaded) disposeScene(loaded.scene); };
+    }).catch(error => { if (!abort.signal.aborted) { setFailed(true); status.current({ state: 'failed', message: errorMessage(error),
+      ...(error instanceof DesignSceneLoadError ? { geometryResolution: error.resolution } : {}) }); } });
+    return () => { abort.abort(); if (loaded) disposeDesignScene(loaded); };
     // Transform-only revisions preserve source meshes and the current camera.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geometryKey]);
@@ -63,6 +69,7 @@ function Presented(props: Props & { graph: DesignSceneGraph }) {
   const { camera, gl, scene, size, invalidate } = useThree();
   const controls = useRef<ComponentRef<typeof OrbitControls>>(null);
   const previous = useRef({ graph: props.graph, reset: -1, focus: -1 });
+  const poseValid = useRef(false);
   const selected = props.selectedInstanceId ? [props.selectedInstanceId] : boundInstances(props.session, props.activeActionId);
   const selectionKey = JSON.stringify(selected);
   const revision = designRevisionId(props.session);
@@ -70,7 +77,15 @@ function Presented(props: Props & { graph: DesignSceneGraph }) {
     gl.domElement.dataset.cameraPosition = JSON.stringify(camera.position.toArray());
     gl.domElement.dataset.controlsTarget = JSON.stringify(controls.current?.target.toArray() ?? []);
     gl.domElement.dataset.boundInstanceIds = selectionKey;
-    gl.domElement.dataset.revisionId = revision;
+    gl.domElement.dataset.revisionId = props.graph.resolution?.revisionId ?? revision;
+    if (props.graph.resolution) {
+      const resolution = props.graph.resolution;
+      gl.domElement.dataset.requestedInstanceCount = String(resolution.requestedInstanceCount);
+      gl.domElement.dataset.resolvedInstanceCount = String(resolution.resolvedInstanceCount);
+      gl.domElement.dataset.loadedInstanceCount = String(resolution.loadedInstanceCount);
+      gl.domElement.dataset.loadedComponentCount = String(resolution.loadedComponentCount);
+      gl.domElement.dataset.missingInstanceIds = JSON.stringify(resolution.missingInstanceIds);
+    }
   }
   useEffect(() => {
     const generator = new PMREMGenerator(gl), room = new RoomEnvironment();
@@ -79,14 +94,21 @@ function Presented(props: Props & { graph: DesignSceneGraph }) {
     return () => { scene.environment = before; map.dispose(); room.dispose(); generator.dispose(); };
   },[gl,scene,invalidate]);
   useLayoutEffect(() => {
-    try { applyDesignPose(props.graph, props.session); invalidate(); }
-    catch (error) { props.onStatus({state:'failed',message:errorMessage(error)}); }
-  },[props.graph,props.session,invalidate,props.onStatus]);
+    poseValid.current = false;
+    try {
+      applyDesignPose(props.graph, props.session); poseValid.current = true;
+      const scorer=props.graph.instances.get('cup-grip-frame');
+      if(scorer)gl.domElement.dataset.scoringFrameMatrix=JSON.stringify(scorer.matrixWorld.toArray());
+      else delete gl.domElement.dataset.scoringFrameMatrix;
+      invalidate();
+    }
+    catch (error) { props.onStatus({state:'failed',message:errorMessage(error),geometryResolution:props.graph.resolution}); }
+  },[props.graph,props.session,invalidate,props.onStatus,gl]);
   useLayoutEffect(() => {
-    const restores = [...props.graph.instances].map(([id, target]) => highlightSelection(target, selected.includes(id) ? target : null, props.theme==='snap' ? '#2069b5' : '#6ec8fa'));
+    const restores = [...props.graph.instances].map(([id, target]) => highlightSelection(target, selected.includes(id)||props.colorSubsystems ? target : null, selected.includes(id) ? props.theme==='snap' ? '#2069b5' : '#6ec8fa' : SUBSYSTEM_COLORS[target.userData.subsystemId]??'#8b9dad'));
     invalidate(); return () => { restores.forEach(restore => restore()); invalidate(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[props.graph,selectionKey,props.theme,invalidate]);
+  },[props.graph,selectionKey,props.theme,props.colorSubsystems,invalidate]);
   useEffect(() => {
     if (!(camera instanceof PerspectiveCamera)) return;
     const old = previous.current;
@@ -115,10 +137,11 @@ function Presented(props: Props & { graph: DesignSceneGraph }) {
   useEffect(() => {
     let second=0;
     const request=requestAnimationFrame(() => { invalidate(); second=requestAnimationFrame(() => {
-      if (gl.getContext().isContextLost() || gl.info.render.calls===0) props.onStatus({state:'failed',message:'No actual assembly geometry was drawn.'});
+      if (!poseValid.current) return;
+      if (gl.getContext().isContextLost() || gl.info.render.calls===0) props.onStatus({state:'failed',message:'No actual assembly geometry was drawn.',geometryResolution:props.graph.resolution});
       else {
         const bounds=new Box3().setFromObject(props.graph.scene,true);
-        props.onStatus({state:'ready',meshCount:props.graph.meshCount,boundsM:{min:bounds.min.toArray(),max:bounds.max.toArray()}});
+        props.onStatus({state:'ready',meshCount:props.graph.meshCount,geometryResolution:props.graph.resolution,boundsM:{min:bounds.min.toArray(),max:bounds.max.toArray()}});
       }
     }); });
     return () => { cancelAnimationFrame(request); cancelAnimationFrame(second); };
@@ -131,6 +154,7 @@ function Presented(props: Props & { graph: DesignSceneGraph }) {
     <ambientLight intensity={1.4}/><hemisphereLight args={['#fff','#87909a',2.1]}/>
     <directionalLight position={[3,5,4]} intensity={3}/><directionalLight position={[-3,1,-2]} intensity={1}/>
     <primitive object={props.graph.scene} dispose={null} onClick={pick}/>
+    {props.operation&&<OperationScene graph={props.graph} session={props.session} playback={props.operation}/>}
     <OrbitControls ref={controls} makeDefault enableDamping={false} screenSpacePanning rotateSpeed={.7} zoomSpeed={.8} onChange={observe}/>
   </>;
 }

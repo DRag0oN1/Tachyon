@@ -1,0 +1,498 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-25T22:34:59.612140+00:00",
+  "status": "partial_generated_development_assembly",
+  "parentCommit": "f6cd922b8905f79c243ce00bd2b182005988a050",
+  "completeRobot": false,
+  "authenticVex": false,
+  "physicalPerformanceVerified": false,
+  "publicAssetPublication": false,
+  "counts": {
+    "requestedPlacements": 494,
+    "resolvedGeometryDefinitions": 35,
+    "relationships": 631,
+    "strategyBindings": 14,
+    "changedHeightJointCoordinates": 30,
+    "subsystemRoles": {
+      "chassis": 104,
+      "drive": 78,
+      "scorer": 193,
+      "pin_intake": 74,
+      "cup_cradle": 39,
+      "pin_transfer": 1,
+      "stack_interface": 5
+    }
+  },
+  "finalProfile": {
+    "privatePath": ".local/generated-robot-a-v6",
+    "recipeSha256": "2c7c553c20bbeb6b844735bd7d66c0417539a59f220967398aff9dc324757b8e",
+    "sourceManifestSha256": "51bc3a38913c0ebf54457f46e1d57d2d0f809025cdc4968cd30a769798f15495",
+    "localRightsManifestSha256": "8a2f56f351af808a461d80e12a8275f3c035ec358f917158cf658b46ccab06bd"
+  },
+  "geometrySources": [
+    {
+      "componentId": "dev_channel",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "eec05f7c691b64c0595c95ed7b0a07fc617a5bdfb42b4b38fd199e69b93a3766"
+    },
+    {
+      "componentId": "dev_short_channel",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "0bb9cebe9e739aae711b1c80627518b586b1bb5f94b7150c25a5004681230cf3"
+    },
+    {
+      "componentId": "dev_angle",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "f51a5926d5b081434633a449de357f768a62ea91666d42f1a221b2855fd3040e"
+    },
+    {
+      "componentId": "dev_bearing",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "a296d90d90896aa613d3c0dbbd83fab163152edb24f2f23e638b4060bb9a4724"
+    },
+    {
+      "componentId": "dev_shaft_long",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "65f1706c5347019f024a03293a118812f7937c7024998fe943cf35a0f0d099aa"
+    },
+    {
+      "componentId": "dev_shaft_medium",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "208676c776a81720fed05882ba0bc2687e09d514151cf76bd7a13290a384b513"
+    },
+    {
+      "componentId": "dev_gear84",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "54e8d010a72c3a0d7158c700507125a26447dd152bdef26df364862ed1dcc0df"
+    },
+    {
+      "componentId": "dev_gear12",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "ce67f4d45101a0fe4e7ab42ffd81701d75cc4ac7ab91a30fcb6729437cbc2e88"
+    },
+    {
+      "componentId": "dev_bolt_short",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "f503862aa01e4e12b1f1b4d5c463167025216e3fa20bcd4d6f9b22f94fae45b3"
+    },
+    {
+      "componentId": "dev_bolt_mid",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "247c3af92c8c5aa2050468a8f0a0f948a9409f78295b8b3bfb94f0234ae6f984"
+    },
+    {
+      "componentId": "dev_bolt_long",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "489af053eba7410fb059010f1989c7f78b8e94130f05ca427399da0034bac0e1"
+    },
+    {
+      "componentId": "dev_bolt25",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "ac03f91e569f47c19432d2abbcc39801bd69c54aba2c927d6c51624caf9816db"
+    },
+    {
+      "componentId": "dev_nut",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "c259f78236dabc22d61f4a9bd93eb70eb3ff41698fdaa478f57bf8d3e124bfe7"
+    },
+    {
+      "componentId": "dev_washer",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "d9bae58f759e789ca58f779326a35ebb204b193acbf76b01b8069bbc4eaad44a"
+    },
+    {
+      "componentId": "dev_spacer",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "ec327fa00c6dae763a187230789bd093622cd2b29478cf1e00a58ad654cc126c"
+    },
+    {
+      "componentId": "dev_standoff",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "679faa6e56c63d8c74614be0f6ef7b1ea1bed2bac0b18ee96f23175e0cf692c2"
+    },
+    {
+      "componentId": "dev_standoff_short",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "34d5b5857830b4dc96492cdb807e022ca29bab4091ab408e9c80d5b81449170b"
+    },
+    {
+      "componentId": "dev_shaft_insert",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "92212ed85e9af05c65fdb64df33da3269eb37fb9ca2f420b774aa242906198bf"
+    },
+    {
+      "componentId": "dev_battery_clip",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "df83f76883b2767473884e14e89fb297c22ccdc6cfa5f70394fcde6cc331a407"
+    },
+    {
+      "componentId": "dev_collar",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "29d14e14e07c7b9af700cb75aab07fddf96f526522ec02bdf45b0240a1cee635"
+    },
+    {
+      "componentId": "dev_motor",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "ebf6d10fd640d4228cdf6001049d8c125c999d10f50d59efcb1646b699917d7a"
+    },
+    {
+      "componentId": "dev_omni",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "bad98a06003f6368418cda9ab1d1dba4a6972b0428c7c7c4531dff59019247f3"
+    },
+    {
+      "componentId": "dev_traction",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "1664d6374e1de080fe44cd3e4cc5045a2d22fa7d30bb3e53fff8341e5219d379"
+    },
+    {
+      "componentId": "dev_brain",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "2f799ee4a6a166f351d031583cf39136fac8ffe1c0b62ddbe081c5d67c7413c3"
+    },
+    {
+      "componentId": "dev_battery",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "d1de2bec852e541e335969b0f3e9297ba082e97e6801e7b40d1d7cbbf3c18f6c"
+    },
+    {
+      "componentId": "dev_gripper",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "860c342b37bb90ab1e4ec7dd52293159e87b71475b7cd09bcd53058d7c4471e5"
+    },
+    {
+      "componentId": "dev_cup_bridge",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "edc1f18526beeb27e0c044729808f03822cb036dc40c7630fe3af745c264aa09"
+    },
+    {
+      "componentId": "dev_cup_rail",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "dda791d73368b557c43e9206bfad9c47c713637fab0252cb7c23b4480015b709"
+    },
+    {
+      "componentId": "dev_cup_jaw_left",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "1e914743036722034a8354b5139b3362bcd5ea8deb9547c4dc140a1be4129b41"
+    },
+    {
+      "componentId": "dev_cup_jaw_right",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "4d23695c2001e6dcea1133197f95b18f7b3badf065162abff87d6497aa0b319b"
+    },
+    {
+      "componentId": "dev_cup_screw",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "423159c787e76d266d8cb0b877b26553be2198d8ae3787293bbb3880e9c41917"
+    },
+    {
+      "componentId": "dev_cup_input_shaft",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "86306779f5a3ab9eab6299a422eda19ffd88681df2fd21e15b297c81aecdfcc5"
+    },
+    {
+      "componentId": "dev_cup_collar",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "aa51b065c3f41bc5becba2ed3e2c345a40dd8aeeb9ba352d8f4a2897217836a8"
+    },
+    {
+      "componentId": "dev_pin_handoff",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "d36761fb47516c6d6ceb168c30ff35e6dbe51d6027e3e0b8a86f4e518ae307e7"
+    },
+    {
+      "componentId": "dev_cup_alignment",
+      "origin": "tachyon_authored",
+      "geometryClass": "test_fixture",
+      "sourceSha256": "644ab88b0390b7660d79efe41c46e3b7a723a73fc7cfc80e75ac698e6972193a"
+    }
+  ],
+  "geometryGenerators": {
+    "tools/verification/development_parts.py": "662a0669f55a75f994acb5e7f996bbc4381ebcb93fd06c4e6214eb7e7e71807b",
+    "server/tachyon/robots/cup_handling.py": "f5b24057a8eed1fa1e074e0ffadce0fef80be231ecb942ca470e8a867bbf5ba8"
+  },
+  "solidAudit": {
+    "status": "collisions_found",
+    "thresholdMm3": 1,
+    "reportSha256": "4a50e80f173d0da4d4594443d4c86ebec8fa89ba8f2bda8401bcb02b69bdf2d8",
+    "endpoints": {
+      "lower": {
+        "majorBodyOverlaps": 51,
+        "rootReachable": 494,
+        "inputShaftOverlaps": 0,
+        "inputShaftFindings": [],
+        "exactIntersectionErrors": 0
+      },
+      "raised": {
+        "majorBodyOverlaps": 37,
+        "rootReachable": 494,
+        "inputShaftOverlaps": 1,
+        "inputShaftFindings": [
+          {
+            "bodyId": "right-upper-four-bar-link",
+            "intersectionVolumeMm3": 65.86925124437312
+          }
+        ],
+        "exactIntersectionErrors": 0
+      }
+    },
+    "scope": "Major structural bodies plus separately listed Cup input-shaft/nonmating-body pairs; other small hardware and intended engagements excluded; not exhaustive collision-free proof"
+  },
+  "modeledOperation": {
+    "provenance": "offline in-process production build_pose and build_operation; not an HTTP/browser result",
+    "sampleCount": 33,
+    "graphValid": true,
+    "capturePredicatePassed": true,
+    "releaseTargetMaxMatrixError": 1.0000056338554941e-12,
+    "nominalCarryClearanceM": 0.005000000000999982,
+    "fixture": "original 120 mm development stand; not official Goal",
+    "knownAssumptions": [
+      "Cup divider/wall/half lengths",
+      "already placed Pin",
+      "ideal screw/gear coupling",
+      "prescribed robot travel and held-object attachment"
+    ],
+    "geometryAuditStatus": "collisions_found",
+    "geometryAuditSha256": "91161d16b03989b4e6686c0d95d751a6fbaa3bfc295df65b1cf3484cd24f4d36",
+    "frames": {
+      "capture_grip": {
+        "cupRobotOverlaps": 0,
+        "cupStaticOverlaps": 0,
+        "inputShaftOverlaps": 0,
+        "inputShaftFindings": []
+      },
+      "carry": {
+        "cupRobotOverlaps": 0,
+        "cupStaticOverlaps": 0,
+        "inputShaftOverlaps": 1,
+        "inputShaftFindings": [
+          {
+            "bodyId": "right-upper-four-bar-link",
+            "intersectionVolumeMm3": 65.80872178191015
+          }
+        ]
+      },
+      "release": {
+        "cupRobotOverlaps": 0,
+        "cupStaticOverlaps": 0,
+        "inputShaftOverlaps": 1,
+        "inputShaftFindings": [
+          {
+            "bodyId": "right-upper-four-bar-link",
+            "intersectionVolumeMm3": 11.509759501767936
+          }
+        ]
+      }
+    }
+  },
+  "tests": {
+    "backend": {
+      "passed": 678
+    },
+    "frontend": {
+      "passed": 109
+    },
+    "rl": {
+      "passed": 102,
+      "trainingPerformed": false
+    },
+    "productionBuild": "passed",
+    "preservedBrowserRegressions": {
+      "passed": 6,
+      "cases": [
+        "strategy desktop/mobile",
+        "authentic selected source desktop/mobile",
+        "original STEP revision desktop/mobile"
+      ]
+    },
+    "finalGeneratedBrowser": {
+      "desktop": {
+        "status": "passed",
+        "durationMinutes": 9.8,
+        "observed": {
+          "project": "desktop",
+          "designId": "design-439c69c8495406bfc1cba401",
+          "requestedPlacements": 494,
+          "resolvedPlacements": 494,
+          "loadedPlacements": 494,
+          "uniqueGeometryAssets": 35,
+          "drawnMeshCount": 925,
+          "relationships": 631,
+          "strategyBindings": 14,
+          "modeledSamples": 33,
+          "fullPlaybackPassed": true,
+          "previewDiscardApplyUndoPassed": true,
+          "physicalPerformanceVerified": false,
+          "authenticVex": false,
+          "completeRobot": false,
+          "geometry": "independently_authored_development_CAD",
+          "browserErrors": []
+        }
+      },
+      "mobile-webkit": {
+        "status": "passed",
+        "durationMinutes": 3.6,
+        "observed": {
+          "project": "mobile-webkit",
+          "designId": "design-439c69c8495406bfc1cba401",
+          "requestedPlacements": 494,
+          "resolvedPlacements": 494,
+          "loadedPlacements": 494,
+          "uniqueGeometryAssets": 35,
+          "drawnMeshCount": 925,
+          "relationships": 631,
+          "strategyBindings": 14,
+          "modeledSamples": 33,
+          "fullPlaybackPassed": true,
+          "previewDiscardApplyUndoPassed": true,
+          "physicalPerformanceVerified": false,
+          "authenticVex": false,
+          "completeRobot": false,
+          "geometry": "independently_authored_development_CAD",
+          "browserErrors": []
+        }
+      },
+      "initialDesktopAttempt": "540-second total fixture timeout during Undo response; rerun with 900-second budget passed unchanged functional assertions",
+      "mobileEvidenceCapture": "Waits for final drawn-frame ready confirmation after Undo before recording loaded counts",
+      "latencyAcceptance": "not established; software-WebGL/catalog verification is slow"
+    }
+  },
+  "acceptanceCriteria": {
+    "passing": 8,
+    "failing": 1,
+    "blocked": 9,
+    "unimplemented": 26,
+    "total": 44,
+    "allP0Passed": false
+  },
+  "rights": {
+    "developmentSources": "Self-authored non-VEX; local storage/conversion/placement/authenticated loopback display only",
+    "manufacturerRecordsChanged": false,
+    "manufacturerLocalInspection": "Existing narrow terms interpretation only",
+    "manufacturerUnverifiedOperations": [
+      "assembly_placement",
+      "part_modification",
+      "lan_display",
+      "public_depiction",
+      "original_redistribution",
+      "mesh_redistribution",
+      "public_hosting"
+    ],
+    "restrictedOriginalOrConvertedAssetsCommitted": false
+  },
+  "remaining": [
+    "structural and input-shaft interference",
+    "powered Pin acquisition/transfer/release/scoring qualification",
+    "complete authentic VEX robot",
+    "architecture B assembly",
+    "physical phone and LAN verification",
+    "learner hands-on/final review; 6-ship not completed"
+  ],
+  "verifiedAt": "2026-10-25T22:58:13.496018+00:00",
+  "privateScreenshots": [
+    {
+      "name": "desktop-generated-cup-placement.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/desktop-generated-cup-placement.png",
+      "sha256": "e3c323d453687e64aeb0dedac8dbce69079a39d7f6f65f3a7bcdbe158a7fd08e"
+    },
+    {
+      "name": "desktop-generated-cup-retained-placement.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/desktop-generated-cup-retained-placement.png",
+      "sha256": "471d22506181c688e335b8cc36f969b9f454819524883a25023f3aab63ba4170"
+    },
+    {
+      "name": "desktop-generated-cup-strategy-highlight.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/desktop-generated-cup-strategy-highlight.png",
+      "sha256": "67d3b2de40385b5fbfec6d8777eff0e869f2ad055b2ecd5750a06fa0219637ac"
+    },
+    {
+      "name": "desktop-generated-robot-overview.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/desktop-generated-robot-overview.png",
+      "sha256": "cdcd176dc0a2402432c0e08759818667716521368c2e460cdcf5d1cdf851e219"
+    },
+    {
+      "name": "desktop-generated-robot-reverse.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/desktop-generated-robot-reverse.png",
+      "sha256": "b32aa404d1c5b56d6a3742295007bbfb7bddabace5622238e80b91d6d2d2012a"
+    },
+    {
+      "name": "desktop-generated-robot-subsystems-overview.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/desktop-generated-robot-subsystems-overview.png",
+      "sha256": "a54548a77a50cbc70783b4a9fdb9bee746fd06252bb10f0facd0988cb1091f16"
+    },
+    {
+      "name": "desktop-generated-robot-subsystems.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/desktop-generated-robot-subsystems.png",
+      "sha256": "be8689f4a3379a56fd6e6427578809b55975f62c13ff3e4c5e572089f5d8281d"
+    },
+    {
+      "name": "mobile-webkit-generated-cup-placement.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/mobile-webkit-generated-cup-placement.png",
+      "sha256": "69627e7de4e4db93d0a106b5f1b026c2300474be4ede32d2ae9c1127e6bc0868"
+    },
+    {
+      "name": "mobile-webkit-generated-cup-retained-placement.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/mobile-webkit-generated-cup-retained-placement.png",
+      "sha256": "0d91e720cac408b96934e2b62b51011dba0ba10d9a8a3d195601ae089e195e4b"
+    },
+    {
+      "name": "mobile-webkit-generated-cup-strategy-highlight.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/mobile-webkit-generated-cup-strategy-highlight.png",
+      "sha256": "dbc71f1d1fdf1723824c47be8c8d910d440255005e751d47678d258a80356289"
+    },
+    {
+      "name": "mobile-webkit-generated-robot-overview.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/mobile-webkit-generated-robot-overview.png",
+      "sha256": "78056f139916dba5b14ab72bd5a96950a3a095d92bb8b90cd4fbf55fffc0b0ef"
+    },
+    {
+      "name": "mobile-webkit-generated-robot-reverse.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/mobile-webkit-generated-robot-reverse.png",
+      "sha256": "78ae43a58fcaac65de73f3ad452934ad03752c3dc629745928d5db3566d6c07f"
+    },
+    {
+      "name": "mobile-webkit-generated-robot-subsystems-overview.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/mobile-webkit-generated-robot-subsystems-overview.png",
+      "sha256": "f93ee3ce0e2ed570cc5f6d9c7311e5ae49fedcb63fc5ca6b9aa7e025b1f187ad"
+    },
+    {
+      "name": "mobile-webkit-generated-robot-subsystems.png",
+      "privatePath": ".local/robot-generation/actual-robot-evidence-v6/mobile-webkit-generated-robot-subsystems.png",
+      "sha256": "b40159cebc7a26880bc6923e10aea57fd13e8b5c0950282e866250625e74259c"
+    }
+  ]
+}

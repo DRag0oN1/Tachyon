@@ -663,7 +663,7 @@ class RealizationService:
         candidate_reach = _reach(recipe, candidate, candidate_bindings) if candidate else None
         target_reach = context.spec["capabilityRequirements"]["targets"]["reachM"]
         available_height = reach["heightM"] if reach else None
-        if recipe.robot:
+        if recipe.robot or recipe.edit_group:
             # A lowered acquisition pose is not the mechanism's maximum reach.
             # Recompute the registered raised endpoint rather than inventing a
             # capability from the proposal's desired height.

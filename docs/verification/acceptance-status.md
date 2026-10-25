@@ -4,19 +4,22 @@ Current build: production strategy/architecture integration, authentic local sou
 inspection and qualified private partial-assembly revisions. **The full product
 and all 22 P0 obligations have not passed.**
 
-Criterion status: **8 passing, 0 failing, 9 blocked, 27 unimplemented**. Partially delivered criteria stay unimplemented
+Criterion status: **8 passing, 1 failing, 9 blocked, 26 unimplemented**. Partially delivered criteria stay unimplemented
 or blocked; their notes identify the real working coverage. Blocked criteria have
 missing authentic inputs/qualification/device evidence, sometimes alongside
-explicitly unfinished whole-robot software. No failing executed software test is
-carried forward. A passing UI criterion does not pass the independent authentic-
+explicitly unfinished whole-robot software. Executed solid-geometry checks fail;
+passing application tests do not erase those findings. A passing UI criterion does not pass the independent authentic-
 robot or full journey gates.
 
-Latest executed checks: **655 backend, 86 frontend and 102 RL tests passed**, plus
-production build and **6 desktop/mobile browser cases** across a selected authentic
-factory tool, real saved-policy UI and a separate original non-VEX STEP mechanism.
-The new partial architecture-A recipe has 449 outer instances/576 relationships;
-its two endpoints and 12 strategy bindings pass metadata checks. This does not
-pass complete-robot criteria. See the [generation increment](robot-generation.md).
+Latest executed checks: **678 backend, 109 frontend and 102 RL tests passed**, plus
+production build. Desktop/mobile generated-assembly, preserved strategy and
+original STEP revision journeys pass; authentic source inspection is recorded
+separately. Architecture A now visibly loads 494/494 development-CAD placements,
+35 geometry assets and 631 relationships, with 14 bindings. Continuous Cup playback
+uses actual joints and 33 sampled graph checks. Structural interference remains
+failing. The generator is independently authored non-VEX CAD; neither this evidence
+nor fixture revision tests pass authentic/complete-robot gates. See the
+[generation report](robot-generation.md) for exact commands, snapshots and findings.
 See [exact commands and boundaries](production-integration.md),
 [evidence hashes](production-evidence.json) and [source operation status](../cad-source-status.md).
 Historical fixture/blocked-source records remain in [Slice 1](slice-1.md) and
@@ -47,22 +50,22 @@ rulebooks are not represented as PPO-supported.
 | STRAT-4 | P1 | unimplemented | Partial: runtime failures and retries are truthful and retain existing UI results; cancellation/operation restoration is not implemented. |
 | ROBOT-1 | P0 | unimplemented | Partial: Create Robot independently executes the policy and shows actual proposals. It does not generate a complete authentic robot from the current catalog. |
 | ROBOT-2 | P0 | unimplemented | Partial: actual four-bar/roller and elevator/gripper proposals are mechanically distinct and implement one learned family. Their full component assemblies are not realized. |
-| ROBOT-3 | P0 | blocked | Source-selected parts and measured ports now supply a partial A recipe. Gated transfer, Cup handling, stack alignment and full mount/transmission/task qualification remain unfinished; assembly-placement rights remain unverified. No complete authentic robot is rendered or accepted. |
+| ROBOT-3 | P0 | blocked | A generated non-VEX development assembly is rendered, with mounted Cup handling and a bounded joint-operation sequence. Structural interference, powered Pin transfer/release, task qualification and authentic geometry remain incomplete. VEX assembly-placement rights remain unverified. No complete authentic robot is accepted. |
 | ROBOT-4 | P1 | unimplemented | Partial: source-derived proposal trade-offs, subsystem choices and strategy associations work. Switching two complete CAD alternatives is not available. |
 | ROBOT-5 | P1 | unimplemented | Partial: typed realization failures preserve reference inspection and accepted revisions. Per-candidate generation retry/recovery remains incomplete. |
 | CAD-1 | P0 | blocked | Authentic V5 motor native import, preserved hierarchy, real GLB geometry and browser scale checks passed. Required complete-robot components and assembled authenticity remain unqualified. |
-| CAD-2 | P0 | unimplemented | Partial: measured-port component placement, rigid transforms, attachments, explicit joints, descendant updates and connectivity are implemented/tested. Full authentic robot actuation/support hardware is missing. |
+| CAD-2 | P0 | failing | Generated A has 494/494 root-connected placements, explicit mounts/joints and 631 relationships, but actual solid checks find structural intersections. Valid graph closure does not establish meaningful physical mounting/operation. B's assembly is also unimplemented; neither design passes complete authentic hardware qualification. |
 | CAD-3 | P0 | unimplemented | Partial: invalid geometry/units/rights, broken ports/graphs, stale hashes and wrong bindings are refused. A source-bound hardware qualifier now checks BOM, mounts, supported shafts, transmission paths and mechanism declarations; the compiler's complete declarations, game-object/task and clearance verification remain unfinished. |
 | CAD-4 | P0 | blocked | Source identities/hashes and per-operation rights checks work. Authentic generation/assembly-placement and public asset/depiction scopes remain unverified; no submitted robot asset set is qualified. |
 | VIEW-1 | P0 | blocked | Actual motor desktop/mobile WebKit controls, multiple native parts and scale checks passed. Physical-phone pinch/pan and complete authentic robot inspection remain unverified. |
-| VIEW-2 | P1 | unimplemented | Partial: native source hierarchy and private assembly inspector select actual instances and expose source data. Full generated robot hierarchy is not available. |
+| VIEW-2 | P1 | unimplemented | Partial: the generated A development assembly exposes its real parent/child hierarchy, source identities, selection and seven subsystem counts/colors. Complete authentic-robot inspection across both alternatives remains unavailable. |
 | VIEW-3 | P2 | unimplemented | Focus/reset/up-axis work; hide/isolate/explode and the full display-mode controls remain unimplemented. |
-| VIEW-4 | P1 | unimplemented | Discrete joint endpoints are tested; continuous supported mechanism operation/animation and swept clearance are not implemented or claimed. |
+| VIEW-4 | P1 | unimplemented | Partial: bounded original-CAD Cup playback moves the actual lift, jaws, drive shafts and screw/input joints; browser stages match backend FK and 33 graph samples pass. Whole-robot interference still fails, including a nonmating input-shaft/link intersection. A useful clearance-qualified complete mechanism operation, powered Pin sequence and swept-clearance verification remain unfinished. No physics/scoring success is claimed. |
 | VIEW-5 | P0 | passing | Full-screen CAD persists while Strategy, Architectures, Components and assistant panels open/close. Actual source and original-mechanism browser journeys preserve the displayed design/camera context. |
-| LINK-1 | P0 | blocked | Actual source-STEP fixture action highlights/focuses carrier/tool, derives the current anchor sketch and retains the abstract field playbook. Required authentic full-robot mechanism evidence is missing. |
+| LINK-1 | P0 | blocked | Generated A strategy steps highlight/focus the actual mechanisms with revision-bound anchors, sketches and the abstract playbook. Fourteen action bindings resolve to this development assembly. Required authentic complete-robot evidence remains missing. |
 | LINK-2 | P1 | unimplemented | Partial: actual fixture tool raycast and assembly hierarchy expose reverse action links, tested through the browser. Full authentic-robot coverage remains unfinished. |
-| LINK-3 | P1 | unimplemented | Partial: revision-bound coordinate sketches/anchors and abstract rollout diagrams are implemented and labeled. Full mechanism-operation controls and authentic-robot illustrations remain unfinished. |
-| LINK-4 | P0 | blocked | Same action/component/anchor IDs and recomputed binding/revision hashes pass fixture Preview/Apply/Discard/Undo, including visible CAD and sketches. Full authentic-robot post-edit linkage remains unverified. |
+| LINK-3 | P1 | unimplemented | Partial: revision-bound coordinate sketches/anchors, abstract rollout diagrams and bounded Cup operation controls resolve actual components/joints. Authentic-robot illustrations and complete Pin mechanism-operation coverage remain unfinished. |
+| LINK-4 | P0 | blocked | Same action/component/anchor IDs and recomputed binding/revision hashes pass generated A development-CAD Preview/Apply/Discard/Undo, including actual drawn scoring-frame transforms. Full authentic-robot post-edit linkage remains unverified. |
 | AI-1 | P0 | passing | Top-left compact composer, side panel/mobile sheet, full-screen state, internal expansion controls and retained input work in component and real browser tests. |
 | AI-2 | P0 | passing | Bounded assistant explains real source/instance/action context and opens strategy/architectures. Scoring-height intent is positively scoped; unsupported targets, negations and arbitrary dimensions do not trigger edits. |
 | AI-3 | P0 | blocked | Real private STEP fixture preview and exact Apply update joint poses, descendants, anchors and visible geometry. Authentic robot scoring hardware/recipe and task qualification are missing. |

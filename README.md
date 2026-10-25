@@ -15,7 +15,9 @@ The app runs the saved Override PPO policy and presents conditional StrategySpec
 with objectives, annotated playbooks and simulation evidence. Generate Strategy and
 Create Robot are independent entry points. Two mechanically distinct architecture
 proposals from the verified bridge implement **one learned family**. They are
-engineering proposals, not generated CAD or two discovered strategies.
+engineering alternatives, not two discovered strategies. Architecture A now
+produces an inspectable development assembly; architecture B's full CAD remains
+unimplemented.
 
 The full-screen CAD workspace displays authentic locally supplied STEP geometry,
 with native hierarchy, part selection, camera controls, source identity,
@@ -32,14 +34,20 @@ revision. Browser verification uses a separately authored **non-VEX STEP mechani
 explicitly labeled as a partial computational fixture. This proves the revision
 pipeline, not VEX robot or physical mechanism functionality.
 
-**The complete authentic robot journey remains incomplete.** A new measured-source
-compiler creates architecture A's geared drive, paired powered four-bars, mounted
-Claw Kit tool, roller intake and control/power layout: 449 outer instances and 576
-relationships. Both endpoint graphs and 12 strategy bindings pass metadata checks;
-this does not establish a rendered or complete robot. Gated transfer, independent
-Cup handling, stack alignment, full mount/transmission qualification and physical
-task/clearance checks remain unfinished. Assembly-placement rights remain
-unverified in the supplied source records. Realization reports these gaps.
+**The complete authentic robot journey remains incomplete.** The architecture-A
+compiler now renders **494 generated placements, 35 geometry assets and 631
+relationships**, with 14 strategy bindings. The development workspace uses
+originally authored, explicitly **non-VEX** STEP hardware through the production
+catalog/conversion/realization/viewer pipeline. It includes a two-motor geared
+drive, paired four-bars, roller intake, supported Cup clamp/transmission and
+control/power layout. A prescribed Cup acquisition/lift/placement/release sequence
+operates its actual joints on a 120 mm development fixture; contact, forces,
+scoring and physical retention are unverified. Whole-assembly solid checks found
+structural interference, so it remains a partial development assembly. Powered
+Pin handoff/release, full mounting/clearance qualification and architecture B
+remain unfinished. No imported factory assembly is used as generated-robot proof.
+The original VEX source records are unchanged; new assembly placement and public
+distribution/hosting/publication rights remain unverified for those assets.
 The [generation increment](docs/verification/robot-generation.md) documents exact
 boundaries and preparation commands. Other-competition PDF ingestion, broader editing and full
 workspace layouts remain unfinished. See the
@@ -115,6 +123,26 @@ between bridge architectures, parts, joints, revisions and strategy bindings.
 
 ## Reproduce geometry and revision checks without third-party CAD
 
+For the generated architecture-A development assembly:
+
+```sh
+.venv/bin/python tools/verification/seed_generated_robot.py \
+  --data-dir .local/generated-development
+TACHYON_DATA_DIR=.local/generated-development \
+TACHYON_UI_ORIGIN=http://127.0.0.1:8017 \
+.venv/bin/python -m uvicorn tachyon.app:app --host 127.0.0.1 --port 8017
+```
+
+Open the serving process's owner launch URL. Choose **Create Robot → alternative
+A → Check parts and realize concept**. Components can color the seven subsystems;
+Strategy highlights the actual mechanisms. **Prepare Cup operation** exposes
+continuous playback and individual stages. The assistant's supported height
+commands operate real Preview/Apply/Discard/Undo revisions. This profile is
+independently authored development CAD, not authentic VEX or validated robot
+hardware. All generated STEP/GLB, recipes, sources and state stay ignored/local.
+It reads no manufacturer or private-project CAD and grants no rights over those
+materials. Existing output is preserved by refusing overwrite.
+
 The calibration seeder authors original STEP in a separate ignored workspace:
 
 ```sh
@@ -156,6 +184,9 @@ separate original-mechanism workspace. Exact commands and evidence are in the
 [verification record](docs/verification/production-integration.md). Missing required
 inputs are skipped/blocked, never passing authentic-VEX criteria. Recordings and
 traces are disabled; private CAD screenshots remain ignored and unpublished.
+The generated assembly uses `@generated-development` with
+`TACHYON_E2E_GENERATED_DEVELOPMENT=1`; its geometry and interference results are
+recorded separately in the [generation report](docs/verification/robot-generation.md).
 
 Model-provider configuration is server-side only. No external model-provider
 inference has been verified. Keep credentials out of frontend variables, browser

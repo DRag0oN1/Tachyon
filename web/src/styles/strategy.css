@@ -149,3 +149,8 @@
   .source-status:not(.design-status) > span:not(.status-dot) { display: none; }
   .source-status > strong { white-space: normal; font-size: 9px; line-height: 1.4; }
 }
+.operation-stages{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.operation-stages button{min-height:44px;padding:6px 10px}
+.operation-buttons{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.operation-panel input[type=range]{display:block;width:100%;min-height:44px}
+.subsystem-legend{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}

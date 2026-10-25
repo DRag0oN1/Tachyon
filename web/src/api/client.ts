@@ -42,6 +42,11 @@ async function request(path: string, init: RequestInit = {}, publicHealth = fals
     throw new ApiError(0, 'Tachyon server is unavailable. Start the local server, then retry.');
   }
   if (!response.ok) {
+    if(response.status===400||response.status===409){
+      const failure=await response.clone().json().catch(()=>null);
+      if(failure&&typeof failure.code==='string'&&/^OPERATION_[A-Z_]+$/.test(failure.code)&&typeof failure.message==='string'&&failure.message.length<=1500)
+        throw new ApiError(response.status,failure.message);
+    }
     if (response.status === 401 || response.status === 403) throw new ApiError(response.status, 'This session is missing, expired, or unauthorized. Open a new authorized launch URL from the running server.');
     if (response.status === 404) throw new ApiError(404, 'The requested component or resource is unavailable. Refresh the local catalog.');
     throw new ApiError(response.status, `The server could not complete this request (${response.status}). Retry when it is available.`);
