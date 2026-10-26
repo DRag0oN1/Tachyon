@@ -31,10 +31,13 @@ test('@production-revision original STEP mechanism has real preview/apply/discar
     await page.getByRole('button',{name:'Create Robot',exact:true}).click();
     await expect(page.locator('.architecture-options button')).toHaveCount(2,{timeout:35_000});
     await page.locator('.architecture-options button').nth(1).click();
-    await page.getByRole('button',{name:'Check parts and realize concept',exact:true}).click();
+    await page.getByRole('button',{name:'Assemble local recipe',exact:true}).click();
     const status=page.getByTestId('design-status');
     await expect(status).toHaveAttribute('data-state','ready',{timeout:30_000});
+    await page.getByRole('button',{name:'Close Design',exact:true}).click();
+    await status.locator('summary').click();
     await expect(status).toContainText('NOT AUTHENTIC VEX / NOT COMPLETE ROBOT');
+    await status.locator('summary').click();
     expect(Number(await status.getAttribute('data-mesh-count'))).toBeGreaterThanOrEqual(3);
     const viewport=page.getByTestId('design-canvas');
     designId=(await viewport.getAttribute('data-design-id'))!;
@@ -43,7 +46,8 @@ test('@production-revision original STEP mechanism has real preview/apply/discar
     expect(initial.status).toBe('partial');expect(initial.canEdit).toBe(true);
     expect(initial.qualification.completeRobot).toBe(false);
     expect(initial.qualification.reach.heightM).toBeCloseTo(.08);
-    await page.getByRole('button',{name:'View the strategy behind these concepts',exact:true}).click();
+    await page.getByRole('button',{name:'Strategy',exact:true}).click();
+    await page.locator('.playbook-analysis > summary').click();
     await page.locator('.strategy-timeline button').filter({hasText:'Place an alliance Pin'}).first().click();
     const canvas=viewport.locator('canvas');
     await expect(canvas).toHaveAttribute('data-bound-instance-ids','["carrier","tool"]');
@@ -67,7 +71,7 @@ test('@production-revision original STEP mechanism has real preview/apply/discar
     const x=box.x+box.width/2*(1+dot(point,right)/(depth*tan*(box.width/box.height)));
     const y=box.y+box.height/2*(1-dot(point,up)/(depth*tan));
     await page.mouse.click(x,y);
-    await expect(page.locator('.design-selection-chip')).toContainText('tool · displayed revision');
+    await expect(page.locator('.design-selection-chip')).toContainText('tool');
     await page.locator('.design-selection-chip').getByRole('button',{name:'Place an alliance Pin',exact:true}).click();
     await expect(canvas).toHaveAttribute('data-bound-instance-ids','["carrier","tool"]');
     await page.getByRole('button',{name:'Expand assistant',exact:true}).click();

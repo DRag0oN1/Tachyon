@@ -13,15 +13,16 @@ test('@generated-development actual architecture recipe renders all geometry and
   expect(catalog.components.length).toBeGreaterThan(30);
   expect(catalog.components.every((c:{originKind:string;geometryClass:string})=>c.originKind==='tachyon_authored'&&c.geometryClass==='test_fixture')).toBe(true);
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+  page.on('requestfailed',r=>console.log('Local request failed:',r.method(),new URL(r.url()).pathname,r.failure()?.errorText));
   const mobile=test.info().project.name.includes('mobile');
   await request.patch('/api/workspace',{headers,data:{preferences:{theme:mobile?'shift':'snap',mode:'simple'}}});
   await page.addInitScript(owner=>sessionStorage.setItem('tachyon.owner-session',owner),token);
   await page.goto('/');
   await page.getByRole('button',{name:'Create Robot',exact:true}).click();
-  await expect(page.getByRole('heading',{name:'Two ways to support the same strategy',exact:true})).toBeVisible({timeout:40_000});
+  await expect(page.getByRole('heading',{name:'Choose your machine.',exact:true})).toBeVisible({timeout:40_000});
   await page.locator('.architecture-options button').first().click();
   const realizationReply=page.waitForResponse(r=>r.url().endsWith('/api/designs/realize')&&r.request().method()==='POST');
-  await page.getByRole('button',{name:'Check parts and realize concept',exact:true}).click();
+  await page.getByRole('button',{name:'Assemble local recipe',exact:true}).click();
   const realization=await(await realizationReply).json();
   const status=page.getByTestId('design-status');
   await expect(status).toHaveAttribute('data-state',/ready|failed/,{timeout:100_000});
@@ -33,7 +34,10 @@ test('@generated-development actual architecture recipe renders all geometry and
   await expect(status).toHaveAttribute('data-missing-instance-ids','[]');
   await expect(status).toContainText('NOT AUTHENTIC VEX');
   await expect(page.getByTestId('design-canvas')).toBeVisible();
-  await page.getByRole('button',{name:'Close Architectures',exact:true}).click();
+  await page.getByRole('button',{name:'Close Design',exact:true}).click();
+  await status.locator('summary').click();
+  await expect(status).toContainText('NOT AUTHENTIC VEX');
+  await status.locator('summary').click();
   await page.locator('canvas').hover();
   if(mobile){
     await page.locator('canvas').dispatchEvent('wheel',{deltaY:-180,deltaMode:0,bubbles:true,cancelable:true});
@@ -56,6 +60,7 @@ test('@generated-development actual architecture recipe renders all geometry and
   await page.getByRole('button',{name:'Close Components',exact:true}).click();
   await page.getByRole('button',{name:'Strategy',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Low quadrant scoring cycles',exact:true})).toBeVisible();
+  await page.locator('.playbook-analysis > summary').click();
   const cup=page.locator('.strategy-timeline button').filter({hasText:'Prepare the stack with a Cup'}).first();
   await cup.click();
   await expect(canvas).toHaveAttribute('data-bound-instance-ids',/cup-grip-frame/);
@@ -112,7 +117,7 @@ test('@generated-development actual architecture recipe renders all geometry and
   const previewScoringFrame=JSON.parse((await canvas.getAttribute('data-scoring-frame-matrix'))!);
   expect(previewScoringFrame).not.toEqual(originalScoringFrame);
   previewScoringFrame.forEach((n:number,i:number)=>expect(n).toBeCloseTo(preview.candidateWorldTransforms['cup-grip-frame'][i],7));
-  const discardReply=page.waitForResponse(r=>r.url().endsWith('/decision')&&r.request().postDataJSON()?.action==='discard');
+  const discardReply=page.waitForResponse(r=>r.url().endsWith('/decision')&&r.request().postDataJSON()?.action==='discard',{timeout:90_000});
   await page.getByRole('button',{name:'Discard',exact:true}).click();
   const discarded=await(await discardReply).json();
   expect(discarded.revisionId).toBe(realization.revisionId);

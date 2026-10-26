@@ -1,25 +1,37 @@
-import type { Capabilities, Catalog } from '../api/contracts';
+import { useState } from 'react';
+import type { Capabilities,Catalog } from '../api/contracts';
+import type { DesignCatalog } from '../api/designCatalog';
 import { Icon } from '../components/Icon';
-import { OVERRIDE_MANUAL_URL, type StrategyStatus } from '../api/strategy';
+import { OVERRIDE_MANUAL_URL,type StrategyStatus } from '../api/strategy';
+import { BeamGraphic } from '../studio/Mechanical';
 
-export function Home({ catalog, capabilities, onInspect, strategyStatus, strategyLoading = false, generating = false, onGenerateStrategy, onCreateRobot, strategyError, onRetryStrategy }: {
-  catalog: Catalog | null; capabilities: Capabilities | null; onInspect: () => void;
-  strategyStatus?: StrategyStatus | null; strategyLoading?: boolean; generating?: boolean;
-  onGenerateStrategy?: () => void; onCreateRobot?: () => void; strategyError?: string | null; onRetryStrategy?: () => void;
-}) {
-  const available = strategyStatus?.available === true;
-  const reason = strategyLoading ? 'Checking trained strategy availability…' : strategyStatus?.reason ?? 'Trained strategy service unavailable. Connect the local server to check availability.';
-  return <div className="home-content">
-    <div className="competition-card"><span className="eyebrow">COMPETITION CONTEXT</span><strong>Override · v2.1</strong><span>Default Override only · abstract simulation</span><a className="source-link" href={OVERRIDE_MANUAL_URL} target="_blank" rel="noreferrer">Official V5 Override manual · pinned v2.1</a><small>Other competitions and rulebook upload are unavailable in this strategy flow.</small></div>
-    <span className="eyebrow section-eyebrow">FROM RULES TO ROBOTICS</span>
-    <h2>Your next idea.<br />Grounded in real parts.</h2>
-    <p className="lead">A focused space to connect strategy, mechanisms, and the robot you build.</p>
-    <div className="entry-actions">
-      <div className="entry-card"><span className="entry-number">01</span><h3>Find an approach</h3><p>Explore the trained PPO policy, objectives, and simulated actions.</p><button disabled={!available || generating || !onGenerateStrategy} onClick={onGenerateStrategy}>Generate Strategy <Icon name="arrow" /></button><span className="unavailable-label">{generating ? 'Running the frozen policy…' : available ? 'Strategy first · no robot required' : reason}</span></div>
-      <div className="entry-card"><span className="entry-number">02</span><h3>Shape the machine</h3><p>Compare two engineering concepts for the same learned family.</p><button disabled={!available || generating || !onCreateRobot} onClick={onCreateRobot}>Create Robot <Icon name="arrow" /></button><span className="unavailable-label">{available ? 'Start directly with architecture concepts; CAD qualification follows.' : reason}</span></div>
+export function Home({catalog,capabilities,strategyStatus,strategyLoading=false,generating=false,onGenerateStrategy,onCreateRobot,strategyError,onRetryStrategy,designCatalog,onOpenSavedDesign}:{
+  catalog:Catalog|null;capabilities:Capabilities|null;onInspect:()=>void;
+  strategyStatus?:StrategyStatus|null;strategyLoading?:boolean;generating?:boolean;
+  onGenerateStrategy?:()=>void;onCreateRobot?:()=>void;strategyError?:string|null;onRetryStrategy?:()=>void;
+  designCatalog?:DesignCatalog|null;onOpenSavedDesign?:(id:string)=>void;
+}){
+  const [competitionOpen,setCompetitionOpen]=useState(false);
+  const available=strategyStatus?.available===true;
+  const reason=strategyLoading?'Connecting to the saved strategy policy…':strategyStatus?.reason??'Connect the local strategy service to begin.';
+  return <div className="home-studio">
+    <div className="home-station-line"><span className="eyebrow">TACHYON / ROBOTICS CREATION STUDIO</span><span className="station-state"><i/>{catalog?.components.length?'LOCAL COMPONENTS CONNECTED':'LOCAL WORKSPACE'}</span></div>
+    <div className="home-studio-grid">
+      <section className="home-intro">
+        <div className="competition-switcher"><button className="competition-trigger" aria-expanded={competitionOpen} onClick={()=>setCompetitionOpen(v=>!v)}><span className="competition-marker">V5</span><span><small>COMPETITION</small><strong>Override <span>2026—27</span></strong></span><Icon name="arrow" size={15}/></button>{competitionOpen&&<div className="competition-info"><strong>Override · pinned manual v2.1</strong><p>The current learned policy supports this bounded Override scenario. Other rulebook workflows are not available yet.</p><a href={OVERRIDE_MANUAL_URL} target="_blank" rel="noreferrer">Inspect the official manual ↗</a></div>}</div>
+        <h2>Make your<br/><em>next move.</em></h2>
+        <p className="studio-intro">Understand the game.<br/>Find the mechanism. Build the machine.</p>
+        <div className="home-process" aria-label="Studio workflow"><span>STRATEGY</span><i/><span>DESIGN</span><i/><span>ASSEMBLY</span></div>
+        <p className="home-domain">Learned in abstract simulation.<br/>Engineered and verified separately.</p>
+      </section>
+      <div className="studio-entry-modules">
+        <button className="entry-module entry-strategy" aria-label="Generate Strategy" disabled={!available||generating||!onGenerateStrategy} onClick={onGenerateStrategy}><div className="entry-module-copy"><span className="entry-module-index">01 / PLAYBOOK</span><h3>Generate<br/>Strategy</h3><p>Turn learned game decisions into a visual plan.</p><span className="module-action">OPEN THE PLAYBOOK <Icon name="arrow"/></span></div><BeamGraphic kind="strategy"/></button>
+        <button className="entry-module entry-robot" aria-label="Create Robot" disabled={!available||generating||!onCreateRobot} onClick={onCreateRobot}><div className="entry-module-copy"><span className="entry-module-index">02 / DESIGN BENCH</span><h3>Create<br/>Robot</h3><p>Explore two mechanical approaches. Inspect the available assembly.</p><span className="module-action">ENTER THE STUDIO <Icon name="arrow"/></span></div><BeamGraphic kind="robot"/></button>
+        {(generating||!available)&&<p className="studio-connection" role="status">{generating?'Preparing your studio from the saved policy…':reason}</p>}
+      </div>
     </div>
-    {strategyError && <div className="strategy-notice" role="alert"><p>{strategyError}</p>{onRetryStrategy && <button className="secondary-button" onClick={onRetryStrategy}>Retry strategy connection</button>}</div>}
-    <div className="home-inspect"><Icon name="parts" size={26} /><div><strong>Start with your components</strong><p>{catalog?.components.length ? `${catalog.components.length} local catalog ${catalog.components.length === 1 ? 'entry' : 'entries'}. Inspect identity, geometry, and sources.` : 'No qualified local geometry is available yet.'}</p></div><button className="icon-button" aria-label="Inspect components" onClick={onInspect}><Icon name="arrow" /></button></div>
-    {capabilities?.reasons.length ? <details className="capability-details"><summary>CAD workspace availability</summary><ul>{capabilities.reasons.map((r, i) => <li key={i}>{r}</li>)}</ul></details> : <p className="availability-note">CAD availability is qualified separately from strategy availability.</p>}
+    {strategyError&&<div role="alert" className="strategy-notice"><p>{strategyError}</p>{onRetryStrategy&&<button className="secondary-button" onClick={onRetryStrategy}>Retry strategy connection</button>}</div>}
+    <section className="saved-builds"><div className="saved-builds-heading"><span className="eyebrow">SAVED LOCAL BUILDS</span><span>{catalog?.components.length??0} catalog definitions</span></div>{designCatalog?.saved.length?<div className="saved-builds-rail">{designCatalog.saved.filter(s=>s.revisionId).slice(0,3).map(s=><button key={s.designId} onClick={()=>onOpenSavedDesign?.(s.designId)} disabled={!onOpenSavedDesign||generating}><Icon name="parts"/><span><strong>Design {designCatalog.architectures.find(a=>a.architectureId===s.architectureId)?.alternative==='B'?'02':'01'}</strong><small>Saved assembly{ s.hasCandidate?' · pending preview':''} · recheck on open</small></span><Icon name="arrow"/></button>)}</div>:<p className="empty-saved">Your saved assemblies will appear here after local construction.</p>}</section>
+    <details className="home-system-notes"><summary>Workspace availability</summary><p>Strategy runs the existing trained PPO policy. Design construction uses registered component recipes; it does not synthesize unrestricted new robot geometry.</p><p>{capabilities?.reasons.join(' ')||'Imported geometry and source permissions are checked by the local CAD pipeline.'}</p></details>
   </div>;
 }

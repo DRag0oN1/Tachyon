@@ -1,40 +1,124 @@
 :root {
-  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-ui: "Bahnschrift", "DIN Alternate", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "DIN Condensed", "Bahnschrift SemiCondensed", "Arial Narrow", Impact, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --snap-ivory: #F3F1E9;
+  --snap-graphite: #252D35;
+  --snap-yellow: #F2BD35;
+  --snap-blue: #317CB8;
+  --snap-red: #D84A43;
+  --shift-night: #101820;
+  --shift-gunmetal: #283642;
+  --shift-titanium: #82929C;
+  --shift-cyan: #35BDE6;
+  --shift-copper: #E38B45;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --motion-snap: 180ms;
+  --motion-unfold: 420ms;
+  --ease-snap: cubic-bezier(.2, .8, .2, 1);
+  --ease-unfold: cubic-bezier(.22, .7, .18, 1);
+  font-family: var(--font-ui);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  color-scheme: light;
 }
-* { box-sizing: border-box; }
-body { margin: 0; overflow: hidden; }
-button, input, textarea { font: inherit; }
-button, a, input, textarea, [tabindex] { -webkit-tap-highlight-color: transparent; }
-button { cursor: pointer; color: inherit; }
-button:disabled { cursor: not-allowed; opacity: .48; }
-button, a { touch-action: manipulation; }
-button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
-button { border: 0; }
-button svg { flex: 0 0 auto; }
-button:disabled:focus-visible { outline: none; }
-.workspace {
-  --background: #eeede7; --surface: #faf9f5; --surface-glass: #faf9f5f5;
-  --surface-raised: #fffefa; --surface-muted: #f0efe9; --text: #292d2c;
-  --muted: #696e68; --quiet: #727871; --border: #d9dcd2; --grid: #b3b8ac35;
-  --accent: #e9bf3b; --accent-ink: #53430f; --focus: #216cb1;
-  --blue: #2a68a4; --warning: #86631e; --warning-bg: #f3e6c5;
-  --core-shell: #d9b139; --core-center: #3d637e; --core-line: #a4aaa2;
-  --shadow: 0 14px 45px #343d3110, 0 2px 5px #343d3109;
-  --radius: 14px; --panel-width: 440px;
+
+/* Existing workspace names stay public; the mechanical parts share their materials. */
+:root, .workspace, [data-theme="snap"] {
+  --background: var(--snap-ivory);
+  --surface: #FAF9F3;
+  --surface-glass: #FAF9F3F7;
+  --surface-raised: #FFFEF9;
+  --surface-muted: #E8E6DB;
+  --panel: var(--surface);
+  --text: var(--snap-graphite);
+  --muted: #59646A;
+  --quiet: #616D72;
+  --border: #BEC2B9;
+  --grid: #252D3512;
+  --accent: var(--snap-yellow);
+  --accent-ink: var(--snap-graphite);
+  --focus: #246A9E;
+  /* Text blue is a darker companion to the illustration pigment. */
+  --blue: #246A9E;
+  --warning: #765412;
+  --warning-bg: #F6E8BC;
+  --danger: #A23530;
+  --core-shell: var(--snap-yellow);
+  --core-center: var(--snap-blue);
+  --core-line: #728087;
+  --core-backplate: #DADDD3;
+  --core-plate: #ECECDF;
+  --core-hub-detail: #E5EEF1;
+  --mechanical-blue: var(--snap-blue);
+  --mechanical-red: var(--snap-red);
+  --mechanical-metal: #D0D5CE;
+  --mechanical-edge: #667177;
+  --mechanical-guide: #A3ABA6;
+  --mechanical-rail: #C7CDC5;
+  --mechanical-void: var(--surface);
+  --mechanical-fastener: var(--snap-graphite);
+  --mechanical-rubber: #323B42;
+  --shadow: 0 3px 0 #252D350A, 0 12px 32px #252D350C;
+  --radius: 4px;
+  --panel-width: 440px;
   color-scheme: light;
-  color: var(--text); background: var(--background);
+  color: var(--text);
+  background: var(--background);
 }
-.workspace[data-theme="shift"] {
-  --background: #171e25; --surface: #222b34; --surface-glass: #222b34f5;
-  --surface-raised: #2b3641; --surface-muted: #1b242d; --text: #edf1f2;
-  --muted: #a8b7bf; --quiet: #95a7b1; --border: #3a4752; --grid: #778fa32c;
-  --accent: #78c9ed; --accent-ink: #0c3345; --focus: #8bd5ff;
-  --blue: #83cef2; --warning: #e7bb81; --warning-bg: #433726;
-  --core-shell: #98b4c8; --core-center: #68c8f8; --core-line: #b68b66;
-  --shadow: 0 14px 45px #0004, 0 2px 5px #0003; --radius: 8px;
+
+[data-theme="shift"], .workspace[data-theme="shift"] {
+  --background: var(--shift-night);
+  --surface: #1B2833;
+  --surface-glass: #1B2833F7;
+  --surface-raised: var(--shift-gunmetal);
+  --surface-muted: #16222C;
+  --panel: var(--surface);
+  --text: #E8EEF0;
+  --muted: #B3C1C9;
+  --quiet: #A2B3BE;
+  --border: #516574;
+  --grid: #82929C20;
+  --accent: var(--shift-cyan);
+  --accent-ink: #102A36;
+  --focus: #6BD5F2;
+  --blue: #6ACFEA;
+  --warning: #F0B879;
+  --warning-bg: #3F2D20;
+  --danger: #F09A89;
+  --core-shell: var(--shift-titanium);
+  --core-center: var(--shift-cyan);
+  --core-line: #8A9DA8;
+  --core-backplate: #16222B;
+  --core-plate: var(--shift-gunmetal);
+  --core-hub-detail: #143947;
+  --mechanical-blue: var(--shift-cyan);
+  --mechanical-red: var(--shift-copper);
+  --mechanical-metal: #415765;
+  --mechanical-edge: var(--shift-titanium);
+  --mechanical-guide: #526B79;
+  --mechanical-rail: #344955;
+  --mechanical-void: var(--shift-night);
+  --mechanical-fastener: #B3C3CA;
+  --mechanical-rubber: #121A21;
+  --shadow: 0 3px 0 #0003, 0 16px 36px #0004;
+  --radius: 2px;
   color-scheme: dark;
 }
+
+* { box-sizing: border-box; }
+body { margin: 0; overflow: hidden; }
+button, input, textarea, select { font: inherit; }
+button, a, input, textarea, select, [tabindex] { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; color: inherit; border: 0; }
+button:disabled { cursor: not-allowed; opacity: .48; }
+button, a { touch-action: manipulation; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+button svg { flex: 0 0 auto; }
+button:disabled:focus-visible { outline: none; }

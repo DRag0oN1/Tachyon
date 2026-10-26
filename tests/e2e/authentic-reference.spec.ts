@@ -34,7 +34,7 @@ test('@authentic-reference actual manufacturer assembly renders and selects sepa
     await request.patch('/api/workspace', { headers, data: { activeComponentId: component.id } });
     await page.addInitScript(owner => sessionStorage.setItem('tachyon.owner-session', owner), token);
     await page.goto('/');
-    await expect(page.getByText('Local workspace', { exact: true })).toBeVisible();
+    await expect(page.getByText('LOCAL / CONNECTED', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Preferences', exact: true }).click();
     await page.getByRole('button', { name: /Advanced/ }).click();
     await page.getByRole('button', { name: 'Components', exact: true }).click();
@@ -43,7 +43,9 @@ test('@authentic-reference actual manufacturer assembly renders and selects sepa
     await expect(status).toHaveAttribute('data-state', /ready|failed/, { timeout: 100_000 });
     await expect(status).toHaveAttribute('data-state', 'ready');
     expect(Number(await status.getAttribute('data-mesh-count'))).toBeGreaterThan(1);
+    await status.locator('summary').click();
     await expect(status).toContainText('IMPORTED REFERENCE');
+    await status.locator('summary').click();
     const observed = JSON.parse((await status.getAttribute('data-render-bounds'))!);
     for (const side of ['min', 'max'] as const) component.boundsM[side].forEach((v, i) => expect(observed[side][i]).toBeCloseTo(v, 4));
     if (id === 'v5_clawbot_reference') {

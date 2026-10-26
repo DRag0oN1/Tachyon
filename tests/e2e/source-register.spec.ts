@@ -33,7 +33,7 @@ test('@source-register external originals remain blocked without qualified conve
   try {
     await page.addInitScript(owner => sessionStorage.setItem('tachyon.owner-session', owner), token);
     await page.goto('/');
-    await expect(page.getByText('Local workspace', { exact: true })).toBeVisible();
+    await expect(page.getByText('LOCAL / CONNECTED', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Preferences', exact: true }).click();
     const theme = test.info().project.name === 'mobile-webkit' ? 'SHIFT' : 'SNAP';
     await page.getByRole('button', { name: new RegExp(theme) }).click();

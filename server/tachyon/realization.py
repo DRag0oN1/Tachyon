@@ -539,6 +539,57 @@ class RealizationService:
                 db.execute("BEGIN IMMEDIATE")
             yield db
 
+    def design_catalog(self):
+        """Read-only discovery, never a cached geometry or rights approval.
+
+        Fixed public proposals and strict private recipes supply availability.
+        Missing inputs do not hide saved work. SQLite projects only navigation
+        metadata; opening a saved design still goes through read/_current.
+        """
+        try:
+            path = SR.HANDOFF / "design/manifest.json"
+            manifest = SR._json_file(self.settings.root, path, SR.MANIFEST_PINS[path])
+            contexts = [architecture_context(self.settings.root, identity)
+                        for identity in manifest["architectureIDs"]]
+        except (TachyonError, SR.StrategyRuntimeError, OSError, ValueError, KeyError, TypeError):
+            contexts = []
+        architectures = []
+        for context in sorted(contexts, key=lambda c: c.proposal["alternative"]):
+            alternative = context.proposal["alternative"]
+            try:
+                recipe = load_recipe(self.settings, alternative)
+            except TachyonError:
+                recipe = None
+            architectures.append({
+                "architectureId": context.proposal["id"],
+                "alternative": alternative, "recipeAvailable": recipe is not None,
+                "recipeKind": "authored_component_recipe" if recipe else "none",
+                "requestedPlacements": len(recipe.template.instances) if recipe else 0,
+                "roleIds": sorted(recipe.role_component_ids) if recipe else [],
+                "qualification": "not_checked",
+            })
+        with self._database() as db:
+            rows = db.execute("""
+                SELECT id, json_extract(data, '$.architectureId'),
+                       json_extract(data, '$.strategyId'),
+                       json_extract(data, '$.accepted.id'),
+                       COALESCE(json_type(data, '$.candidate') = 'object', 0)
+                FROM design_realizations WHERE json_valid(data)
+                  AND json_type(data, '$.architectureId') = 'text'
+                  AND json_type(data, '$.strategyId') = 'text'
+                  AND (json_type(data, '$.accepted.id') IS NULL
+                       OR json_type(data, '$.accepted.id') IN ('text', 'null'))
+                ORDER BY rowid DESC LIMIT 8
+            """).fetchall()
+        saved = [{"designId": identity, "architectureId": architecture, "strategyId": strategy,
+                  "revisionId": revision, "hasCandidate": bool(candidate)}
+                 for identity, architecture, strategy, revision, candidate in rows
+                 if all(isinstance(value, str) for value in (identity, architecture, strategy))
+                 and (revision is None or isinstance(revision, str))]
+        return {"schemaVersion": 1, "kind": "tachyon.design_catalog",
+                "architectures": architectures, "saved": saved,
+                "canGenerateAdditionalArchitectures": False}
+
     def _load(self, db, design_id):
         row = db.execute("SELECT data FROM design_realizations WHERE id = ?", (design_id,)).fetchone()
         if row is None:

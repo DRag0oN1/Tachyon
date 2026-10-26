@@ -49,6 +49,12 @@ def realize(body: Realize, request: Request):
     return _service(request).realize(body.architecture_id)
 
 
+@router.get("/catalog")
+def catalog(request: Request):
+    """Discovery metadata only; opening a design rechecks its current inputs."""
+    return _service(request).design_catalog()
+
+
 @router.get("/{design_id}")
 def read(design_id: str, request: Request):
     return _service(request).read(design_id)

@@ -1,92 +1,55 @@
+import { useState } from 'react';
 import type { Mode } from '../api/contracts';
-import { capabilityValue, readable, type ArchitectureProposal, type RealizationState, type StrategySession } from '../api/strategy';
+import type { DesignCatalog } from '../api/designCatalog';
+import { capabilityValue,readable,type ArchitectureProposal,type DesignSession,type RealizationState,type StrategySession } from '../api/strategy';
+import { ArchitectureDrawing,architectureName } from '../studio/ArchitectureDrawing';
+import { DockFrame } from '../studio/Mechanical';
+import { Icon } from '../components/Icon';
 
 export interface ArchitecturesPanelProps {
-  session: StrategySession | null;
-  loading: boolean;
-  error?: string | null;
-  mode?: Mode;
-  selectedArchitectureId: string | null;
-  selectedActionId?: string | null;
-  realization?: RealizationState;
-  onSelectArchitecture: (architectureId: string) => void;
-  onRealizeArchitecture?: (architectureId: string) => void | Promise<void>;
-  onInspectReference?: () => void;
-  onStrategy: () => void;
-  onGenerate: () => void;
-  available?: boolean;
+  session:StrategySession|null;loading:boolean;error?:string|null;mode?:Mode;
+  selectedArchitectureId:string|null;selectedActionId?:string|null;realization?:RealizationState;
+  onSelectArchitecture:(id:string)=>void;onRealizeArchitecture?:(id:string)=>void|Promise<void>;
+  onInspectReference?:()=>void;onStrategy:()=>void;onGenerate:()=>void;available?:boolean;
+  designCatalog?:DesignCatalog|null;designSessions?:Record<string,DesignSession>;onInspectAssembly?:(id:string)=>void;
 }
-
-function mechanism(a: ArchitectureProposal, id: string) { return a.subsystems.find(s => s.id === id); }
-function title(a: ArchitectureProposal) {
-  return [mechanism(a, 'scorer'), mechanism(a, 'pin_intake')].filter(s => !!s).map(s => readable(s!.mechanismIntent)).join(' + ');
+export function designStatus(a:ArchitectureProposal,session?:DesignSession,catalog?:DesignCatalog|null){
+  if(session?.accepted)return session.qualification.completeRobot?'Realized assembly':'Partial assembly';
+  if(catalog?.architectures.find(row=>row.architectureId===a.id)?.recipeAvailable)return 'Authored recipe available';
+  return 'Architecture only';
 }
-
-/** An authored schematic of supplied mechanism intents, never authentic component geometry. */
-function ConceptSketch({ architecture, activeActionId }: { architecture: ArchitectureProposal; activeActionId?: string | null }) {
-  const scorer = mechanism(architecture, 'scorer');
-  const fourBar = scorer?.mechanismIntent.includes('four_bar');
-  const elevator = scorer?.mechanismIntent.includes('elevator');
-  const highlighted = new Set(architecture.bindingIntent.actions.filter(a => (a.action ?? a.sourceValue) === activeActionId).flatMap(a => a.subsystemIDs));
-  return <figure className="strategy-figure concept-sketch"><svg viewBox="0 0 440 300" role="img" aria-label={`Schematic mechanical concept for alternative ${architecture.alternative}; not CAD`}>
-    <path className="concept-ground" d="M20 245H420" />
-    <g className={highlighted.has('drive') ? 'is-selected' : ''}><rect x="100" y="209" width="220" height="23" rx="3" /><circle cx="130" cy="234" r="15" /><circle cx="290" cy="234" r="15" />{mechanism(architecture, 'drive')?.layoutIntent.wheelCount === 6 && <circle cx="210" cy="236" r="15" />}<path d="M220 250V272H340" /><text x="230" y="287">{String(mechanism(architecture, 'drive')?.layoutIntent.wheelCount ?? '?')} wheel drive intent</text></g>
-    <g className={highlighted.has('scorer') ? 'is-selected' : ''}>
-      {fourBar ? <><path d="M175 205 245 113 284 113 214 205ZM175 185 245 93 284 93 214 185Z" /><circle cx="175" cy="205" r="4" /><circle cx="245" cy="113" r="4" /><path d="M280 98H350V66H395" /></> : elevator ? <><path d="M234 208V80H266V208M242 200V90M258 200V90" /><rect x="229" y="106" width="44" height="27" /><path d="M273 119H320M266 80H350V66H395" /></> : <><rect x="220" y="100" width="50" height="100" /><path d="M270 100H350V66H395" /></>}
-      <text x="270" y="52">{fourBar ? 'Four-bar scoring intent' : elevator ? 'Guided elevator intent' : 'Scoring mechanism intent'}</text>
-    </g>
-    <g className={highlighted.has('pin_intake') || highlighted.has('pin_transfer') ? 'is-selected' : ''}><path d="M100 213 65 197H35M100 199 65 183H35M65 183V159H22" /><text x="22" y="146">Pin pickup → handoff</text></g>
-    <g className={highlighted.has('cup_cradle') ? 'is-selected' : ''}><path d="M285 159 292 186H316L323 159M304 186V208M323 172H397" /><text x="316" y="151">Cup bay</text></g>
-    <text x="22" y="28">CONCEPT ONLY · NOT CAD · NOT TO SCALE</text>
-  </svg><figcaption>Original schematic of the supplied subsystem intents. Lines are not real parts, mounts, verified joints, or achieved travel. Dimensions below are sizing intent in metres.</figcaption></figure>;
+function Tradeoffs({architecture}:{architecture:ArchitectureProposal}){
+  const lift=architecture.subsystems.find(s=>s.id==='scorer')?.mechanismIntent??'';
+  const intake=architecture.subsystems.find(s=>s.id==='pin_intake')?.mechanismIntent??'';
+  return <dl className="design-tradeoffs"><div><dt>Lift</dt><dd>{lift.includes('four_bar')?'Linked motion, with a curved tool path to qualify.':'Guided vertical motion, with carriage alignment to qualify.'}</dd></div><div><dt>Acquire</dt><dd>{intake.includes('roller')?'Roller feed needs controlled contact and a timed handoff.':'Jaw pickup needs alignment and coordinated grip timing.'}</dd></div><div><dt>Verify</dt><dd>Clearance, retention and loaded performance remain unverified.</dd></div></dl>;
 }
-
-function Tradeoffs({ architecture }: { architecture: ArchitectureProposal }) {
-  const drive = mechanism(architecture, 'drive');
-  const scorer = mechanism(architecture, 'scorer');
-  const intake = mechanism(architecture, 'pin_intake');
-  return <div className="architecture-tradeoffs"><h4>Engineering tradeoffs to qualify</h4><ul>
-    {drive && <li>{String(drive.layoutIntent.wheelCount)} wheels and {String(drive.actuationIntent.motorCountIntent)} drive motors intended; qualify transmission losses, traction, loaded speed, and turning.</li>}
-    {scorer?.mechanismIntent.includes('four_bar') && <li>Four-bar links introduce a curved tool path and pivot alignment requirements. Check reach, retention, and clearance throughout the stroke.</li>}
-    {scorer?.mechanismIntent.includes('elevator') && <li>A guided elevator adds rails, carriage alignment, and lift transmission requirements. Check binding, loaded holding, and stability.</li>}
-    {intake?.mechanismIntent.includes('rollers') && <li>Roller pickup needs contact force, orientation guides, and a timed handoff that prevents a second Pin entering.</li>}
-    {intake?.mechanismIntent.includes('jaw') && <li>Jaw pickup needs alignment, opening clearance, and coordinated grip/shuttle timing while preserving Pin orientation.</li>}
-  </ul><p className="strategy-caption">Engineering considerations inferred from the supplied mechanisms. Neither concept has measured performance or a proven advantage.</p></div>;
-}
-
-export function ArchitecturesPanel({ session, loading, error, mode = 'simple', selectedArchitectureId, selectedActionId, realization = { state: 'idle' }, onSelectArchitecture, onRealizeArchitecture, onInspectReference, onStrategy, onGenerate, available = true }: ArchitecturesPanelProps) {
-  if (!session) return <div className="strategy-content"><span className="eyebrow">START WITH THE MACHINE</span><h2>{loading ? 'Preparing engineering alternatives…' : 'Create a robot concept'}</h2><p role="status">{loading ? 'Loading saved proposals driven by the frozen PPO strategy. CAD qualification is a separate step.' : 'Start directly here. The strategy runs as context for two mechanical alternatives; no prior Strategy visit is required.'}</p>{error && <p role="alert" className="strategy-notice">{error}</p>}<button disabled={loading || !available} className="primary-button" onClick={onGenerate}>{error ? 'Retry generation' : 'Create Robot'}</button></div>;
-  const selected = session.architectures.find(a => a.id === selectedArchitectureId);
-  const roles = [...new Set(session.architectures.flatMap(a => a.subsystems.map(s => s.id)))];
-  const currentRealization = realization.state !== 'idle' && realization.architectureId === selectedArchitectureId ? realization : null;
-  return <div className="strategy-content architectures-content">
-    <span className="eyebrow">ONE LEARNED FAMILY · ENGINEERING ALTERNATIVES</span><h2>Two ways to support the same strategy</h2><p>Both alternatives consume {readable(session.strategyFamily).toLowerCase()} requirements. They are mechanically different proposals for one learned family. Generated CAD and its qualification appear separately below.</p><p className="strategy-domain">Abstract simulation only · default Override v2.1</p>
-    {error && <p role="alert" className="strategy-notice">{error}</p>}
-    <div className="architecture-options" aria-label="Engineering alternatives">{session.architectures.map(a => <button key={a.id} className="architecture-option" aria-pressed={selectedArchitectureId === a.id} onClick={() => onSelectArchitecture(a.id)}><span className="eyebrow">ALTERNATIVE {a.alternative}</span><strong>{title(a)}</strong><small>Same learned family · engineering intent</small></button>)}</div>
-    {!session.architectures.length && <p>No saved architecture proposals were returned. No robot has been created.</p>}
-    <section><h3>Compare actual subsystem choices</h3><div className="architecture-table-scroll" tabIndex={0} role="region" aria-label="Architecture subsystem comparison"><table className="architecture-table"><thead><tr><th scope="col">Subsystem</th>{session.architectures.map(a => <th scope="col" key={a.id}>Alternative {a.alternative}</th>)}</tr></thead><tbody>{roles.map(role => <tr key={role}><th scope="row">{readable(role)}</th>{session.architectures.map(a => <td key={a.id}>{mechanism(a, role) ? readable(mechanism(a, role)!.mechanismIntent) : 'Not declared'}</td>)}</tr>)}</tbody></table></div></section>
-    {selected ? <>
-      <section><h3>Alternative {selected.alternative} · mechanical concept</h3><ConceptSketch architecture={selected} activeActionId={selectedActionId} /><Tradeoffs architecture={selected} />
-        <dl className="strategy-metrics">{Object.entries(selected.capabilityConstraints.targets).map(([k, v]) => <div key={k}><dt>{readable(k)} target</dt><dd>{capabilityValue(k, v)}</dd></div>)}</dl><p className="strategy-caption">Shared abstract capability targets, not predictions for either mechanism. No topology performance comparison is established.</p>
-      </section>
-      <section className="architecture-realization"><h3>CAD qualification</h3><p>Authentic components, mounts, actuation, and validation are required before this concept can become a connected assembly.</p>
-        <button className="primary-button" disabled={!onRealizeArchitecture || realization.state === 'loading'} onClick={() => onRealizeArchitecture?.(selected.id)}>{currentRealization?.state === 'loading' ? 'Checking qualified components…' : currentRealization?.state === 'failed' ? 'Retry CAD qualification' : 'Check parts and realize concept'}</button>
-        {!onRealizeArchitecture && <p className="strategy-caption">CAD realization is unavailable in this workspace.</p>}
-        {currentRealization?.state === 'loading' && <p role="status">Requesting a real assembly. The schematic remains a concept.</p>}
-        {currentRealization?.state === 'failed' && <p role="alert" className="strategy-notice">{currentRealization.message}</p>}
-        {currentRealization?.state === 'loaded' && <div className="strategy-notice" role="status"><strong>{currentRealization.result.status === 'blocked' ? 'CAD blocked — missing qualified parts or mechanisms' : currentRealization.result.status === 'partial' ? 'Partial assembly — qualifications remain' : 'Assembly response ready — review qualifications'}</strong><p>{currentRealization.result.accepted ? 'Only the returned assembly revision may be displayed as design geometry.' : 'No architecture CAD is available. Any source geometry on the canvas is an inspection reference.'}</p><ul>{currentRealization.result.missing.map((m, i) => <li key={i}><strong>{readable(m.role)}</strong>: {m.message}<small>{readable(m.code)}</small></li>)}</ul>{onInspectReference && <button className="secondary-button" onClick={onInspectReference}>Inspect reference</button>}</div>}
-        {currentRealization?.state === 'loaded' && currentRealization.result.accepted && <div className="generated-assembly-summary">
-          <h4>{currentRealization.result.qualification.completeRobot ? 'Generated conceptual robot' : 'Generated assembly coverage'}</h4>
-          <dl className="strategy-metrics"><div><dt>Placed component instances</dt><dd>{currentRealization.result.accepted.assembly.instances.length}</dd></div><div><dt>Assembly relationships</dt><dd>{Array.isArray(currentRealization.result.accepted.assembly.relationships) ? currentRealization.result.accepted.assembly.relationships.length : 'Unavailable'}</dd></div><div><dt>Populated subsystems</dt><dd>{currentRealization.result.accepted.assembly.subsystems.length}</dd></div><div><dt>Source definitions</dt><dd>{currentRealization.result.components.length}</dd></div></dl>
-          <p>{currentRealization.result.accepted.assembly.subsystems.map(s => readable(s.id)).join(' · ')}</p>
-          <p className="strategy-caption">Purchased subassemblies retain their native source parts; their internal bodies are additional to the placed-instance count. Geometry and connections do not establish real-world task performance or competition legality.</p>
-        </div>}
-      </section>
-      <details open={mode === 'advanced'} className="strategy-evidence"><summary>Required qualifications</summary><ul>{selected.qualificationRequired.map((q, i) => <li key={i}>{q}</li>)}</ul></details>
-      <details className="strategy-evidence" open={mode === 'advanced'}><summary>Subsystem sizing, actuation, and connection intents</summary>{selected.subsystems.map(s => <article key={s.id}><h4>{readable(s.id)} · {readable(s.mechanismIntent)}</h4><dl className="strategy-metrics">{Object.entries({ ...s.layoutIntent, ...s.actuationIntent }).filter(([, v]) => ['string', 'number', 'boolean'].includes(typeof v)).map(([k, v]) => <div key={k}><dt>{readable(k)}</dt><dd>{typeof v === 'number' ? capabilityValue(k, v) : typeof v === 'boolean' ? v ? 'Yes' : 'No' : String(v)}</dd></div>)}</dl></article>)}<h4>Attachment and joint intents</h4><ul>{selected.attachmentAndJointIntents.map((j, i) => <li key={i}>{readable(j.parentSubsystemID)} → {readable(j.childSubsystemID)}: {j.jointIntent} · {j.mountZoneIntent}</li>)}</ul></details>
-      <details className="strategy-evidence"><summary>Engineering assumptions</summary><ul>{selected.engineeringAssumptions.map((s, i) => <li key={i}>{s}</li>)}</ul></details>
-      <p className="strategy-caption">Minimum modeled reach: {capabilityValue('reachM', selected.capabilityConstraints.hardMinimums.reachM ?? 0)}. Authentic part selection and physical performance remain unverified.</p>
-    </> : <p className="strategy-notice">Select an alternative to inspect its schematic, capability targets, qualifications, and CAD availability.</p>}
-    <button className="secondary-button" onClick={onStrategy}>View the strategy behind these concepts</button>
+export function ArchitecturesPanel({session,loading,error,mode='simple',selectedArchitectureId,selectedActionId,realization={state:'idle'},onSelectArchitecture,onRealizeArchitecture,onStrategy,onGenerate,available=true,designCatalog,designSessions={},onInspectAssembly}:ArchitecturesPanelProps){
+  const [showRequirements,setShowRequirements]=useState(false);
+  if(!session)return <div className="design-explorer"><span className="eyebrow">MECHANICAL DESIGN / 01—02</span><h2>{loading?'Preparing the design bench…':'Start with a strategy.'}</h2><p>{loading?'Running the saved policy and loading its two mechanical proposals.':'Create Robot runs the learned strategy as context. No separate strategy visit is needed.'}</p>{error&&<p role="alert" className="strategy-notice">{error}</p>}<button className="primary-button" disabled={loading||!available} onClick={onGenerate}>{loading?'Preparing designs…':'Create Robot'}<Icon name="arrow"/></button></div>;
+  const selected=session.architectures.find(a=>a.id===selectedArchitectureId);
+  const current=selected?designSessions[selected.id]:undefined;
+  const availability=designCatalog?.architectures.find(a=>a.architectureId===selected?.id);
+  const loaded=realization.state==='loaded'&&realization.architectureId===selected?.id?realization.result:undefined;
+  const working=realization.state==='loading'&&realization.architectureId===selected?.id;
+  const canBuild=availability?.recipeAvailable??true;
+  return <div className="design-explorer">
+    <header className="design-heading"><span className="eyebrow">ONE LEARNED PLAN / TWO MECHANICAL APPROACHES</span><h2>Choose your machine.</h2><p>Different mechanisms. The same learned strategy.</p></header>
+    {error&&<p role="alert" className="strategy-notice">{error}</p>}
+    <div className="architecture-options design-choices" aria-label="Engineering alternatives">{session.architectures.map((a,index)=><button className="design-choice" key={a.id} aria-pressed={a.id===selectedArchitectureId} onClick={()=>{setShowRequirements(false);onSelectArchitecture(a.id);}}><span className="design-choice-id">DESIGN {String(index+1).padStart(2,'0')}<span>{a.id===selectedArchitectureId?'IN VIEW':'SELECT'}</span></span><ArchitectureDrawing architecture={a} compact/><strong>{architectureName(a)}</strong><span className="design-choice-state"><i/>{designStatus(a,designSessions[a.id],designCatalog)}</span></button>)}</div>
+    {selected&&<>
+      <DockFrame className="design-detail" label={`DESIGN ${String(session.architectures.indexOf(selected)+1).padStart(2,'0')}`} code="MECHANISM INTENT">
+        <div className="design-title-row"><h3>{architectureName(selected)}</h3><span className="design-state">{designStatus(selected,current??loaded,designCatalog)}</span></div>
+        <ArchitectureDrawing architecture={selected} activeActionId={selectedActionId}/>
+        <p className="drawing-caption">Conceptual arrangement from this proposal. Not CAD or a verified mechanical layout.</p>
+        <div className="design-primary-actions">{current?.accepted?<button className="primary-button" onClick={()=>onInspectAssembly?.(selected.id)}>Inspect assembly<Icon name="arrow"/></button>:canBuild?<button className="primary-button" disabled={!onRealizeArchitecture||working} onClick={()=>onRealizeArchitecture?.(selected.id)}>{working?'Assembling registered parts…':'Assemble local recipe'}<Icon name="parts"/></button>:<button className="primary-button" onClick={()=>setShowRequirements(v=>!v)}>{showRequirements?'Hide build requirements':'Review build requirements'}<Icon name="parts"/></button>}<button className="text-action" onClick={onStrategy}>Open strategy<Icon name="arrow"/></button></div>
+        {working&&<p role="status" className="design-progress">Checking source geometry, placements and registered connections.</p>}
+        {realization.state==='failed'&&realization.architectureId===selected.id&&<p role="alert" className="strategy-notice">{realization.message}</p>}
+        <p className="design-provenance">{current?.accepted?'Constructed from a preauthored component recipe. Source provenance and clearance warnings remain in the CAD workspace.':!availability?'Recipe availability is unknown. The local engine will check the recipe and return construction results or missing requirements.':canBuild?'Builds a registered, authored assembly recipe using local component geometry. This is not an unrestricted robot generator.':'This design is a proposal. No assembled CAD recipe is available for it in this catalog.'}</p>
+      </DockFrame>
+      <section className="design-mechanisms"><h3>Inside this machine</h3><ol>{selected.subsystems.map((s,i)=><li key={s.id}><span className="mechanism-pin">{String(i+1).padStart(2,'0')}</span><div><strong>{readable(s.id)}</strong><span>{readable(s.mechanismIntent)}</span></div></li>)}</ol></section>
+      <section className="design-support"><h3>Strategy goals</h3><p>{session.spec.scoringPriorities.slice(0,2).map(p=>readable(p.objective)).join(' · ')}</p><Tradeoffs architecture={selected}/></section>
+      {(showRequirements||loaded?.status==='blocked')&&<section className="strategy-notice" role="status"><h3>Assembly still required</h3><p>The schematic remains available while these engineering requirements are unresolved.</p><ul>{(loaded?.missing??[]).map((m,i)=><li key={i}>{readable(m.role)}: {m.message}</li>)}{selected.qualificationRequired.slice(0,5).map(q=><li key={q}>{q}</li>)}</ul></section>}
+      <details className="strategy-evidence" open={mode==='advanced'}><summary>Advanced design analysis</summary><h4>Capability requirements</h4><dl className="strategy-metrics">{Object.entries(selected.capabilityConstraints.targets).map(([k,v])=><div key={k}><dt>{readable(k)}</dt><dd>{capabilityValue(k,v)}</dd></div>)}</dl><p>Targets are abstract engineering inputs, not measured robot capabilities.</p><h4>Subsystem sizing and actuation intents</h4>{selected.subsystems.map(s=><section key={s.id}><h4>{readable(s.id)}</h4><dl>{Object.entries({...s.layoutIntent,...s.actuationIntent}).filter(([,v])=>['number','boolean','string'].includes(typeof v)).map(([k,v])=><div key={k}><dt>{readable(k)}</dt><dd>{String(v)}</dd></div>)}</dl></section>)}<h4>Connection intents</h4><ul>{selected.attachmentAndJointIntents.map((j,i)=><li key={i}>{readable(j.parentSubsystemID)} → {readable(j.childSubsystemID)}: {j.jointIntent} · {j.mountZoneIntent}</li>)}</ul><h4>Qualification requirements</h4><ul>{selected.qualificationRequired.map(q=><li key={q}>{q}</li>)}</ul><h4>Engineering assumptions</h4><ul>{selected.engineeringAssumptions.map(q=><li key={q}>{q}</li>)}</ul><p>These are the two saved bridge proposals. Additional architecture generation is not supported by the current contract.</p></details>
+    </>}
   </div>;
 }

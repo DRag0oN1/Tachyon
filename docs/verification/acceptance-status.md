@@ -1,4 +1,4 @@
-# Application acceptance status — 2026-10-25
+# Application acceptance status — 2026-10-26
 
 Current build: production strategy/architecture integration, authentic local source
 inspection and qualified private partial-assembly revisions. **The full product
@@ -11,7 +11,7 @@ explicitly unfinished whole-robot software. Executed solid-geometry checks fail;
 passing application tests do not erase those findings. A passing UI criterion does not pass the independent authentic-
 robot or full journey gates.
 
-Latest executed checks: **678 backend, 109 frontend and 102 RL tests passed**, plus
+Latest executed checks: **689 backend, 165 frontend and 102 RL tests passed**, plus
 production build. Desktop/mobile generated-assembly, preserved strategy and
 original STEP revision journeys pass; authentic source inspection is recorded
 separately. Architecture A now visibly loads 494/494 development-CAD placements,
@@ -22,6 +22,7 @@ nor fixture revision tests pass authentic/complete-robot gates. See the
 [generation report](robot-generation.md) for exact commands, snapshots and findings.
 See [exact commands and boundaries](production-integration.md),
 [evidence hashes](production-evidence.json) and [source operation status](../cad-source-status.md).
+The [mechanical studio increment](mechanical-studio.md) adds actual-rollout phases, distinct proposal schematics, per-design revision retention and adaptive mechanical UI; it does not change the complete-robot acceptance totals.
 Historical fixture/blocked-source records remain in [Slice 1](slice-1.md) and
 [external catalog](external-catalog.md); their older counts/status are not current.
 
@@ -61,7 +62,7 @@ rulebooks are not represented as PPO-supported.
 | VIEW-2 | P1 | unimplemented | Partial: the generated A development assembly exposes its real parent/child hierarchy, source identities, selection and seven subsystem counts/colors. Complete authentic-robot inspection across both alternatives remains unavailable. |
 | VIEW-3 | P2 | unimplemented | Focus/reset/up-axis work; hide/isolate/explode and the full display-mode controls remain unimplemented. |
 | VIEW-4 | P1 | unimplemented | Partial: bounded original-CAD Cup playback moves the actual lift, jaws, drive shafts and screw/input joints; browser stages match backend FK and 33 graph samples pass. Whole-robot interference still fails, including a nonmating input-shaft/link intersection. A useful clearance-qualified complete mechanism operation, powered Pin sequence and swept-clearance verification remain unfinished. No physics/scoring success is claimed. |
-| VIEW-5 | P0 | passing | Full-screen CAD persists while Strategy, Architectures, Components and assistant panels open/close. Actual source and original-mechanism browser journeys preserve the displayed design/camera context. |
+| VIEW-5 | P0 | passing | Full-screen CAD persists while Strategy, Design, Components and assistant panels open/close. Actual source and original-mechanism browser journeys preserve the displayed design/camera context. |
 | LINK-1 | P0 | blocked | Generated A strategy steps highlight/focus the actual mechanisms with revision-bound anchors, sketches and the abstract playbook. Fourteen action bindings resolve to this development assembly. Required authentic complete-robot evidence remains missing. |
 | LINK-2 | P1 | unimplemented | Partial: actual fixture tool raycast and assembly hierarchy expose reverse action links, tested through the browser. Full authentic-robot coverage remains unfinished. |
 | LINK-3 | P1 | unimplemented | Partial: revision-bound coordinate sketches/anchors, abstract rollout diagrams and bounded Cup operation controls resolve actual components/joints. Authentic-robot illustrations and complete Pin mechanism-operation coverage remain unfinished. |
@@ -75,9 +76,9 @@ rulebooks are not represented as PPO-supported.
 | THEME-2 | P1 | unimplemented | Partial: source theme continuity is verified and engineering revisions are separated from display preferences. Full proposal-review/theme-switch matrix remains unverified. |
 | THEME-3 | P1 | unimplemented | Partial: existing core/panel reduced-motion checks pass. Full mechanism-operation and proposal interaction coverage remains incomplete. |
 | LAYOUT-1 | P1 | unimplemented | Partial: Simple/Advanced progressively expose source and simulation evidence details. The full robot editing control set remains unavailable. |
-| LAYOUT-2 | P2 | unimplemented | Dismiss/reopen and desktop strategy-panel width work. Complete Focus/Split/Studio/Custom maximize/restore/docking is unfinished. |
+| LAYOUT-2 | P2 | unimplemented | Partial: Focus/Split/Studio/Custom display arrangements, retractable tools, desktop panel resizing and an assembly tree work. General docking and the complete maximize/restore matrix remain unfinished. |
 | LAYOUT-3 | P1 | unimplemented | Partial: mobile sheets and full-window CAD work with no horizontal viewport overflow in the tested journeys. Full adaptive layout matrix remains unfinished. |
-| LAYOUT-4 | P1 | unimplemented | Theme/mode/source preferences persist. Full project layouts, reopened strategy sessions and all custom view preferences are not restored. |
+| LAYOUT-4 | P1 | unimplemented | Theme/mode/source preferences persist, and the selected display layout is stored locally. Saved assembly discovery requalifies on open. Full project state, reopened strategy sessions and all custom view preferences are not restored. |
 | MOBILE-1 | P1 | unimplemented | Partial: actual mobile WebKit rendering, source part taps and full fixture revision journey pass. Physical phone and full authentic-robot journey remain unverified. |
 | MOBILE-2 | P1 | unimplemented | Partial: sheet/assistant context and updated compact layout work. Device rotation, keyboard/safe-area and full project recovery matrix remain unverified. |
 | MOBILE-3 | P1 | unimplemented | Named controls, touch targets and focus behavior have tests. Complete keyboard/accessibility audit is unfinished. |

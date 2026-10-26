@@ -10,6 +10,7 @@ import { frameCamera, highlightSelection } from './inspection';
 import { OperationScene } from './OperationScene';
 import type { OperationPlayback } from './operationKinematics';
 import { SUBSYSTEM_COLORS } from './subsystemPalette';
+import { OrientationMarker } from './OrientationMarker';
 import { applyDesignPose, boundInstances, designGeometryResolution, designInstances, designRevisionId, DesignSceneLoadError, disposeDesignScene, instanceAt, instanceBounds, loadDesignScene, type DesignGeometryResolution, type DesignSceneGraph, type DesignSceneSession } from './designSceneGraph';
 
 export type DesignSceneStatus = SceneStatus & { geometryResolution?: DesignGeometryResolution };
@@ -68,7 +69,7 @@ function Unavailable({ onStatus }: Pick<Props,'onStatus'>) {
 function Presented(props: Props & { graph: DesignSceneGraph }) {
   const { camera, gl, scene, size, invalidate } = useThree();
   const controls = useRef<ComponentRef<typeof OrbitControls>>(null);
-  const previous = useRef({ graph: props.graph, reset: -1, focus: -1 });
+  const previous = useRef({ graph: props.graph, reset: -1, focus: -1, width: 0, height: 0 });
   const poseValid = useRef(false);
   const selected = props.selectedInstanceId ? [props.selectedInstanceId] : boundInstances(props.session, props.activeActionId);
   const selectionKey = JSON.stringify(selected);
@@ -109,18 +110,24 @@ function Presented(props: Props & { graph: DesignSceneGraph }) {
     invalidate(); return () => { restores.forEach(restore => restore()); invalidate(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[props.graph,selectionKey,props.theme,props.colorSubsystems,invalidate]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!(camera instanceof PerspectiveCamera)) return;
+    if (size.width <= 0 || size.height <= 0 || !poseValid.current) return;
     const old = previous.current;
     const reset = old.graph!==props.graph || old.reset!==props.resetKey;
     const focus = old.focus!==props.focusKey;
-    previous.current = {graph:props.graph,reset:props.resetKey,focus:props.focusKey};
-    if (!reset && !focus) { observe(); return; }
+    const resized = old.width!==size.width || old.height!==size.height;
+    previous.current = {graph:props.graph,reset:props.resetKey,focus:props.focusKey,width:size.width,height:size.height};
+    if (!reset && !focus && !resized) { observe(); return; }
     const whole = new Box3().setFromObject(props.graph.scene,true);
-    const bounds = reset ? whole : instanceBounds(props.graph,selected);
-    if (!bounds) return;
+    const bounds = !reset && focus ? instanceBounds(props.graph,selected) : whole;
+    if (!bounds || bounds.isEmpty()) return;
+    // A viewport resize fits the actual posed assembly, keeping the user's
+    // orbit direction. Only an explicit reset restores the default heading.
+    const direction = !reset && controls.current ? camera.position.clone().sub(controls.current.target) : new Vector3(1,.7,1);
     camera.up.set(0,1,0);
-    const fit = frameCamera(camera,bounds,size,new Vector3(1,.7,1),whole);
+    camera.aspect = size.width/size.height;
+    const fit = frameCamera(camera,bounds,size,direction,whole);
     if (controls.current) {
       controls.current.target.copy(fit.center); controls.current.minDistance=fit.minDistance;
       controls.current.maxDistance=fit.maxDistance; controls.current.update();
@@ -156,5 +163,6 @@ function Presented(props: Props & { graph: DesignSceneGraph }) {
     <primitive object={props.graph.scene} dispose={null} onClick={pick}/>
     {props.operation&&<OperationScene graph={props.graph} session={props.session} playback={props.operation}/>}
     <OrbitControls ref={controls} makeDefault enableDamping={false} screenSpacePanning rotateSpeed={.7} zoomSpeed={.8} onChange={observe}/>
+    <OrientationMarker/>
   </>;
 }

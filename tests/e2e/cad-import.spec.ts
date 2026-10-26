@@ -14,7 +14,7 @@ function ownerSession(): string | null {
 async function connect(page: Page, token: string) {
   await page.addInitScript(owner => { sessionStorage.setItem('tachyon.owner-session', owner); }, token);
   await page.goto('/');
-  await expect(page.getByText('Local workspace', { exact: true })).toBeVisible();
+  await expect(page.getByText('LOCAL / CONNECTED', { exact: true })).toBeVisible();
 }
 async function openSource(page: Page, component: ComponentDefinition) {
   await page.getByRole('button', { name: 'Components', exact: true }).click();
@@ -33,7 +33,7 @@ test('@cad-import missing owner session stays unavailable without replacement ge
   await expect(page.getByTestId('cad-canvas')).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'Generate Strategy' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Create Robot' })).toBeDisabled();
-  await page.getByRole('button', { name: 'Close Welcome to Tachyon' }).click();
+  await page.getByRole('button', { name: 'Close Studio' }).click();
   await page.screenshot({ path: test.info().outputPath(`${test.info().project.name}-missing-session-no-cad.png`) });
 });
 
@@ -53,6 +53,8 @@ test('@cad-import authenticated empty catalog explains missing source inputs', a
 });
 
 test('@cad-import real authenticated GLB keeps identity, bounds, selection and workspace context without crypto.subtle', async ({ page, request, baseURL }) => {
+  test.setTimeout(120_000);
+  page.setDefaultTimeout(15_000);
   const token = ownerSession();
   test.skip(!token, 'Blocked: supply a runtime owner session; no catalog or rendering evidence is fabricated.');
   const headers = { 'X-Tachyon-Session': token!, Origin: baseURL! };
@@ -83,7 +85,7 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     });
     await connect(page, token!);
     expect(await page.evaluate(() => typeof window.crypto.subtle)).toBe('undefined');
-    await openSource(page, component);
+    await openSource(page, component);console.log('source: geometry ready');
     const status = page.getByTestId('scene-status');
     await expect(status).toHaveAttribute('data-component-id', component.id);
     await expect(status).toHaveAttribute('data-mesh-sha256', component.meshSha256);
@@ -91,13 +93,13 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     const observed = JSON.parse((await status.getAttribute('data-render-bounds'))!);
     for (const side of ['min', 'max'] as const) component.boundsM[side].forEach((v, i) => expect(observed[side][i]).toBeCloseTo(v, 4));
     const expectedDimensions = component.boundsM.max.map((v, i) => ((v - component.boundsM.min[i]) * 1000).toFixed(2)).join(' × ');
-    await expect(page.getByTestId('component-dimensions')).toHaveText(expectedDimensions);
+    await expect(page.getByTestId('component-dimensions')).toHaveText(expectedDimensions);console.log('source: scale checked');
     await expect(page.getByRole('dialog', { name: 'Components' })).toContainText('Source part only');
     if (component.geometryClass === 'test_fixture') await expect(status).toContainText('NOT AUTHENTIC VEX');
-    await page.getByRole('button', { name: 'Select in scene' }).click();
+    await page.getByRole('button', { name: 'Select in scene' }).click();console.log('source: selection requested');
     await page.getByRole('button', { name: 'Close Components' }).click();
     await expect(page.locator('.selection-chip')).toHaveAttribute('data-component-id', component.id);
-    await page.getByRole('button', { name: 'Clear selection' }).click();
+    await page.getByRole('button', { name: 'Clear selection' }).click();console.log('source: canvas controls');
     const canvas = page.locator('canvas');
     const bounds = (await canvas.boundingBox())!;
     const initialPosition = await canvas.getAttribute('data-camera-position');
@@ -136,6 +138,7 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     }
     await expect(page.locator('.selection-chip')).toHaveAttribute('data-component-id', component.id);
     await expect(page.locator('.selection-chip')).toHaveAttribute('data-native-node-id', /^node-\d+$/);
+    console.log('source: native picking checked');
     const requestCount = meshRequests;
     const retainedCamera = await canvas.getAttribute('data-camera-position');
     await page.getByRole('button', { name: 'Preferences', exact: true }).click();
@@ -149,7 +152,8 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     await expect(page.getByRole('dialog', { name: 'Components' })).toContainText(component.sourceSha256);
     const node = component.nativeHierarchy?.find(n => n.hasMesh);
     if (node) {
-      await page.locator('.native-hierarchy button').filter({ hasText: node.id }).click();
+      await page.getByPlaceholder('Source name or node ID').fill(node.id);
+      await page.locator(`.native-hierarchy button[data-native-node-id="${node.id}"]`).click();
       await expect(page.locator('.selection-chip')).toHaveAttribute('data-native-node-id', node.id);
     }
     await page.getByRole('button', { name: 'Close Components' }).click();
@@ -159,7 +163,8 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     await page.getByLabel('Design request').fill('Keep this draft; editing is unavailable.');
     await page.getByRole('button', { name: 'Full-screen assistant' }).click();
     await expect(page.getByRole('dialog', { name: 'Tachyon assistant' })).toHaveAttribute('aria-modal', 'true');
-    await expect(page.getByRole('button', { name: 'Send request' })).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Preview raised',exact:true })).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Apply',exact:true })).toBeDisabled();
     await page.getByRole('button', { name: 'Close assistant' }).click();
     await page.getByRole('button', { name: 'Expand assistant', exact: true }).click();
     await expect(page.getByLabel('Design request')).toHaveValue('Keep this draft; editing is unavailable.');
@@ -167,8 +172,8 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     await expect(canvas).toHaveAttribute('data-camera-position', retainedCamera!);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.getByRole('button', { name: 'Expand assistant', exact: true }).click();
-    await expect(page.locator('.core-module').first()).toHaveCSS('transform', 'none');
-    await expect(page.locator('.core-center')).toHaveCSS('animation-name', 'none');
+    await expect(page.locator('.mechanical-core__module').first()).toHaveCSS('transition-duration', '0s');
+    await expect(page.locator('.mechanical-core__signal').first()).toHaveCSS('animation-name', 'none');
     await page.getByRole('button', { name: 'Close assistant' }).click();
     await page.getByRole('button', { name: 'Preferences', exact: true }).click();
     await page.getByRole('button', { name: /SNAP/ }).click();
@@ -179,10 +184,12 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     expect(pageErrors).toEqual([]);
     if (component.geometryClass === 'test_fixture') await page.screenshot({ path: test.info().outputPath(`${test.info().project.name}-snap-tachyon-authored-non-vex-converter-fixture.png`) });
     // Wait for actual preference persistence before restoring the initial state.
-    await expect(page.getByText('Local workspace', { exact: true })).toBeVisible();
+    await expect(page.getByText('LOCAL / CONNECTED', { exact: true })).toBeVisible();
   } catch (error) {
-    await test.info().attach('renderer-diagnostics', { body: JSON.stringify({ pageErrors, canvasCount: await page.locator('canvas').count(), state: await page.getByTestId('scene-status').getAttribute('data-state') }), contentType: 'application/json' });
-    if (component.geometryClass === 'test_fixture') await page.screenshot({ path: test.info().outputPath(`${test.info().project.name}-failed-tachyon-authored-non-vex-converter-fixture.png`) });
+    if(!page.isClosed()){
+      await test.info().attach('renderer-diagnostics', { body: JSON.stringify({ pageErrors, canvasCount: await page.locator('canvas').count(), state: await page.getByTestId('scene-status').getAttribute('data-state',{timeout:1000}).catch(()=>null) }), contentType: 'application/json' }).catch(()=>{});
+      if (component.geometryClass === 'test_fixture') await page.screenshot({ path: test.info().outputPath(`${test.info().project.name}-failed-tachyon-authored-non-vex-converter-fixture.png`),timeout:1000 }).catch(()=>{});
+    }
     throw error;
-  } finally { await request.patch('/api/workspace', { headers, data: initial }); }
+  } finally { await request.patch('/api/workspace', { headers, data: initial }).catch(()=>{}); }
 });

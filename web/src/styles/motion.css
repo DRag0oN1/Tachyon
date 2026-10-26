@@ -1,17 +1,64 @@
-.ai-core .core-module { transform-box: fill-box; transform-origin: center; transition: transform 280ms cubic-bezier(.2,.7,.3,1); }
-.ai-core:hover .module-a, .ai-expanded .module-a { transform: translate(2px, 2px); }
-.ai-core:hover .module-b, .ai-expanded .module-b { transform: translate(-2px, 2px); }
-.ai-core:hover .module-c, .ai-expanded .module-c { transform: translate(2px, -2px); }
-.ai-core:hover .module-d, .ai-expanded .module-d { transform: translate(-2px, -2px); }
-[data-theme="shift"] .ai-core:hover .module-a, [data-theme="shift"] .ai-expanded .module-a { transform: translate(-3px, -2px) rotate(-8deg); }
-[data-theme="shift"] .ai-core:hover .module-b, [data-theme="shift"] .ai-expanded .module-b { transform: translate(3px, -2px) rotate(8deg); }
-[data-theme="shift"] .ai-core:hover .module-c, [data-theme="shift"] .ai-expanded .module-c { transform: translate(-3px, 2px) rotate(8deg); }
-[data-theme="shift"] .ai-core:hover .module-d, [data-theme="shift"] .ai-expanded .module-d { transform: translate(3px, 2px) rotate(-8deg); }
-.is-connecting .core-center { animation: connecting-core 1.2s ease-in-out infinite alternate; }
-.workspace-panel, .assistant-body { animation: reveal-surface 180ms ease-out; }
+.mechanical-core {
+  --core-travel-x: 3px;
+  --core-travel-y: 3px;
+  --core-twist: 0deg;
+  --core-turn: 9deg;
+  --core-duration: var(--motion-snap);
+  --core-ease: var(--ease-snap);
+}
+[data-theme="shift"] .mechanical-core {
+  --core-travel-x: 7px;
+  --core-travel-y: 5px;
+  --core-twist: 9deg;
+  --core-turn: 27deg;
+  --core-duration: var(--motion-unfold);
+  --core-ease: var(--ease-unfold);
+}
+.mechanical-core__module, .mechanical-core__gear {
+  transform-box: view-box;
+  transform-origin: 64px 64px;
+  transition: transform var(--core-duration) var(--core-ease);
+}
+.mechanical-core .module-a { --module-x: -1; --module-y: -1; --module-turn: -1; }
+.mechanical-core .module-b { --module-x: 1; --module-y: -1; --module-turn: 1; }
+.mechanical-core .module-c { --module-x: -1; --module-y: 1; --module-turn: 1; }
+.mechanical-core .module-d { --module-x: 1; --module-y: 1; --module-turn: -1; }
+.mechanical-core[data-expanded="true"] .mechanical-core__module {
+  transform: translate(calc(var(--module-x) * var(--core-travel-x)), calc(var(--module-y) * var(--core-travel-y))) rotate(calc(var(--module-turn) * var(--core-twist)));
+}
+.mechanical-core[data-expanded="true"] .mechanical-core__gear { transform: rotate(var(--core-turn)); }
+.dock-frame__rail { transition: background-color var(--motion-snap) var(--ease-snap); }
+.beam-graphic__route { transition: stroke-dashoffset var(--motion-unfold) var(--ease-unfold); }
+@media (hover: hover) {
+  .ai-core:hover .mechanical-core:not([data-expanded="true"]) .mechanical-core__module {
+    transform: translate(calc(var(--module-x) * var(--core-travel-x) * .5), calc(var(--module-y) * var(--core-travel-y) * .5));
+  }
+  .entry-card:hover .beam-graphic__route, .entry-module:not(:disabled):hover .beam-graphic__route { stroke-dashoffset: -9; }
+  .dock-frame:hover .dock-frame__rail { background-color: var(--mechanical-metal); }
+}
+
+/* Older core consumers retain motion without overriding the shared SVG. */
+.ai-core svg:not(.mechanical-core) .core-module { transform-box: fill-box; transform-origin: center; transition: transform var(--motion-snap) var(--ease-snap); }
+.ai-core:hover svg:not(.mechanical-core) .module-a, .ai-expanded svg:not(.mechanical-core) .module-a { transform: translate(2px, 2px); }
+.ai-core:hover svg:not(.mechanical-core) .module-b, .ai-expanded svg:not(.mechanical-core) .module-b { transform: translate(-2px, 2px); }
+.ai-core:hover svg:not(.mechanical-core) .module-c, .ai-expanded svg:not(.mechanical-core) .module-c { transform: translate(2px, -2px); }
+.ai-core:hover svg:not(.mechanical-core) .module-d, .ai-expanded svg:not(.mechanical-core) .module-d { transform: translate(-2px, -2px); }
+[data-theme="shift"] .ai-core:hover svg:not(.mechanical-core) .module-a, [data-theme="shift"] .ai-expanded svg:not(.mechanical-core) .module-a { transform: translate(-3px, -2px) rotate(-8deg); }
+[data-theme="shift"] .ai-core:hover svg:not(.mechanical-core) .module-b, [data-theme="shift"] .ai-expanded svg:not(.mechanical-core) .module-b { transform: translate(3px, -2px) rotate(8deg); }
+[data-theme="shift"] .ai-core:hover svg:not(.mechanical-core) .module-c, [data-theme="shift"] .ai-expanded svg:not(.mechanical-core) .module-c { transform: translate(-3px, 2px) rotate(8deg); }
+[data-theme="shift"] .ai-core:hover svg:not(.mechanical-core) .module-d, [data-theme="shift"] .ai-expanded svg:not(.mechanical-core) .module-d { transform: translate(3px, 2px) rotate(-8deg); }
+.is-connecting .core-center, [aria-busy="true"] .mechanical-core__signal { animation: connecting-core 1.2s ease-in-out infinite alternate; }
+.workspace-panel, .assistant-body, .ac-deck { animation: reveal-surface var(--motion-snap) var(--ease-snap); }
+[data-theme="shift"] .workspace-panel, [data-theme="shift"] .assistant-body, [data-theme="shift"] .ac-deck { animation-duration: var(--motion-unfold); animation-timing-function: var(--ease-unfold); }
 @keyframes connecting-core { from { opacity: .35; } to { opacity: 1; } }
 @keyframes reveal-surface { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  .core-module { transform: none !important; }
+  .core-module, .mechanical-core__gear { transform: none !important; }
 }
+.workspace[data-theme=snap] .workspace-panel{animation-name:dock-snap}
+.workspace[data-theme=shift] .workspace-panel{animation-name:rail-unfold;transform-origin:100% 50%}
+@keyframes dock-snap{0%{opacity:0;transform:translateY(8px)}80%{opacity:1;transform:translateY(-1px)}100%{opacity:1;transform:none}}
+@keyframes rail-unfold{from{opacity:0;transform:perspective(1000px) translateX(18px) rotateY(-4deg)}to{opacity:1;transform:none}}
+@media(max-width:760px){.workspace[data-theme=shift] .workspace-panel{animation-name:sheet-unfold;transform-origin:50% 100%}}
+@keyframes sheet-unfold{from{opacity:0;transform:perspective(1000px) translateY(14px) rotateX(4deg)}to{opacity:1;transform:none}}

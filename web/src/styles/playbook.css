@@ -1,0 +1,95 @@
+/* Scoped to the strategy content: the workspace and CAD dock own their layout. */
+.strategy-playbook { container: strategy-playbook / inline-size; }
+.strategy-playbook .playbook-heading h2 { font-size: clamp(24px, 4cqi, 34px); line-height: 1.13; letter-spacing: -.035em; font-weight: 550; margin: 12px 0; }
+.strategy-playbook .playbook-model-status { display: block; border: 0; border-left: 2px solid var(--blue); border-radius: 0; background: transparent; padding: 3px 0 3px 10px; color: var(--muted) !important; font-size: 11px; line-height: 1.65; }
+.playbook-priorities { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; font-size: 11px; margin: 18px 0; }
+.playbook-priorities > span { color: var(--muted); }
+.playbook-priorities strong { font-weight: 550; }
+.strategy-playbook .playbook-sequence { padding-top: 0; margin: 20px 0; min-width: 0; }
+.playbook-sequence .dock-frame__body { min-width: 0; }
+.playbook-sequence-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.strategy-playbook .playbook-sequence-heading h3 { margin: 0; }
+.strategy-playbook .playbook-sequence-heading p { display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: 10px; }
+.playbook-sequence-heading p strong { font-variant-numeric: tabular-nums; font-weight: 550; font-size: 24px; line-height: 1.2; color: var(--text); }
+.strategy-playbook .playbook-score-basis { margin: 5px 0 18px; font-size: 10px; }
+.playbook-sequence-layout { min-width: 0; }
+.playbook-phase-rail { display: flex; gap: 0; margin: 0 0 22px; padding: 0 0 8px; list-style: none; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+.playbook-phase-rail > li { flex: 1 0 128px; position: relative; }
+.playbook-phase-rail > li::before { content: ''; position: absolute; top: 22px; left: 28px; right: 0; border-top: 1px solid var(--border); pointer-events: none; }
+.playbook-phase-rail > li:last-child::before { display: none; }
+.playbook-phase-rail button { width: 100%; min-height: 100px; display: flex; flex-direction: column; align-items: flex-start; gap: 9px; text-align: left; padding: 8px 10px 10px 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); }
+.playbook-phase-rail .playbook-phase-number { position: relative; display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--border); background: var(--surface); font: 10px/1 ui-monospace, monospace; border-radius: 50%; }
+.playbook-phase-rail strong { display: block; font-size: 11px; font-weight: 550; line-height: 1.55; }
+.playbook-phase-rail small { display: block; font-size: 10px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.playbook-phase-rail button.is-active { color: var(--text); border-bottom-color: var(--blue); }
+.playbook-phase-rail button.is-active .playbook-phase-number { border-color: var(--blue); color: var(--blue); box-shadow: 0 0 0 3px var(--surface-muted); }
+.playbook-phase-rail button:focus-visible { outline-offset: -2px; }
+.playbook-selected-phase { min-width: 0; }
+.strategy-playbook .playbook-phase-heading h3 { font-size: 20px; letter-spacing: -.025em; line-height: 1.3; font-weight: 550; margin: 5px 0 8px; }
+.strategy-playbook .playbook-phase-heading p { font-size: 10px; margin: 0 0 16px; font-variant-numeric: tabular-nums; }
+.playbook-drawings { display: grid; gap: 20px; min-width: 0; }
+.playbook-map { margin: 0; min-width: 0; }
+.playbook-map svg { display: block; width: 100%; max-height: 310px; font-family: inherit; }
+.playbook-map text { fill: var(--text); font-size: 11px; }
+.phase-map-plane { fill: var(--surface-muted); stroke: var(--border); }
+.phase-map-grid { stroke: var(--border); stroke-width: .6; fill: none; }
+.playbook-map .phase-map-caption { font-size: 8px; fill: var(--muted); letter-spacing: 1px; }
+.phase-map-route { fill: none; stroke: var(--muted); stroke-width: 1; opacity: .15; }
+.phase-map-route.is-active { stroke: var(--blue); stroke-width: 3; opacity: .95; }
+.phase-map-route.is-incomplete { stroke-dasharray: 4 4; }
+.phase-map-site circle { fill: var(--surface); stroke: var(--blue); stroke-width: 1.5; }
+.phase-map-focus { fill: none; stroke: var(--blue); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.strategy-playbook figcaption, .strategy-playbook .playbook-binding-basis { font-size: 10px; color: var(--muted); line-height: 1.7; margin-top: 9px; }
+.phase-mechanisms { min-width: 0; border-top: 1px solid var(--border); padding-top: 14px; }
+.playbook-tag { font: 9px/1.6 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--blue); }
+.strategy-playbook .phase-mechanism-heading h4 { margin: 3px 0 12px; font-size: 12px; font-weight: 550; }
+.phase-requirement-figure { margin: 0; }
+.phase-requirement-figure svg { display: block; width: 100%; max-height: 270px; }
+.phase-requirement-figure text { fill: var(--text); font-size: 12px; }
+.phase-requirement-action { font-size: 11px !important; }
+.phase-requirement-hub { fill: var(--blue); }
+.phase-requirement-line { fill: none; stroke: var(--blue); stroke-width: 1.5; }
+.phase-requirement-node { fill: var(--surface-muted); stroke: var(--border); }
+.phase-mechanisms .assembly-coordinate-sketch { margin: 0; border: 0; padding: 0; background: transparent; }
+.playbook-phase-actions { display: flex; flex-wrap: wrap; gap: 0 18px; margin-top: 14px; border-top: 1px solid var(--border); padding-top: 6px; }
+.playbook-phase-actions button { min-height: 44px; text-align: left; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; }
+.playbook-phase-actions button[aria-pressed="true"] { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
+.playbook-mechanism-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 16px; }
+.playbook-mechanism-actions button { min-height: 44px; font-size: 11px; }
+.playbook-mechanism-actions > span { color: var(--muted); font-size: 10px; }
+.playbook-footer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
+.playbook-footer-actions button { min-height: 44px; flex: 1 1 auto; }
+.playbook-analysis { margin: 24px 0 4px; border-top: 1px solid var(--border); }
+.playbook-analysis > summary { cursor: pointer; min-height: 56px; padding: 16px 2px; font-size: 13px; font-weight: 600; }
+.playbook-analysis > summary small { display: block; margin: 4px 0 0 17px; font-size: 10px; font-weight: 400; color: var(--muted); }
+.playbook-analysis > summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.playbook-analysis-content { min-width: 0; }
+.strategy-playbook .playbook-analysis-content > section { margin: 0 0 24px; padding: 20px 0 0; }
+.playbook-analysis-content p, .playbook-analysis-content li { overflow-wrap: anywhere; }
+.strategy-playbook .playbook-data-values { margin: 8px 0; font-size: 11px; }
+.strategy-playbook .playbook-data-values > div { display: block; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.strategy-playbook .playbook-data-values dt { color: var(--muted); }
+.strategy-playbook .playbook-data-values dd { max-width: none; text-align: left; margin: 3px 0 0; overflow-wrap: anywhere; }
+.strategy-playbook .playbook-data-values .playbook-data-values { margin-left: 10px; padding-left: 10px; border-left: 1px solid var(--border); }
+.playbook-data-list { margin: 4px 0; }
+.playbook-statistic-note { border-left: 2px solid var(--blue); padding-left: 12px; }
+@container strategy-playbook (min-width: 610px) {
+  .playbook-sequence-layout { display: grid; grid-template-columns: 155px minmax(0, 1fr); gap: 24px; }
+  .playbook-phase-rail { display: block; overflow: visible; margin: 0; padding: 0; }
+  .playbook-phase-rail > li { padding-bottom: 8px; }
+  .playbook-phase-rail > li::before { top: 24px; left: 13px; bottom: 0; right: auto; border-top: 0; border-left: 1px solid var(--border); }
+  .playbook-phase-rail button { flex-direction: row; gap: 10px; min-height: 66px; padding: 7px 8px 7px 0; border-bottom: 0; }
+  .playbook-phase-rail .playbook-phase-number { flex: 0 0 28px; }
+  .playbook-phase-rail button.is-active strong { color: var(--blue); }
+  .playbook-phase-rail small { font-size: 9px; }
+}
+@container strategy-playbook (min-width: 900px) {
+  .playbook-drawings { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+  .phase-mechanisms { border-top: 0; border-left: 1px solid var(--border); padding: 0 0 0 20px; }
+}
+.phase-architecture-figure{margin:0 0 12px}.phase-architecture-figure .architecture-drawing{max-height:190px}.phase-architecture-figure+.phase-requirement-figure svg{max-height:130px}
+.strategy-playbook .playbook-overview{font-size:13px;line-height:1.65;max-width:640px;color:var(--text);margin:0 0 16px}.phase-object-key{display:flex;align-items:center;gap:20px;padding:8px 0 15px;border-bottom:1px solid var(--border);margin-bottom:16px}.phase-object-key>span{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--blue)}.phase-object-key svg{width:42px;height:30px}.phase-object-key>small{font:8px var(--font-mono);color:var(--muted);margin-left:auto;max-width:95px}
+@media(max-width:760px){
+ .playbook-phase-rail>li{flex-basis:146px}.playbook-phase-rail button{min-height:66px;flex-direction:row;align-items:center;gap:9px}.playbook-phase-rail strong{font-size:10px;line-height:1.4}.playbook-phase-rail small{display:none}.playbook-phase-rail .playbook-phase-number{flex:0 0 25px;width:25px;height:25px}.playbook-phase-rail>li::before{display:none}.strategy-playbook .playbook-heading>.eyebrow{display:none}
+}
+@container strategy-playbook (min-width:360px) and (max-width:899px){.playbook-drawings.has-cad-link{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}.has-cad-link .phase-mechanisms{border-top:0;border-left:1px solid var(--border);padding:0 0 0 12px}.has-cad-link figcaption,.strategy-playbook .has-cad-link .playbook-binding-basis{font-size:9px;line-height:1.55}}

@@ -7,6 +7,7 @@ import type { ComponentDefinition, Selection, Theme } from '../api/contracts';
 import { errorMessage } from '../api/client';
 import { disposeScene, loadComponent, type LoadedComponent } from './loadComponent';
 import { applyInspection, frameCamera, framingAction, highlightSelection, selectionFromObject, selectionTarget, subtreeBounds, type FrameRequest, type Inspection } from './inspection';
+import { OrientationMarker } from './OrientationMarker';
 
 export type SceneStatus = { state: 'idle' | 'loading' | 'ready' | 'failed'; meshCount?: number; message?: string; boundsM?: { min: number[]; max: number[] } };
 interface Props {
@@ -40,7 +41,7 @@ function NativeScene({ model, ...props }: Props & { model: LoadedComponent }) {
     invalidate();
     return () => { renderScene.environment = previous; environment.dispose(); room.dispose(); generator.dispose(); };
   }, [gl, renderScene, invalidate]);
-  const frameRequest = useRef<FrameRequest | null>(null);
+  const frameRequest = useRef<(FrameRequest & { width: number; height: number }) | null>(null);
   const observeCamera = useCallback(() => {
     // Passive observation of the real controls: no React updates or render loop.
     gl.domElement.dataset.cameraPosition = JSON.stringify(camera.position.toArray());
@@ -58,20 +59,22 @@ function NativeScene({ model, ...props }: Props & { model: LoadedComponent }) {
     invalidate();
     return () => { restore(); invalidate(); };
   }, [model, props.component, props.selection, props.theme, invalidate]);
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (!(camera instanceof PerspectiveCamera) || size.width <= 0 || size.height <= 0) return;
     const upAxis = props.upAxis ?? 'Z';
-    const next = { model, resetKey: props.resetKey, focusKey: props.focusKey, upAxis };
-    const action = framingAction(frameRequest.current, next);
+    const next = { model, resetKey: props.resetKey, focusKey: props.focusKey, upAxis, width: size.width, height: size.height };
+    const resized = frameRequest.current?.width !== size.width || frameRequest.current?.height !== size.height;
+    const action = framingAction(frameRequest.current, next) ?? (resized ? 'resize' : null);
     frameRequest.current = next;
     if (!action) return;
-    if (!(camera instanceof PerspectiveCamera)) return;
     camera.up.copy(upAxis === 'Y' ? new Vector3(0, 0, -1) : upAxis === 'X' ? new Vector3(1, 0, 0) : new Vector3(0, 1, 0));
     const target = action === 'focus' && props.selection ? selectionTarget(model.scene, props.component, props.selection) : model.scene;
     // A stale or hidden selection never silently focuses the whole assembly.
     const bounds = action === 'reset' ? model.bounds : target && subtreeBounds(target);
     if (!bounds) return;
     const defaultDirection = upAxis === 'Y' ? new Vector3(1, 1, -.65) : upAxis === 'X' ? new Vector3(.65, 1, 1) : new Vector3(1, .65, 1);
-    const direction = action === 'focus' && controls.current ? camera.position.clone().sub(controls.current.target) : defaultDirection;
+    const direction = action !== 'reset' && controls.current ? camera.position.clone().sub(controls.current.target) : defaultDirection;
+    camera.aspect = size.width / size.height;
     const fit = frameCamera(camera, bounds, size, direction, model.bounds);
     if (controls.current) {
       controls.current.target.copy(fit.center);
@@ -102,6 +105,7 @@ function NativeScene({ model, ...props }: Props & { model: LoadedComponent }) {
     <directionalLight position={[-3, 1, -2]} intensity={1} />
     <primitive object={model.scene} onClick={select} dispose={null} />
     <OrbitControls ref={controls} makeDefault enableDamping={false} screenSpacePanning rotateSpeed={0.7} zoomSpeed={0.8} onChange={observeCamera} />
+    <OrientationMarker />
   </>;
 }
 export function AssemblyScene(props: Props) {

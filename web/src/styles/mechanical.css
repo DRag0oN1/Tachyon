@@ -1,0 +1,116 @@
+/* Structural skin stays behind the HTML content, preserving selection and focus. */
+.dock-frame {
+  --dock-cut: 12px;
+  --dock-edge: var(--mechanical-edge);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1px 1px 1px 17px;
+  color: var(--text);
+}
+.dock-frame::before, .dock-frame::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  clip-path: polygon(var(--dock-cut) 0, calc(100% - var(--dock-cut)) 0, 100% var(--dock-cut), 100% calc(100% - var(--dock-cut)), calc(100% - var(--dock-cut)) 100%, var(--dock-cut) 100%, 0 calc(100% - var(--dock-cut)), 0 var(--dock-cut));
+}
+.dock-frame::before { inset: 0; background: var(--dock-edge); }
+.dock-frame::after { inset: 1px; background: var(--surface); }
+.dock-frame:focus-within { --dock-edge: var(--focus); }
+.dock-frame__hardware { position: absolute; inset: 0; pointer-events: none; }
+.dock-frame__rail {
+  position: absolute;
+  top: 16px;
+  bottom: 16px;
+  left: 5px;
+  width: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 8px 0;
+  background: var(--mechanical-rail);
+  border-inline: 1px solid var(--mechanical-edge);
+}
+.dock-frame__rail i { width: 3px; height: 10px; min-height: 3px; background: var(--mechanical-void); border-radius: 2px; box-shadow: inset 0 1px 0 var(--mechanical-edge); }
+.dock-frame__fastener { position: absolute; width: 5px; height: 5px; border: 1px solid var(--mechanical-fastener); border-radius: 50%; }
+.dock-frame__fastener::after { content: ''; position: absolute; width: 3px; height: 1px; inset: 1px 0; transform: rotate(-45deg); background: var(--mechanical-fastener); }
+.dock-frame__fastener--tl { top: 7px; left: 18px; }
+.dock-frame__fastener--tr { top: 7px; right: 14px; }
+.dock-frame__fastener--bl { bottom: 7px; left: 18px; }
+.dock-frame__fastener--br { bottom: 7px; right: 14px; }
+.dock-frame__header { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; min-height: 40px; margin: 0 12px; padding: 12px 8px 10px; border-bottom: 1px solid var(--border); }
+.dock-frame__label { display: inline-flex; align-items: center; gap: 8px; font: 600 10px/1.4 var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
+.dock-frame__label::before { content: ''; width: 3px; height: 10px; background: var(--accent); }
+.dock-frame__code { margin-left: auto; color: var(--muted); font: 10px/1.4 var(--font-mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.dock-frame__body { flex: 1 1 auto; min-width: 0; min-height: 0; padding: 18px; }
+
+/* The core's material roles follow the theme; its geometry is shared. */
+.mechanical-core { display: block; width: 100%; height: auto; overflow: visible; }
+.mechanical-core__chassis { fill: var(--core-backplate); stroke: var(--core-line); stroke-width: 1; }
+.mechanical-core__datum { stroke: var(--core-line); stroke-width: .8; opacity: .8; }
+.mechanical-core .mechanical-core__module { fill: none; }
+.mechanical-core__plate { fill: var(--core-plate); stroke: var(--core-line); stroke-width: 1; stroke-linejoin: bevel; }
+.mechanical-core__latch { fill: var(--core-shell); stroke: var(--mechanical-edge); stroke-width: .8; }
+.mechanical-core__vent { fill: none; stroke: var(--core-line); stroke-width: 1.2; }
+.mechanical-core__gear-ring { fill: var(--core-shell); stroke: var(--mechanical-fastener); stroke-width: .8; stroke-linejoin: bevel; }
+.mechanical-core .mechanical-core__hub { fill: var(--core-center); stroke: var(--mechanical-fastener); stroke-width: 1; }
+.mechanical-core__hub-detail { fill: none; stroke: var(--core-hub-detail); stroke-width: 2; }
+.mechanical-core__bearing { fill: var(--core-backplate); stroke: var(--mechanical-fastener); stroke-width: 1; }
+.mechanical-core__signal { fill: var(--core-center); }
+.mechanical-core__index { fill: none; stroke: var(--mechanical-red); stroke-width: 3; }
+.mechanical-fastener circle { fill: var(--mechanical-metal); stroke: var(--mechanical-fastener); stroke-width: 1; }
+.mechanical-fastener path { fill: none; stroke: var(--mechanical-fastener); stroke-width: 1; }
+
+.beam-graphic { min-width: 0; margin: 0; }
+.beam-graphic > svg { display: block; width: 100%; height: auto; overflow: visible; }
+.beam-graphic__construction { fill: none; stroke: var(--mechanical-guide); stroke-width: .7; stroke-dasharray: 4 5; }
+.beam-graphic__plate { fill: var(--mechanical-metal); stroke: var(--mechanical-edge); stroke-width: 1; stroke-linejoin: bevel; }
+.beam-graphic__fold { fill: none; stroke: var(--surface-raised); stroke-width: 1; opacity: .75; }
+.beam-graphic__hole { fill: var(--mechanical-void); stroke: var(--mechanical-edge); stroke-width: .8; }
+.beam-graphic__link .beam-graphic__plate { fill: var(--core-shell); }
+.beam-graphic__chassis { fill: var(--surface-muted); stroke: var(--mechanical-edge); stroke-width: 1.2; }
+.beam-graphic__tool { fill: var(--mechanical-blue); stroke: var(--text); stroke-width: 1; stroke-linejoin: bevel; }
+.beam-graphic__tool-detail { fill: none; stroke: var(--core-hub-detail); stroke-width: 1.3; }
+.beam-graphic__route { fill: none; stroke: var(--mechanical-blue); stroke-width: 4; stroke-linejoin: bevel; stroke-dasharray: 7 2; }
+.beam-graphic__decision { fill: var(--core-shell); stroke: var(--mechanical-edge); stroke-width: 1; }
+.beam-graphic__choice { fill: var(--mechanical-blue); stroke: var(--mechanical-fastener); stroke-width: 1; }
+.beam-graphic__terminal > path { fill: var(--surface-raised); stroke: var(--mechanical-edge); stroke-width: 1.2; }
+.beam-graphic__terminal > circle { fill: var(--mechanical-blue); }
+.beam-graphic__tread { fill: var(--mechanical-rubber); stroke: var(--mechanical-edge); stroke-width: 1; }
+.beam-graphic__rim { fill: var(--mechanical-metal); stroke: var(--mechanical-edge); stroke-width: 1; }
+.beam-graphic__wheel > path:not(:first-child) { fill: none; stroke: var(--mechanical-edge); stroke-width: 4; }
+.beam-graphic__annotations { fill: var(--muted); font: 8px var(--font-mono); letter-spacing: .4px; }
+.beam-graphic__annotations path { fill: none; stroke: var(--mechanical-edge); stroke-width: .8; }
+.beam-graphic figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; padding: 7px 0; border-top: 1px solid var(--border); color: var(--muted); font: 9px/1.5 var(--font-mono); }
+.beam-graphic figcaption > :last-child { font-size: 8px; letter-spacing: .09em; }
+
+.mechanical-status { --status-color: var(--muted); display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 3px 7px; border: 1px solid var(--border); background: var(--surface-muted); color: var(--text); font: 10px/1.5 var(--font-mono); }
+.mechanical-status__lamp { flex: 0 0 5px; width: 5px; height: 5px; background: var(--status-color); }
+.mechanical-status[data-tone="active"] { --status-color: var(--blue); }
+.mechanical-status[data-tone="warning"] { --status-color: var(--warning); color: var(--warning); background: var(--warning-bg); }
+.mechanical-status[data-tone="danger"] { --status-color: var(--danger); color: var(--danger); }
+.tachyon-wordmark { display: block; width: 100%; height: auto; overflow: visible; color: var(--text); }
+.tachyon-wordmark__letters { fill: none; stroke: currentColor; stroke-width: 5; stroke-linecap: square; stroke-linejoin: bevel; }
+.tachyon-wordmark__cuts { fill: none; stroke: var(--background); stroke-width: 3; }
+
+@media (max-width: 480px) {
+  .dock-frame { --dock-cut: 9px; }
+  .dock-frame__body { padding: 14px; }
+}
+@media (forced-colors: active) {
+  .dock-frame { --dock-edge: CanvasText; }
+  .dock-frame::after { background: Canvas; }
+  .mechanical-status__lamp { background: CanvasText; }
+  .mechanical-core, .beam-graphic { --core-shell: Highlight; --core-center: Highlight; --core-plate: Canvas; --core-backplate: Canvas; --core-hub-detail: Canvas; --mechanical-metal: Canvas; --mechanical-void: Canvas; --mechanical-edge: CanvasText; --mechanical-fastener: CanvasText; --mechanical-blue: Highlight; --mechanical-guide: GrayText; --core-line: CanvasText; }
+}
+[data-theme=shift] .dock-frame{--dock-cut:19px;--dock-edge:var(--border)}
+[data-theme=shift] .dock-frame::before,[data-theme=shift] .dock-frame::after{clip-path:polygon(0 0,calc(100% - var(--dock-cut)) 0,100% var(--dock-cut),100% 100%,var(--dock-cut) 100%,0 calc(100% - var(--dock-cut)))}
+[data-theme=shift] .dock-frame__rail{width:8px;left:5px;background:var(--surface-muted);border-inline-color:var(--mechanical-edge)}
+[data-theme=shift] .dock-frame__rail i{height:3px;width:5px;border-radius:0;transform:skewY(-35deg);background:var(--core-line)}
+[data-theme=shift] .dock-frame__header{border-bottom:1px solid var(--mechanical-edge)}
+[data-theme=shift] .dock-frame__label::before{width:9px;height:5px;transform:skewX(-35deg);background:var(--mechanical-red)}

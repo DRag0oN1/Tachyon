@@ -1,5 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// CI keeps deterministic software WebGL. macOS visual review may explicitly
+// exercise the native Metal renderer; the same CAD/behavior assertions apply.
+const desktopAngle = process.env.TACHYON_E2E_ANGLE === 'metal'
+  ? ['--use-gl=angle', '--use-angle=metal']
+  : ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'];
+
 export default defineConfig({
   testDir: '../tests/e2e',
   fullyParallel: false,
@@ -13,7 +19,7 @@ export default defineConfig({
     trace: 'off', screenshot: 'off', video: 'off',
   },
   projects: [
-    { name: 'desktop', use: { ...devices['Desktop Chrome'], launchOptions: { args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] } } },
+    { name: 'desktop', use: { ...devices['Desktop Chrome'], launchOptions: { args: desktopAngle } } },
     { name: 'mobile-webkit', use: { ...devices['iPhone 13'] } },
   ],
   webServer: process.env.TACHYON_E2E_BASE_URL ? undefined : {

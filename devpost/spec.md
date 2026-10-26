@@ -356,6 +356,26 @@ maximize as P1/P2 functionality arrives. All three assistant modes have their
 controls inside the assistant. Basic SNAP/SHIFT, Focus, core states, phone input,
 and dismiss/reopen work are part of P0, not deferred decorative work.
 
+### Mechanical studio presentation — learner-directed 2026-10-26
+
+Use reusable original SVG/CSS mechanical housings, perforated rails, fasteners,
+icons, core geometry and local industrial typography. SNAP docks modules; SHIFT
+uses articulated shell/panel motion and asymmetric housing geometry. Respect
+reduced motion. The two prominent Home entry points feed the existing services.
+A visual playbook condenses actual contiguous rollout events into up to six
+phases without inventing actions, timings, scores or additional learned families.
+Keep full traces, conditional statistics, capabilities and provenance in Advanced
+Analysis. When CAD exists, dock the playbook beside it; before CAD, use the bench.
+
+Make Design 01/02 central. Derive distinct, explicitly conceptual schematics from
+the actual architecture contracts. Switching alternatives must replace viewer
+content and retain each accepted revision. A proposal without a recipe shows its
+schematic and requirements, never unrelated reference CAD. Saved-build discovery
+is metadata only; opening a saved build requalifies its local inputs. The current
+construction path executes an authored recipe, not unrestricted robot synthesis.
+Focus/Split/Studio/Custom are display arrangements; they cannot mutate engineering
+or strategy links. Keep source/clearance status visible with details on demand.
+
 ## Components
 
 Each heading is an implementation address for the later `5-build` checklist.
@@ -807,6 +827,7 @@ that candidate; an older attempt cannot overwrite a newer result.
 | `POST /api/designs/generations/{id}/candidates/{slot}/retry` | P1: `{workspaceId, competitionSnapshotId, expectedRequestHash, idempotencyKey}` → targeted retry operation; preserve the other candidate |
 | `GET /api/operations/{id}` | Status/stage/origin/result/error |
 | `POST /api/operations/{id}/cancel` | Idempotent cancellation request/result |
+| `GET /api/designs/catalog` | Owner-local proposal/recipe availability and saved-build metadata; no geometry qualification |
 | `GET /api/designs/{id}` | Accepted revision, strategy, supported configurations, readiness |
 | `GET /api/revisions/{id}` | Immutable snapshot, bindings, illustrations, evidence |
 | `GET /api/assets/{hash}.glb` | Owner-authorized qualified local mesh; loopback/LAN rights scope checked, no public cache or arbitrary filesystem access |

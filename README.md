@@ -49,11 +49,33 @@ remain unfinished. No imported factory assembly is used as generated-robot proof
 The original VEX source records are unchanged; new assembly placement and public
 distribution/hosting/publication rights remain unverified for those assets.
 The [generation increment](docs/verification/robot-generation.md) documents exact
-boundaries and preparation commands. Other-competition PDF ingestion, broader editing and full
-workspace layouts remain unfinished. See the
+boundaries and preparation commands. Other-competition PDF ingestion, broader engineering edits and full
+inspection/docking controls remain unfinished. See the
 [production verification](docs/verification/production-integration.md),
 [CAD source status](docs/cad-source-status.md) and
 [44-criterion acceptance record](docs/verification/acceptance-status.md).
+
+## Mechanical studio
+
+Home keeps **Generate Strategy** and **Create Robot** as independent actions.
+The visual playbook groups the actual rollout into phases; **Advanced Analysis**
+retains its full trace, conditional evidence and capability targets. Episode points
+are labeled separately from evaluation averages.
+
+**Design 01** is the four-bar/roller proposal with a local authored assembly recipe.
+**Design 02** is the distinct elevator/jaw proposal and currently shows its honest
+schematic and build requirements. Switching designs changes the displayed content
+and preserves each accepted assembly revision. Saved local builds recheck their
+inputs when opened. This is recipe construction, not unrestricted robot synthesis.
+
+SNAP uses perforated docking housings and modular motion; SHIFT uses articulated
+shells, asymmetric panels and rail transitions. The small top-left mechanical core
+contains its expansion controls. The bottom rail prioritizes Design, Strategy and
+Components. Preferences provides Simple/Advanced and Focus/Split/Studio/Custom
+arrangements; desktop Custom permits practical panel resizing. Phones use one
+resizable task sheet. Tool rails retract, and viewport resizing refits actual CAD.
+General docking, hide/isolate/explode and full two-robot realization remain unfinished.
+See the [studio verification](docs/verification/mechanical-studio.md).
 
 ## Saved strategy-first RL
 

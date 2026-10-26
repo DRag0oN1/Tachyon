@@ -2,10 +2,10 @@ import { useRef, useState, type ReactNode } from 'react';
 import { Icon } from '../components/Icon';
 import { useDialogFocus } from '../workspace/useDialogFocus';
 
-export function PanelHost({ title, subtitle, children, onClose }: { title: string; subtitle: string; children: ReactNode; onClose: () => void }) {
+export function PanelHost({ title, subtitle, children, onClose, defaultHeight = 56 }: { title: string; subtitle: string; children: ReactNode; onClose: () => void; defaultHeight?: number }) {
   const ref = useRef<HTMLElement>(null);
   const drag = useRef<{ y: number; height: number } | null>(null);
-  const [height, setHeight] = useState(56);
+  const [height, setHeight] = useState(defaultHeight);
   useDialogFocus(ref, true);
   const clamp = (h: number) => Math.min(75, Math.max(32, h));
   return <section ref={ref} role="dialog" aria-label={title} tabIndex={-1} className="workspace-panel" style={{ '--sheet-height': `${height}dvh` } as React.CSSProperties}

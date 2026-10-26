@@ -20,8 +20,12 @@ it('reopening the already loaded source never resets readiness or submits anothe
   vi.mocked(api.capabilities).mockResolvedValue(capabilitiesFixture);
   vi.mocked(api.workspace).mockResolvedValue({ ...workspaceFixture, activeComponentId: componentFixture.id });
   render(<WorkspaceShell />);
+  await screen.findByText('LOCAL / CONNECTED');
+  expect(screen.queryByLabelText('Unit-test renderer contract stub')).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Components' }));
   await screen.findByLabelText('Unit-test renderer contract stub');
   await waitFor(() => expect(screen.getByTestId('scene-status')).toHaveAttribute('data-state', 'ready'));
+  fireEvent.click(screen.getByRole('button', { name: 'Close Components' }));
   fireEvent.click(screen.getByRole('button', { name: 'Components' }));
   fireEvent.click(screen.getByRole('button', { name: /Tachyon-authored non-VEX calibration fixture/ }));
   expect(screen.getByTestId('scene-status')).toHaveAttribute('data-state', 'ready');
