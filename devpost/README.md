@@ -14,7 +14,12 @@ Its license is preserved in [third-party notices](../THIRD_PARTY_NOTICES.md).
 | `3-prd` | `prd.md` | Approved by the learner; initial scoring reach/height edit confirmed |
 | `4-spec` | `spec.md` | Approved by the learner; local supplied-CAD path and architecture accepted; asset/complete-recipe qualification remains a build gate |
 | `5-build` | `checklist.md`, application, `app-map.html` | Active; implementation order approved with the first complete robot before live two-design generation; fast mode selected |
-| `6-ship` | Working demo video, public repository, learner-authored submission | Awaits verified build and required reviews |
+| `6-ship` | Working demo video, public repository, learner-authored submission | Authorized partial-demo source published; reviewed video upload-ready; learner-authored entry/submission pending; full engineering gates remain open |
+
+Current public source: <https://github.com/DRag0oN1/Tachyon>. The annotated tag
+`submission-baseline-2026-10-26` preserves the reviewed application. The learner
+approved publication of the honestly bounded partial demo; no complete authentic
+robot claim or Devpost submission is implied. See [publication](../docs/publication.md).
 
 ## Actual project sequence
 

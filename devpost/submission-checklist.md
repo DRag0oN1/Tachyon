@@ -1,15 +1,16 @@
 # Submission preparation checklist
 
-Status: partial-demo preparation; formal build and shipping completion pending.
-Updated 2026-10-26 against Git snapshot `143d6b5`.
+Status: authorized partial-demo source published; video upload and learner submission pending.
+Updated 2026-10-26. Reviewed source `2d86280`; application baseline `667fd90`.
 
 The reviewed application is preserved at `667fd90` under local tag
 `submission-baseline-2026-10-26`, with a verified private Git bundle. The learner's
 favorable demo review and fixed-two-design concern are recorded in the build
 checklist. Following the explicit deadline fallback, [additional design generation
 and management](../docs/next-design-generation.md) is the first post-hackathon
-milestone, not a feature claimed in the existing recording. Publication/submission
-authorization remains pending; the application and review video are unchanged.
+milestone, not a feature claimed in the existing recording. Public source release
+is now explicitly authorized and complete; the application and review video are
+unchanged. The learner will complete and submit the Devpost entry themselves.
 
 This is a factual technical checklist, not learner-authored submission copy.
 The learner authorized honest partial-demo preparation while the approved full
@@ -17,12 +18,13 @@ build is unfinished. Scope, acceptance requirements and existing review checkbox
 are unchanged. See [the shipping audit](../docs/ship-readiness.md) for evidence,
 history/privacy checks and exact publication blockers.
 
-Current authorization covers an actual **1–3 minute private local recording**
-using original Tachyon development CAD from `.local/generated-robot-a-v6`.
-Manufacturer VEX reference assets are excluded. Keep all source geometry and
-meshes private and out of Git. Recording preparation does not authorize public
-upload or grant unverified public CAD rights. Automated auth-recovery checks now
-pass and learner confirmation remains pending.
+Current authorization covers public code/documentation/history at
+`DRag0oN1/Tachyon` and preparation of the reviewed **1–3 minute video** for public
+sharing. It uses original Tachyon development CAD from `.local/generated-robot-a-v6`.
+Manufacturer VEX reference assets are excluded. All source geometry and meshes
+remain private and out of Git; manufacturer redistribution rights are unchanged.
+The learner approved publishing the reviewed partial demonstration, not completion
+of its remaining full engineering criteria. See [publication](../docs/publication.md).
 The private review export is complete at **124.54 seconds (2:05)**:
 `.local/final-demo/Tachyon-demo-review.mp4`. The 233.84-second raw media is
 retained; its recording evidence separately measures 232.051 seconds of wall time.
@@ -69,44 +71,41 @@ no API mocks or browser errors were reported. See the
 - [ ] Complete the learning wrap-up and record the actual learner activity.
   The [technical reference map](app-map.html) is now prepared; its existence does
   not establish that the learner reviewed it or completed the learning activity.
-- [ ] Obtain learner review/readiness confirmation for the stabilized app and
-  private review video. Retain failed attempts and passing retries locally, and
-  reverify any changes made after the final recorded suite results.
+- [x] Learner reviewed the demo favorably and explicitly approved public source
+  publication and video preparation for the partial application. Retained failed
+  attempts and passing retries; no application changes were made for publication.
 
-These open gates keep formal `5-build`/`6-ship` completion pending. They do not
-prevent the explicitly authorized preparation of a truthfully labeled partial demo.
+The remaining full-build/learning gates stay open. They do not prevent the learner's
+explicitly authorized publication of this truthfully labeled partial demo.
 
 ## Required links
 
 | Deliverable | Link | Verification |
 | --- | --- | --- |
-| Public GitHub repository | **Pending — no remote; candidate `DRag0oN1/Tachyon` returned 404** | Creation/push requires user approval; verify anonymous access after authorized publication. |
-| Short demo video | **Public URL pending; private 124.54-second review MP4 complete** | Technical classification/privacy review complete; learner review, combined repo/video release approval and anonymous access remain pending. |
+| Public GitHub repository | [DRag0oN1/Tachyon](https://github.com/DRag0oN1/Tachyon) | Public source, required scope/PRD/spec and baseline tag verified anonymously with HTTP 200. |
+| Short demo video | **Upload-ready:** `.local/final-demo/Tachyon-demo-review.mp4`, approximately 2:05 | Reviewed file unchanged; classification/privacy check complete. Learner uploads it and verifies reviewer access; public URL pending. |
 | Live application | Optional; not selected | Deployment is not required and does not replace either link above. |
 
 ## Public repository and asset release
 
-- [ ] Confirm or choose the public repository destination; obtain explicit
-  authorization to create it, change visibility or push the reviewed code/history.
-  Candidate `DRag0oN1/Tachyon` was checked with a 404 response. No remote is
-  configured, and no publication has occurred in this task.
-- [ ] Review the final intended files and included history immediately before
-  publication. Keep credentials, owner-session material, profile content, private
-  rights evidence, CAD, meshes, recordings and local caches excluded.
+- [x] Received explicit learner authorization; created public `DRag0oN1/Tachyon`,
+  configured `origin`, and pushed reviewed `main` plus the preserved baseline tag.
+- [x] Reviewed the exact files and all 17 pre-release commits before pushing:
+  credentials, owner-session material, private profiles/rights, CAD, meshes, media
+  and caches are excluded. The final publication record documents the audit scope.
 - Optional: choose an application reuse license. No root application license is
   currently present; this is not a challenge requirement or submission gate.
   The curriculum's MIT license is a separate notice.
-- [ ] Preserve dependency/curriculum notices and the provenance of retained
+- [x] Preserve dependency/curriculum notices and the provenance of retained
   authored RL results; do not label tooling licenses as CAD redistribution permission.
-- [ ] Obtain the single explicit repository/video publication approval, including
-  depiction of the original Tachyon CAD shown. The private-use records remain
-  unchanged until that decision; no separate manufacturer-license gate applies
-  to this recording. Manufacturer references remain excluded with their existing
-  unresolved scopes.
-- [ ] Keep restricted geometry and meshes out of Git/Git LFS, release downloads,
+- [x] Learner approved publishing Tachyon and preparing the already-reviewed
+  original-development-CAD video for public sharing. This is not a manufacturer
+  CAD license; no original/converted geometry is distributed. Manufacturer
+  references remain excluded with their unresolved scopes.
+- [x] Keep restricted geometry and meshes out of Git/Git LFS, release downloads,
   public static assets and public hosting. Review any proposed change to that scope
   against its own actual rights evidence first.
-- [ ] Verify and record the public repository URL without authentication.
+- [x] Verify and record the public repository URL without authentication.
 
 ## Demo-video preparation
 
@@ -121,8 +120,8 @@ prevent the explicitly authorized preparation of a truthfully labeled partial de
 - [x] Check the official public overview: the required demo duration is 1–3
   minutes, and the public repository must include scope/PRD/spec. The signed-in
   form and all its remaining prompts have not been operated by this audit.
-- [ ] Learner reviews the private recording and stabilized app, and gives the
-  explicit repo/video publication approval if ready. These remain pending.
+- [x] Learner reviewed the demonstration favorably and explicitly authorized
+  source publication plus preparation of this reviewed video for public sharing.
 - [x] Record the already-defined demonstration sequence. Narration is optional;
   the completed export is silent. Any narration or personal submission answers
   remain learner-authored.
@@ -132,8 +131,8 @@ prevent the explicitly authorized preparation of a truthfully labeled partial de
 - [x] Complete technical recording privacy review by the main owner: actual
   home/playbook/B/CAD/highlight/mobile/edit frames inspected; no credentials,
   address bar or private windows on screen. Only original Tachyon CAD is shown.
-- [ ] After the combined explicit release approval, upload the video and verify
-  anonymous reviewer access. Source CAD and meshes remain outside Git.
+- [ ] Learner uploads the prepared video and verifies anonymous reviewer access.
+  Source CAD and meshes remain outside Git; no public media URL is claimed yet.
 - [ ] Record the video link in the table above and the project's sharing instructions.
 
 ## Learner-authored form and survey
@@ -173,10 +172,9 @@ used and an age-of-majority checkbox. The public repository link belongs in the
 no age/eligibility answer, reflection or submission prose is supplied here. The
 signed-in submission form has not been operated in this task.
 
-GitHub authentication is available locally. Read-only inspection found that the
-proposed `DRag0oN1/Tachyon` repository does not currently exist (404). It has not
-been created or pushed. That concrete destination remains subject to the user's
-publication approval, including review of code/history and depiction of the
-original CAD in the video; these can be one explicit approval. No root reuse
-license has been selected; that optional choice is not a submission gate, and
-the curriculum's MIT license is not an application or CAD license grant.
+The authorized public repository now exists and is anonymously readable at
+<https://github.com/DRag0oN1/Tachyon>. Initial push was 17:03:21 Eastern, after the
+stated 17:00 deadline; no timely-publication or Devpost submission claim is made.
+The learner must check whether their submission form remains available. No root
+reuse license has been selected; that optional choice is not a submission gate,
+and the curriculum's MIT license is not an application or CAD license grant.

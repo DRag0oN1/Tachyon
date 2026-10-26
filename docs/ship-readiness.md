@@ -1,5 +1,12 @@
 # Shipping readiness audit
 
+**Publication update:** the learner subsequently authorized public source release.
+The reviewed repository and baseline tag are now public and anonymously accessible:
+<https://github.com/DRag0oN1/Tachyon>. The reviewed video is upload-ready. See the
+[final publication audit](publication.md) for the current status and timestamps;
+the preparation-time findings below remain a historical record, not a current
+authorization blocker. Full engineering criteria and learner submission remain open.
+
 Audit date: 2026-10-26. Git baseline: `143d6b5` (`main`), 15 reachable
 commits, plus the current uncommitted stabilization candidate. This is a factual technical record for an authorized **partial-demo
 preparation**, not submission copy, publication approval or full-product sign-off.

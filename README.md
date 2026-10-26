@@ -9,8 +9,9 @@ data and controls; the top-left core expands inside the assistant.
 ## Build status
 
 Scope, PRD, specification and checklist are approved. `5-build` remains active in
-fast mode. The learner authorized bounded `6-ship` preparation of the partial
-demo; final hands-on sign-off, full-build completion and publication remain open.
+fast mode. The learner authorized bounded `6-ship` publication of the partial
+demo. [Public source](https://github.com/DRag0oN1/Tachyon) is available; full-build
+completion, video hosting and the learner's Devpost submission remain open.
 
 The app runs the saved Override PPO policy and presents conditional StrategySpec v2
 with objectives, annotated playbooks and simulation evidence. Generate Strategy and
@@ -96,8 +97,9 @@ See the [studio verification](docs/verification/mechanical-studio.md).
 This demonstrates frozen-policy inference and real changes to a **partial,
 independently authored non-VEX assembly**. It does not demonstrate a complete
 validated VEX robot, physical match performance, arbitrary robot synthesis or
-new-rulebook PPO support. CAD/recording artifacts stay private until an explicit
-asset/publication review. [Submission preparation](devpost/submission-checklist.md)
+new-rulebook PPO support. CAD files remain private; the reviewed video is prepared
+for public sharing. [Publication details](docs/publication.md) and
+[submission preparation](devpost/submission-checklist.md)
 records the remaining user-authored fields and publication approvals.
 The [demo stabilization record](docs/verification/demo-stabilization.md) contains
 the launch/recovery verification, recording procedure and remaining failures.
@@ -256,6 +258,7 @@ storage and Git. The independent PPO path needs no provider credential.
 
 ## Project documents
 
+- [Public source, video handoff and final audit](docs/publication.md)
 - [Immediate next milestone: scalable design generation](docs/next-design-generation.md)
 - [Product vision](docs/product-vision.md)
 - [Devpost progress](devpost/README.md)
@@ -268,4 +271,4 @@ storage and Git. The independent PPO path needs no provider credential.
 
 The official sequence remains `1-start` → `2-scope` → `3-prd` → `4-spec` →
 `5-build` → `6-ship`. Reviews, learning wrap-up and shipping remain pending.
-No publication, deployment or challenge submission has occurred.
+Source publication is complete. No live deployment or challenge submission has occurred.

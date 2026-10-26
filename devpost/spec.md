@@ -252,6 +252,15 @@ from CAD software licenses.
 
 ## Where It Runs and How Someone Tries It
 
+**Publication record — 2026-10-26:** the learner authorized the reviewed partial
+application's public source at <https://github.com/DRag0oN1/Tachyon>. The preserved
+tag `submission-baseline-2026-10-26` identifies tested application commit `667fd90`.
+Current executable setup/reproduction instructions are in [README.md](../README.md).
+The reviewed 2:05 upload-ready video remains at
+`.local/final-demo/Tachyon-demo-review.mp4`; its hosting URL is not yet available.
+[The publication record](../docs/publication.md) documents the audit and remaining
+learner submission actions. This changes no technical acceptance or CAD rights status.
+
 Proposed default: a local-first web application for one person, with server-side
 AI credentials. The laptop runs the Python application; desktop or a phone on
 the same trusted network opens its web interface. Remote hosting is optional
