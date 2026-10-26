@@ -109,6 +109,17 @@ completion rather than inferring them from passing automated tests.
 - [ ] Record learner observations and agreed revision tasks here; implement, mechanically verify, commit and have the learner retry affected behavior before marking each fix complete. No fixes are presumed yet.
 - [ ] Final review complete — feedback resolved and learner explicitly confirms ready to ship. If essential assets/permissions, full assemblies, live inference, actual edits or required checks remain blocked/failing/unimplemented, retain that status and keep completion unchecked.
 
+Bounded demo verification on 2026-10-26: documented private launch/recovery,
+699 backend tests, 186 frontend tests, 102 isolated RL tests, clean desktop/mobile
+launch and missing-session browser checks pass. An actual browser recording shows
+the six-phase playbook, two proposals, A's partial development CAD, highlighting
+and Preview/Apply/Undo/Discard. The private review export is 2:05; processing waits
+are explicitly abbreviated. See [demo verification](../docs/verification/demo-stabilization.md).
+This records technical evidence, not learner readiness or full engineering completion.
+The desktop generated-development regression also passes with 494 resolved and
+rendered placements, 925 meshes, 631 relationships, 14 strategy bindings, full
+33-sample modeled Cup playback and exact revision/matrix restoration.
+
 Deployment/publication/submission are outside this build authorization. Any
 eventual CAD imagery in a public demo needs separately qualified publication
 rights. `6-ship` follows only the completed build, reviews and learning wrap-up.
@@ -117,14 +128,16 @@ rights. `6-ship` follows only the completed build, reviews and learning wrap-up.
 
 - [ ] Learning activity complete — use one actual scoring-height request to investigate how the app distinguishes engineering revisions from display changes and rederives strategy links; adapt if useful practice already occurred during implementation.
 - [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as actually reported, with personal reflection kept in the ignored profile.
-- [ ] `devpost/app-map.html` generated from finished code, checked and shown, including a project-grounded practice to reuse.
+- [ ] `devpost/app-map.html` learner review complete. A current technical reference map has been prepared for the bounded demo; generation alone is not a completed learner activity.
 
-Activity and evidence: Not performed; after final revisions use actual assembly,
-revision-service, binding and browser-test references. Do not claim learner mastery.
+Activity and evidence: Learner activity not performed. The prepared reference map
+uses actual assembly, revision-service, binding and browser-test references; it
+has been rendered and its local links checked. Do not claim learner mastery.
 
-Route and stops: Not yet established; identify the real implementation symbols
-after code exists. The intended focus is command → candidate assembly → derived
-bindings → Apply/Undo → rendered selection.
+Route prepared for review: `AiCore` → `WorkspaceShell.edit` → `RealizationService`
+→ revision-specific bindings → `DesignAssemblyScene`. The reference map also
+traces CLI launch → `SessionBoundary` → protected workspace loading. These are
+prepared code references, not a learner-completed tour.
 
 Edit outcome: Not offered yet; optional and not an additional approval gate.
 
@@ -134,6 +147,8 @@ Activity mode: Planned focused investigation for the learner's existing technica
 experience; use the finished app and real code, not a redundant introductory tour.
 
 ## Revisions
+
+- **2026-10-26 final demo stabilization, learner-directed:** the learner explicitly requested a stable, honestly bounded partial demonstration and submission preparation rather than completing new robot engineering. Preserve the original unfinished engineering criteria and do not promote development CAD into authentic/complete-robot evidence. Implemented a single authorization gate, private per-port launch handoff/CLI, recovery and refresh checks, direct saved-CAD access, collapsed core and six-phase overview. Prepared the actual private 2:05 recording, factual reproduction/readiness documentation and a rendered technical reference map. Formal full-build completion, learner readiness, learner-authored submission/exit survey, public repository/video authorization and submission remain separate. The learner's reported expired-session failure is recorded feedback; automated repair verification passes without inferring learner-approved readiness.
 
 - **2026-10-26 mechanical studio overhaul, learner-directed:** apply the requested P0 product-interface revision within the existing services: reusable SNAP/SHIFT mechanical components and motion, actual-rollout playbook with advanced disclosure, central Design 01/02 schematics and revision-preserving switching, compact top-left core, CAD rails and adaptive layouts. Add read-only local saved-build discovery; requalify on open. Preserve the existing complete-robot, authentic-source, clearance, required-review and shipping gates. This UI increment does not complete the unfinished engineering slices. Verification: 689 backend, 165 frontend, 102 preserved RL and seven distinct browser cases pass, plus the production build. Reviewed desktop/phone screenshots remain private. Remaining limitations: `docs/verification/mechanical-studio.md`.
 

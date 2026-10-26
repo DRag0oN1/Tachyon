@@ -1,5 +1,6 @@
 import { readFileSync,writeFileSync } from 'node:fs';
 import { test,expect } from '../../web/e2e-support';
+import type { DesignCatalog } from '../../web/src/api/designCatalog';
 
 test('@generated-development actual architecture recipe renders all geometry and strategy mechanisms',async({page,request,baseURL})=>{
   // Hundreds of original STEP-derived instances and repeated private-catalog
@@ -18,12 +19,22 @@ test('@generated-development actual architecture recipe renders all geometry and
   await request.patch('/api/workspace',{headers,data:{preferences:{theme:mobile?'shift':'snap',mode:'simple'}}});
   await page.addInitScript(owner=>sessionStorage.setItem('tachyon.owner-session',owner),token);
   await page.goto('/');
+  const strategyReply=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/strategy/generate'&&r.request().method()==='POST');
   await page.getByRole('button',{name:'Create Robot',exact:true}).click();
+  const strategy=await(await strategyReply).json();
   await expect(page.getByRole('heading',{name:'Choose your machine.',exact:true})).toBeVisible({timeout:40_000});
   await page.locator('.architecture-options button').first().click();
-  const realizationReply=page.waitForResponse(r=>r.url().endsWith('/api/designs/realize')&&r.request().method()==='POST');
-  await page.getByRole('button',{name:'Assemble local recipe',exact:true}).click();
-  const realization=await(await realizationReply).json();
+  const indexReply=await request.get('/api/designs/catalog',{headers});expect(indexReply.status()).toBe(200);
+  const index:DesignCatalog=await indexReply.json(),architecture=strategy.architectures[0];
+  const saved=index.saved.find(row=>row.architectureId===architecture.id&&row.strategyId===architecture.strategyId&&!!row.revisionId?.trim());
+  const realizationReply=page.waitForResponse(r=>new URL(r.url()).pathname===(saved?`/api/designs/${encodeURIComponent(saved.designId)}`:'/api/designs/realize')&&r.request().method()===(saved?'GET':'POST'),{timeout:180_000});
+  await page.getByRole('button',{name:saved?'Open development CAD':'Assemble local recipe',exact:true}).click();
+  const loaded=await realizationReply;expect(loaded.status()).toBe(200);
+  const realization=await loaded.json();
+  expect(realization.architectureId).toBe(architecture.id);
+  if(saved)expect(realization.designId).toBe(saved.designId);
+  await expect(page.getByRole('dialog',{name:'Design',exact:true})).toHaveCount(0);
+  await expect(page.locator('main')).toHaveAttribute('data-panel','none');
   const status=page.getByTestId('design-status');
   await expect(status).toHaveAttribute('data-state',/ready|failed/,{timeout:100_000});
   await expect(status).toHaveAttribute('data-state','ready');
@@ -34,9 +45,9 @@ test('@generated-development actual architecture recipe renders all geometry and
   await expect(status).toHaveAttribute('data-missing-instance-ids','[]');
   await expect(status).toContainText('NOT AUTHENTIC VEX');
   await expect(page.getByTestId('design-canvas')).toBeVisible();
-  await page.getByRole('button',{name:'Close Design',exact:true}).click();
   await status.locator('summary').click();
   await expect(status).toContainText('NOT AUTHENTIC VEX');
+  await expect(status).toContainText('Constructed from an authored assembly recipe');
   await status.locator('summary').click();
   await page.locator('canvas').hover();
   if(mobile){

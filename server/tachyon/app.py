@@ -21,6 +21,7 @@ from .config import Settings
 from .errors import TachyonError
 from .models import WorkspacePatch
 from .store import Store
+from .launch import write_owner_launch, remove_owner_launch
 
 log = logging.getLogger("uvicorn.error")
 
@@ -51,9 +52,12 @@ def create_app(settings: Settings | None = None):
     async def lifespan(app):
         app.state.session = secrets.token_urlsafe(32)
         app.state.store = Store(settings.data_dir)
-        # The fragment is never sent as an HTTP request. Do not record this console in a public demo.
-        log.info("Tachyon owner launch URL: %s/#session=%s", settings.ui_origin, app.state.session)
-        yield
+        write_owner_launch(settings, app.state.session)
+        log.info("Tachyon is ready. Use tachyon launch with this port to open its authorized browser session.")
+        try:
+            yield
+        finally:
+            remove_owner_launch(settings, app.state.session)
 
     app = FastAPI(title="Tachyon", version=__version__, lifespan=lifespan,
                   docs_url=None, redoc_url=None, openapi_url=None)

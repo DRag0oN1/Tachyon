@@ -9,7 +9,8 @@ data and controls; the top-left core expands inside the assistant.
 ## Build status
 
 Scope, PRD, specification and checklist are approved. `5-build` remains active in
-fast mode; final hands-on review and `6-ship` have not occurred.
+fast mode. The learner authorized bounded `6-ship` preparation of the partial
+demo; final hands-on sign-off, full-build completion and publication remain open.
 
 The app runs the saved Override PPO policy and presents conditional StrategySpec v2
 with objectives, annotated playbooks and simulation evidence. Generate Strategy and
@@ -77,6 +78,30 @@ resizable task sheet. Tool rails retract, and viewport resizing refits actual CA
 General docking, hide/isolate/explode and full two-robot realization remain unfinished.
 See the [studio verification](docs/verification/mechanical-studio.md).
 
+
+## Current demonstration
+
+- Start with the authorized launch, then **Generate Strategy**. All six observed
+  PPO phases are visible; full traces and experiment data stay in Advanced Analysis.
+- **Create Robot** opens Design 01 and Design 02. A has a saved/authored partial
+  development assembly; B is an elevator/jaw schematic, not realized CAD.
+- Use **Inspect the development assembly** on Home or **Open development CAD**
+  in Design. Every open rechecks its inputs; no imported reference replaces it.
+- Select a phase and its Cup action to highlight actual linked geometry.
+- Open the mechanical core, request a supported scoring-height configuration,
+  then Preview/Apply/Undo or Preview/Discard. Collapsing the core hides the form
+  and response; it does not accept an edit.
+- SNAP/SHIFT and mobile layouts share the same engineering data.
+
+This demonstrates frozen-policy inference and real changes to a **partial,
+independently authored non-VEX assembly**. It does not demonstrate a complete
+validated VEX robot, physical match performance, arbitrary robot synthesis or
+new-rulebook PPO support. CAD/recording artifacts stay private until an explicit
+asset/publication review. [Submission preparation](devpost/submission-checklist.md)
+records the remaining user-authored fields and publication approvals.
+The [demo stabilization record](docs/verification/demo-stabilization.md) contains
+the launch/recovery verification, recording procedure and remaining failures.
+
 ## Saved strategy-first RL
 
 The independent [PyTorch PPO experiment](research/strategy_rl/README.md) completed
@@ -107,15 +132,30 @@ npm run build --prefix web
 python3.12 -m venv .local/rl-venv
 .local/rl-venv/bin/python -m pip install -r research/strategy_rl/requirements.lock
 .local/rl-venv/bin/python -m pip install --no-deps --no-build-isolation -e research/strategy_rl
-.venv/bin/python -m uvicorn tachyon.app:app --host 127.0.0.1 --port 8000
+.venv/bin/tachyon serve --port 8019 --open
 ```
 
-Open the **owner launch URL printed by that serving process**. The app removes
-its session fragment from the address bar and authorizes local requests. A plain
-URL without the owner session shows a connection error. Keep this URL out of
-public demos. Restarting invalidates the session. No provider key is needed for
-the saved PPO path. An unavailable isolated runtime produces a retryable
-availability/error view rather than mock inference.
+The `--open` option opens a connected browser tab after the server is ready.
+To reopen or recover an expired tab, run this from the Tachyon project folder:
+
+```sh
+.venv/bin/tachyon launch --port 8019
+```
+
+This works from a fresh terminal even when the server uses a separate private CAD
+profile. The launcher reads a mode-600 project-local handoff, verifies it against
+the real protected API, and opens the current authorized link without printing its
+credential. There is no unauthenticated token endpoint or public-CAD shortcut.
+A plain `http://127.0.0.1:8019/` in a fresh browser shows one connection screen,
+not a broken Home/Strategy view. If automatic opening is unavailable, run
+`launch --port 8019 --show-url` **privately** and paste its full output into the
+connection screen. Never paste it into chat, a public recording or submission.
+
+The app strips the credential fragment before requests, keeps it in tab-scoped
+storage, and supports refresh. New independent tabs/reopened browsers need the
+launch command. Restart rotates the session and invalidates the old link; saved
+assemblies and server-side previews remain intact. No provider key is required
+for the saved PPO path. Unavailable services are reported rather than mocked.
 
 STEP originals default to `~/Documents/TachyonCAD/step/`; source and permission
 records use `~/Documents/TachyonCAD/rights/`. These stay outside the repository.
@@ -124,8 +164,7 @@ is installed automatically and no CAD bytes/renders are sent to a remote service
 
 For frontend development, run the API with
 `TACHYON_UI_ORIGIN=http://127.0.0.1:5173`, start
-`npm run dev --prefix web -- --host 127.0.0.1` separately, then use its printed
-owner URL. Vite proxies `/api` to port 8000. Physical-phone access requires an
+`npm run dev --prefix web -- --host 127.0.0.1` separately, then use `tachyon launch --port 5173` once both are running. Vite proxies `/api` to port 8000. Physical-phone access requires an
 explicit trusted LAN origin and separately qualified LAN display rights.
 Loopback browser emulation does not establish physical-phone support.
 
@@ -151,12 +190,10 @@ For the generated architecture-A development assembly:
 .venv/bin/python tools/verification/seed_generated_robot.py \
   --data-dir .local/generated-development
 TACHYON_DATA_DIR=.local/generated-development \
-TACHYON_UI_ORIGIN=http://127.0.0.1:8017 \
-.venv/bin/python -m uvicorn tachyon.app:app --host 127.0.0.1 --port 8017
+.venv/bin/tachyon serve --port 8017 --open
 ```
 
-Open the serving process's owner launch URL. Choose **Create Robot → alternative
-A → Check parts and realize concept**. Components can color the seven subsystems;
+Use `tachyon launch --port 8017` to reopen. Choose **Create Robot → Design 01 → Assemble local recipe** (or **Open development CAD** for an existing saved assembly). The accepted partial assembly opens directly in the full-screen viewer. Components can color the seven subsystems;
 Strategy highlights the actual mechanisms. **Prepare Cup operation** exposes
 continuous playback and individual stages. The assistant's supported height
 commands operate real Preview/Apply/Discard/Undo revisions. This profile is
@@ -206,6 +243,9 @@ separate original-mechanism workspace. Exact commands and evidence are in the
 [verification record](docs/verification/production-integration.md). Missing required
 inputs are skipped/blocked, never passing authentic-VEX criteria. Recordings and
 traces are disabled; private CAD screenshots remain ignored and unpublished.
+The opt-in `demo-launch.spec.ts` instead reads the private launch handoff via
+`TACHYON_E2E_LAUNCH_FILE` and follows the actual launch URL from a clean browser,
+including missing/expired recovery, refresh and an independent new tab.
 The generated assembly uses `@generated-development` with
 `TACHYON_E2E_GENERATED_DEVELOPMENT=1`; its geometry and interference results are
 recorded separately in the [generation report](docs/verification/robot-generation.md).
@@ -220,6 +260,8 @@ storage and Git. The independent PPO path needs no provider credential.
 - [Devpost progress](devpost/README.md)
 - [Approved scope](devpost/scope.md), [PRD](devpost/prd.md), [specification](devpost/spec.md)
 - [Build checklist](devpost/checklist.md)
+- [Application reference map](devpost/app-map.html)
+- [Submission preparation](devpost/submission-checklist.md)
 - [Source restrictions](docs/cad-source-status.md)
 - [Third-party notices](THIRD_PARTY_NOTICES.md)
 

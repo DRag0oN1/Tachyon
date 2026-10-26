@@ -60,6 +60,7 @@ it('keeps a blocked architecture schematic separate from source CAD, reports mis
   expect(screen.queryByTestId('unit-reference-scene')).not.toBeInTheDocument();
   expect(screen.getByTestId('concept-canvas')).toHaveTextContent('Not CAD');
   expect(screen.queryByTestId('unit-design-scene')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Expand assistant' }));
   fireEvent.change(screen.getByLabelText('Design request'), { target: { value: 'raise scorer' } });
   fireEvent.click(screen.getByRole('button', { name: 'Send request' }));
   expect(await screen.findByText(/Editing requires a qualified mechanism recipe, components, and assembly placement/)).toBeVisible();
@@ -151,6 +152,7 @@ it.each(['Do not raise the scorer', 'Raise scoring height by 20 cm', 'Raise the 
   await home(); fireEvent.click(screen.getByRole('button', {name:'Create Robot'}));
   fireEvent.click(await screen.findByRole('button', {name:'Assemble local recipe'}));
   await screen.findByTestId('unit-design-scene');
+  fireEvent.click(screen.getByRole('button', {name:'Expand assistant'}));
   fireEvent.change(screen.getByLabelText('Design request'), {target:{value:text}});
   fireEvent.click(screen.getByRole('button', {name:'Send request'}));
   await waitFor(() => expect(screen.getByLabelText('Design request')).toHaveValue(''));
@@ -249,7 +251,9 @@ it('opens a saved build through GET requalification and displays that response r
   let finish!:(value:DesignSession)=>void;
   const pending=new Promise<DesignSession>(resolve=>{finish=resolve;});
   vi.mocked(api.get).mockImplementation(async path=>{
-    if(path==='/api/designs/catalog')return index;
+    // The build enters the saved index after its initial realization. This
+    // keeps the first action a POST rather than the direct saved-build opener.
+    if(path==='/api/designs/catalog')return {...index,saved:vi.mocked(api.post).mock.calls.length?index.saved:[]};
     if(path==='/api/designs/unit-design')return pending;
     throw new Error(`Unexpected test GET: ${path}`);
   });

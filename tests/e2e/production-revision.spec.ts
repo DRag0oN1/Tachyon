@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { test, expect } from '../../web/e2e-support';
+import type { DesignCatalog } from '../../web/src/api/designCatalog';
 
 test('@production-revision original STEP mechanism has real preview/apply/discard/undo and revision-exact strategy links', async ({page,request,baseURL}) => {
   test.setTimeout(120_000);
@@ -12,7 +13,12 @@ test('@production-revision original STEP mechanism has real preview/apply/discar
   expect(catalog.components).toHaveLength(3);
   expect(catalog.components.every((c:{geometryClass:string;originKind:string})=>c.geometryClass==='test_fixture'&&c.originKind==='tachyon_authored')).toBe(true);
   const proposals=JSON.parse(readFileSync(resolve('../research/strategy_rl/results/strategy-design-bridge-v1/design/architecture-proposals.json'),'utf8'));
-  let baseline=await(await request.post('/api/designs/realize',{headers,data:{architecture_id:proposals[1].id}})).json();
+  const catalogReply=await request.get('/api/designs/catalog',{headers});expect(catalogReply.status()).toBe(200);
+  const designCatalog:DesignCatalog=await catalogReply.json();
+  const savedBaseline=designCatalog.saved.find(row=>row.architectureId===proposals[1].id&&row.strategyId===proposals[1].strategyId&&!!row.revisionId?.trim());
+  const baselineReply=savedBaseline?await request.get(`/api/designs/${encodeURIComponent(savedBaseline.designId)}`,{headers}):await request.post('/api/designs/realize',{headers,data:{architecture_id:proposals[1].id}});
+  expect(baselineReply.status()).toBe(200);
+  let baseline=await baselineReply.json();
   expect(baseline.qualification.testFixtureOnly).toBe(true);
   if (baseline.candidate) baseline=await(await request.post(`/api/designs/${baseline.designId}/decision`,{headers,data:{action:'discard',base_revision_id:baseline.revisionId,candidate_revision_id:baseline.candidate.id}})).json();
   if (baseline.accepted.assembly.configurationId!=='lower') {
@@ -31,12 +37,21 @@ test('@production-revision original STEP mechanism has real preview/apply/discar
     await page.getByRole('button',{name:'Create Robot',exact:true}).click();
     await expect(page.locator('.architecture-options button')).toHaveCount(2,{timeout:35_000});
     await page.locator('.architecture-options button').nth(1).click();
-    await page.getByRole('button',{name:'Assemble local recipe',exact:true}).click();
+    const indexReply=await request.get('/api/designs/catalog',{headers});expect(indexReply.status()).toBe(200);
+    const index:DesignCatalog=await indexReply.json();
+    const saved=index.saved.find(row=>row.architectureId===proposals[1].id&&row.strategyId===proposals[1].strategyId&&!!row.revisionId?.trim());
+    const openingReply=page.waitForResponse(r=>new URL(r.url()).pathname===(saved?`/api/designs/${encodeURIComponent(saved.designId)}`:'/api/designs/realize')&&r.request().method()===(saved?'GET':'POST'));
+    await page.getByRole('button',{name:saved?'Open development CAD':'Assemble local recipe',exact:true}).click();
+    const loaded=await openingReply;expect(loaded.status()).toBe(200);
+    const opened=await loaded.json();expect(opened.architectureId).toBe(proposals[1].id);
+    if(saved)expect(opened.designId).toBe(saved.designId);
+    await expect(page.getByRole('dialog',{name:'Design',exact:true})).toHaveCount(0);
+    await expect(page.locator('main')).toHaveAttribute('data-panel','none');
     const status=page.getByTestId('design-status');
     await expect(status).toHaveAttribute('data-state','ready',{timeout:30_000});
-    await page.getByRole('button',{name:'Close Design',exact:true}).click();
     await status.locator('summary').click();
     await expect(status).toContainText('NOT AUTHENTIC VEX / NOT COMPLETE ROBOT');
+    await expect(status).toContainText('Constructed from an authored assembly recipe');
     await status.locator('summary').click();
     expect(Number(await status.getAttribute('data-mesh-count'))).toBeGreaterThanOrEqual(3);
     const viewport=page.getByTestId('design-canvas');
@@ -96,8 +111,8 @@ test('@production-revision original STEP mechanism has real preview/apply/discar
     await expect(page.getByRole('button',{name:'Apply',exact:true})).toBeEnabled();
     const second=await read();
     await page.getByRole('button',{name:'Apply',exact:true}).click();
-    await expect(status).toContainText('ACCEPTED ASSEMBLY REVISION');
-    await expect(status).not.toContainText('CANDIDATE PREVIEW');
+    await expect(status.locator('summary')).toContainText('PARTIAL ASSEMBLY');
+    await expect(status.locator('summary')).not.toContainText('PREVIEW · NOT APPLIED');
     await expect(viewport).toHaveAttribute('data-revision-id',second.candidate.id);
     const applied=await read();
     expect(applied.bindings.revisionId).toBe(applied.revisionId);

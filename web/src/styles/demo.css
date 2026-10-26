@@ -1,0 +1,93 @@
+/* Optional final studio skin. Existing layout, hit areas and CAD remain in charge. */
+.studio-workspace {
+  --demo-rim: color-mix(in srgb, var(--mechanical-edge) 58%, var(--surface));
+  --demo-highlight: color-mix(in srgb, var(--surface-raised) 80%, transparent);
+  --demo-seat: color-mix(in srgb, var(--text) 12%, transparent);
+  --demo-duration: var(--motion-snap);
+}
+
+/* A seated panel and its title share a rail; the home bench keeps its open edge. */
+.studio-workspace:not([data-panel="home"]) .workspace-panel {
+  border-color: var(--demo-rim);
+  box-shadow: inset 1px 0 var(--demo-highlight), 3px 3px 0 var(--demo-seat);
+}
+.studio-workspace:not([data-panel="home"]) .panel-header {
+  background-image: linear-gradient(180deg, var(--demo-highlight), transparent 12px);
+  box-shadow: inset 3px 0 var(--accent), inset 0 -1px var(--demo-rim);
+}
+.studio-workspace:not([data-panel="home"]) .workspace-panel::before {
+  box-shadow: inset 1px 0 var(--demo-highlight);
+}
+.studio-workspace .dock-frame__rail {
+  box-shadow: inset 1px 0 var(--demo-highlight), 1px 0 var(--demo-seat);
+}
+.studio-workspace .dock-frame__header {
+  background-image: linear-gradient(90deg, var(--accent) 0 22px, transparent 22px);
+  background-size: 100% 2px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+}
+
+/* Connection marks follow actual selected tools, designs and rollout phases. */
+.studio-workspace :is(.workspace-dock, .cad-utility-rail) {
+  border-color: var(--demo-rim);
+  box-shadow: inset 0 1px var(--demo-highlight), 2px 3px 0 var(--demo-seat);
+}
+.studio-workspace .workspace-dock::before {
+  border-color: var(--demo-rim);
+  box-shadow: inset 0 1px var(--demo-highlight);
+}
+.studio-workspace .workspace-dock button[aria-pressed="true"] {
+  box-shadow: inset 0 -3px var(--accent), inset 1px 0 var(--demo-rim), inset -1px 0 var(--demo-rim);
+}
+.studio-workspace .design-switcher button[aria-pressed="true"] > span {
+  border-right-color: var(--accent);
+}
+.studio-workspace .design-choice[aria-pressed="true"] {
+  box-shadow: inset 4px 0 var(--blue), inset 0 1px var(--demo-highlight);
+}
+.studio-workspace .playbook-phase-rail button[aria-pressed="true"] .playbook-phase-number {
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 3px var(--blue);
+}
+.studio-workspace :is(.operation-drawer, .playbook-analysis)[open] > summary {
+  background-image: linear-gradient(90deg, var(--blue) 0 24px, var(--border) 24px);
+  background-size: 100% 1px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+}
+
+/* SHIFT separates gunmetal housings from titanium edges without expanding them. */
+.studio-workspace[data-theme="shift"] {
+  --demo-rim: color-mix(in srgb, var(--shift-titanium) 64%, var(--shift-gunmetal));
+  --demo-highlight: color-mix(in srgb, var(--shift-titanium) 22%, transparent);
+  --demo-seat: color-mix(in srgb, var(--shift-night) 85%, transparent);
+  --demo-duration: var(--motion-unfold);
+}
+.studio-workspace[data-theme="shift"]:not([data-panel="home"]) .panel-header {
+  background-image: linear-gradient(115deg, var(--shift-gunmetal), var(--surface-muted));
+  box-shadow: inset 3px 0 var(--shift-copper), inset 0 1px var(--demo-highlight), inset 0 -1px var(--demo-rim);
+}
+.studio-workspace[data-theme="shift"] .workspace-dock {
+  background-image: linear-gradient(180deg, var(--shift-gunmetal), var(--surface) 14px);
+}
+
+/* Material changes move only when the user permits motion; touch geometry is fixed. */
+@media (prefers-reduced-motion: no-preference) {
+  .studio-workspace .workspace-dock button,
+  .studio-workspace .design-choice,
+  .studio-workspace .playbook-phase-number {
+    transition: background-color var(--demo-duration) var(--ease-snap), border-color var(--demo-duration) var(--ease-snap), box-shadow var(--demo-duration) var(--ease-snap);
+  }
+}
+@media (forced-colors: active) {
+  .studio-workspace { --demo-rim: CanvasText; --demo-highlight: transparent; --demo-seat: transparent; }
+  .studio-workspace[data-theme="shift"] { --demo-rim: CanvasText; --demo-highlight: transparent; --demo-seat: transparent; }
+  .studio-workspace[data-theme="shift"]:not([data-panel="home"]) .panel-header,
+  .studio-workspace[data-theme="shift"] .workspace-dock,
+  .studio-workspace :is(.panel-header, .workspace-dock, .dock-frame__header, .operation-drawer > summary, .playbook-analysis > summary) { background-image: none; }
+  .studio-workspace .workspace-dock button[aria-pressed="true"]:not(:focus-visible),
+  .studio-workspace .design-choice[aria-pressed="true"]:not(:focus-visible),
+  .studio-workspace .playbook-phase-rail button[aria-pressed="true"] .playbook-phase-number { outline: 1px solid Highlight; outline-offset: -2px; }
+}
+.studio-workspace .home-open-cad{display:flex;align-items:center;gap:12px;text-align:left;width:min(340px,100%);min-height:64px;padding:12px 14px;margin-top:22px;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--blue);box-shadow:3px 3px 0 var(--border)}.home-open-cad>span{display:grid;gap:6px;flex:1}.home-open-cad strong{font-size:12px}.home-open-cad small{font:8px var(--font-mono);color:var(--muted)}
+@media(max-width:760px){.studio-workspace .home-open-cad{margin-top:14px;min-height:56px}.home-open-cad strong{font-size:11px}}

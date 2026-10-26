@@ -13,20 +13,27 @@
 .playbook-sequence-heading p strong { font-variant-numeric: tabular-nums; font-weight: 550; font-size: 24px; line-height: 1.2; color: var(--text); }
 .strategy-playbook .playbook-score-basis { margin: 5px 0 18px; font-size: 10px; }
 .playbook-sequence-layout { min-width: 0; }
-.playbook-phase-rail { display: flex; gap: 0; margin: 0 0 22px; padding: 0 0 8px; list-style: none; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
-.playbook-phase-rail > li { flex: 1 0 128px; position: relative; }
-.playbook-phase-rail > li::before { content: ''; position: absolute; top: 22px; left: 28px; right: 0; border-top: 1px solid var(--border); pointer-events: none; }
-.playbook-phase-rail > li:last-child::before { display: none; }
-.playbook-phase-rail button { width: 100%; min-height: 100px; display: flex; flex-direction: column; align-items: flex-start; gap: 9px; text-align: left; padding: 8px 10px 10px 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); }
-.playbook-phase-rail .playbook-phase-number { position: relative; display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--border); background: var(--surface); font: 10px/1 ui-monospace, monospace; border-radius: 50%; }
-.playbook-phase-rail strong { display: block; font-size: 11px; font-weight: 550; line-height: 1.55; }
-.playbook-phase-rail small { display: block; font-size: 10px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.playbook-phase-rail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; margin: 0 0 22px; padding: 0; list-style: none; }
+.playbook-phase-rail > li { min-width: 0; }
+.playbook-phase-rail button { width: 100%; height: 100%; min-height: 78px; display: flex; align-items: flex-start; gap: 9px; text-align: left; padding: 10px 2px; border-bottom: 2px solid var(--border); background: transparent; color: var(--muted); }
+.playbook-phase-rail button > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.playbook-phase-rail .playbook-phase-number { flex: 0 0 25px; display: grid; place-items: center; width: 25px; height: 25px; border: 1px solid var(--border); background: var(--surface); font: 10px/1 ui-monospace, monospace; border-radius: 50%; }
+.playbook-phase-rail strong { display: block; font-size: 11px; font-weight: 550; line-height: 1.45; }
+.playbook-phase-rail small { display: block; font-size: 9px; margin-top: 4px; font-variant-numeric: tabular-nums; }
 .playbook-phase-rail button.is-active { color: var(--text); border-bottom-color: var(--blue); }
 .playbook-phase-rail button.is-active .playbook-phase-number { border-color: var(--blue); color: var(--blue); box-shadow: 0 0 0 3px var(--surface-muted); }
 .playbook-phase-rail button:focus-visible { outline-offset: -2px; }
 .playbook-selected-phase { min-width: 0; }
 .strategy-playbook .playbook-phase-heading h3 { font-size: 20px; letter-spacing: -.025em; line-height: 1.3; font-weight: 550; margin: 5px 0 8px; }
 .strategy-playbook .playbook-phase-heading p { font-size: 10px; margin: 0 0 16px; font-variant-numeric: tabular-nums; }
+.playbook-phase-explanation { border-left: 2px solid var(--blue); padding-left: 12px; margin: 12px 0; }
+.strategy-playbook .playbook-phase-explanation h4 { font-size: 12px; font-weight: 600; margin: 0; }
+.strategy-playbook .playbook-phase-explanation p { font-size: 10px; line-height: 1.65; margin: 3px 0 8px; }
+.playbook-phase-explanation p strong { font-weight: 550; color: var(--text); }
+.playbook-phase-explanation dl { margin: 0; }
+.playbook-phase-explanation dl > div { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 10px; margin: 6px 0; font-size: 11px; line-height: 1.6; }
+.playbook-phase-explanation dt { font-weight: 550; }
+.playbook-phase-explanation dd { margin: 0; color: var(--muted); overflow-wrap: anywhere; }
 .playbook-drawings { display: grid; gap: 20px; min-width: 0; }
 .playbook-map { margin: 0; min-width: 0; }
 .playbook-map svg { display: block; width: 100%; max-height: 310px; font-family: inherit; }
@@ -54,7 +61,7 @@
 .playbook-phase-actions { display: flex; flex-wrap: wrap; gap: 0 18px; margin-top: 14px; border-top: 1px solid var(--border); padding-top: 6px; }
 .playbook-phase-actions button { min-height: 44px; text-align: left; display: inline-flex; align-items: center; gap: 8px; font-size: 11px; }
 .playbook-phase-actions button[aria-pressed="true"] { color: var(--blue); text-decoration: underline; text-underline-offset: 4px; }
-.playbook-mechanism-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 16px; }
+.playbook-mechanism-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 12px 0 18px; }
 .playbook-mechanism-actions button { min-height: 44px; font-size: 11px; }
 .playbook-mechanism-actions > span { color: var(--muted); font-size: 10px; }
 .playbook-footer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
@@ -74,14 +81,10 @@
 .playbook-data-list { margin: 4px 0; }
 .playbook-statistic-note { border-left: 2px solid var(--blue); padding-left: 12px; }
 @container strategy-playbook (min-width: 610px) {
-  .playbook-sequence-layout { display: grid; grid-template-columns: 155px minmax(0, 1fr); gap: 24px; }
-  .playbook-phase-rail { display: block; overflow: visible; margin: 0; padding: 0; }
-  .playbook-phase-rail > li { padding-bottom: 8px; }
-  .playbook-phase-rail > li::before { top: 24px; left: 13px; bottom: 0; right: auto; border-top: 0; border-left: 1px solid var(--border); }
-  .playbook-phase-rail button { flex-direction: row; gap: 10px; min-height: 66px; padding: 7px 8px 7px 0; border-bottom: 0; }
-  .playbook-phase-rail .playbook-phase-number { flex: 0 0 28px; }
+  .playbook-phase-rail { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 18px; }
+  .playbook-phase-rail button { min-height: 72px; }
   .playbook-phase-rail button.is-active strong { color: var(--blue); }
-  .playbook-phase-rail small { font-size: 9px; }
+  .playbook-phase-explanation dl > div { grid-template-columns: 72px minmax(0, 1fr); }
 }
 @container strategy-playbook (min-width: 900px) {
   .playbook-drawings { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
@@ -90,6 +93,6 @@
 .phase-architecture-figure{margin:0 0 12px}.phase-architecture-figure .architecture-drawing{max-height:190px}.phase-architecture-figure+.phase-requirement-figure svg{max-height:130px}
 .strategy-playbook .playbook-overview{font-size:13px;line-height:1.65;max-width:640px;color:var(--text);margin:0 0 16px}.phase-object-key{display:flex;align-items:center;gap:20px;padding:8px 0 15px;border-bottom:1px solid var(--border);margin-bottom:16px}.phase-object-key>span{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--blue)}.phase-object-key svg{width:42px;height:30px}.phase-object-key>small{font:8px var(--font-mono);color:var(--muted);margin-left:auto;max-width:95px}
 @media(max-width:760px){
- .playbook-phase-rail>li{flex-basis:146px}.playbook-phase-rail button{min-height:66px;flex-direction:row;align-items:center;gap:9px}.playbook-phase-rail strong{font-size:10px;line-height:1.4}.playbook-phase-rail small{display:none}.playbook-phase-rail .playbook-phase-number{flex:0 0 25px;width:25px;height:25px}.playbook-phase-rail>li::before{display:none}.strategy-playbook .playbook-heading>.eyebrow{display:none}
+ .strategy-playbook .playbook-heading>.eyebrow{display:none}
 }
 @container strategy-playbook (min-width:360px) and (max-width:899px){.playbook-drawings.has-cad-link{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}.has-cad-link .phase-mechanisms{border-top:0;border-left:1px solid var(--border);padding:0 0 0 12px}.has-cad-link figcaption,.strategy-playbook .has-cad-link .playbook-binding-basis{font-size:9px;line-height:1.55}}

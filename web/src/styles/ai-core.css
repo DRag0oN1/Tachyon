@@ -20,18 +20,6 @@
   font-size: 13px;
 }
 
-.workspace .mechanical-assistant.ai-compact[data-state='compact'] {
-  display: block;
-  width: min(320px, calc(100% - 40px));
-  max-height: min(360px, calc(100dvh - 120px));
-  overflow: auto;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  scrollbar-width: thin;
-}
 
 .workspace .mechanical-assistant .ac-housing {
   position: relative;
@@ -58,14 +46,6 @@
   opacity: .55;
 }
 
-.mechanical-assistant.ai-compact .ac-housing {
-  min-height: 70px;
-  padding: 4px 8px 4px 4px;
-  border: 1px solid var(--ac-edge);
-  border-left: 3px solid var(--accent);
-  border-radius: 7px;
-  box-shadow: 0 3px 0 var(--ac-inset), 0 8px 24px #00000014;
-}
 
 .mechanical-assistant .ac-core-control {
   display: flex;
@@ -89,7 +69,6 @@
   height: 64px;
 }
 
-.mechanical-assistant.ai-compact .ac-core-object { flex-basis: 54px; width: 54px; height: 54px; }
 .mechanical-assistant .ac-core-object > svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .mechanical-assistant .ac-identity { display: grid; min-width: 0; gap: 5px; }
 .mechanical-assistant .ac-kicker { color: var(--muted); font-size: 9px; font-weight: 650; letter-spacing: .11em; text-transform: uppercase; }
@@ -101,26 +80,11 @@
 .mechanical-assistant button:focus-visible, .mechanical-assistant input:focus-visible, .mechanical-assistant textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: -3px; }
 .mechanical-assistant button:not(:disabled):active { transform: translateY(1px); }
 
-.mechanical-assistant .ac-compact-deck {
-  position: relative;
-  margin: 5px 0 4px 17px;
-  padding: 0 10px 4px;
-  background: var(--surface);
-  border: 1px solid var(--ac-edge);
-  border-radius: 3px 3px 8px 8px;
-  box-shadow: -4px 0 0 var(--surface-muted), 0 3px 0 var(--ac-inset), 0 10px 24px #00000010;
-}
-
-.mechanical-assistant .ac-context-strip { display: flex; align-items: center; gap: 7px; min-height: 28px; color: var(--muted); font-size: 10px; }
-.mechanical-assistant .ac-context-strip > span:last-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mechanical-assistant .ac-context-pin { flex: 0 0 5px; width: 5px; height: 5px; background: var(--blue); border: 1px solid var(--ac-edge); }
 .mechanical-assistant .ac-composer { min-width: 0; margin: 0; padding: 0; }
 .mechanical-assistant .ac-command-rail { display: flex; align-items: center; gap: 6px; min-width: 0; }
-.mechanical-assistant .ac-composer-compact .ac-command-rail { border-top: 1px solid var(--border); }
-.mechanical-assistant .ac-command-rail input, .mechanical-assistant .ac-command-rail textarea { display: block; flex: 1 1 auto; width: 100%; min-width: 0; margin: 0; color: var(--text); background: transparent; border: 0; border-radius: 4px; font-size: 13px; line-height: 1.5; }
-.mechanical-assistant .ac-command-rail input { min-height: 44px; padding: 10px 3px; }
+.mechanical-assistant .ac-command-rail textarea { display: block; flex: 1 1 auto; width: 100%; min-width: 0; margin: 0; color: var(--text); background: transparent; border: 0; border-radius: 4px; font-size: 13px; line-height: 1.5; }
 .mechanical-assistant .ac-command-rail textarea { min-height: 72px; max-height: 160px; padding: 10px; resize: vertical; }
-.mechanical-assistant .ac-command-rail input::placeholder, .mechanical-assistant .ac-command-rail textarea::placeholder { color: var(--quiet); opacity: 1; }
+.mechanical-assistant .ac-command-rail textarea::placeholder { color: var(--quiet); opacity: 1; }
 .mechanical-assistant .ac-send { display: grid; flex: 0 0 44px; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--accent-ink); background: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 70%, var(--ac-edge)); border-radius: 5px; }
 .mechanical-assistant .ac-send:not(:disabled):hover { box-shadow: inset 0 0 0 1px currentColor; }
 .mechanical-assistant .ac-send:disabled { color: var(--muted); background: var(--surface-muted); border-color: var(--border); opacity: .65; }
@@ -137,7 +101,6 @@
 .workspace .mechanical-assistant .ac-response { max-height: 200px; margin: 0; padding: 12px; overflow: auto; color: var(--text); background: var(--surface-muted); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: 4px; font-size: 12px; line-height: 1.65; overflow-wrap: anywhere; }
 .workspace .mechanical-assistant .ac-response p { margin: 6px 0 0; white-space: pre-wrap; }
 .workspace .mechanical-assistant .ac-response-error { background: var(--warning-bg); border-left-color: var(--warning); }
-.workspace .mechanical-assistant .assistant-compact-reply { grid-column: auto; max-height: 120px; margin: 5px 0; padding: 8px; font-size: 11px; }
 .mechanical-assistant .ac-preview-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
 .mechanical-assistant .ac-decision-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 7px; }
 .mechanical-assistant .ac-action { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 0; min-height: 44px; padding: 9px 10px; color: var(--text); background: var(--surface-raised); border: 1px solid var(--ac-edge); border-radius: 4px; box-shadow: 0 2px 0 var(--ac-inset); font-size: 11px; font-weight: 600; line-height: 1.5; }
@@ -166,50 +129,82 @@
 .mechanical-assistant.ai-fullscreen .ac-workspace-actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 .workspace[data-theme='shift'] .mechanical-assistant { border-radius: 3px 14px 3px 14px; box-shadow: 0 3px 0 var(--ac-inset), 0 20px 48px #0005; }
-.workspace[data-theme='shift'] .mechanical-assistant.ai-compact { border-radius: 0; box-shadow: none; }
 .workspace[data-theme='shift'] .mechanical-assistant .ac-housing { background: linear-gradient(135deg, var(--surface-raised), var(--surface) 65%, var(--surface-muted)); }
-.workspace[data-theme='shift'] .mechanical-assistant.ai-compact .ac-housing { border-left-color: var(--core-line); border-radius: 3px 13px 3px 3px; }
-.workspace[data-theme='shift'] .mechanical-assistant .ac-compact-deck { border-radius: 3px 3px 3px 12px; }
 
 @media (max-width: 760px) {
   .workspace .mechanical-assistant { left: max(12px, env(safe-area-inset-left)); top: max(12px, env(safe-area-inset-top)); }
-  .workspace .mechanical-assistant.ai-compact[data-state='compact'] { left: max(12px, env(safe-area-inset-left)); top: max(12px, env(safe-area-inset-top)); width: min(230px, calc(100% - 24px)); }
   .workspace .mechanical-assistant.ai-expanded[data-state='expanded'] { top: auto; bottom: max(84px, calc(env(safe-area-inset-bottom) + 76px)); left: max(8px, env(safe-area-inset-left)); width: calc(100% - max(8px, env(safe-area-inset-left)) - max(8px, env(safe-area-inset-right))); max-height: min(60dvh, calc(100dvh - 150px)); border-radius: 14px 14px 5px 5px; }
   .mechanical-assistant .ac-housing { min-height: 72px; }
   .mechanical-assistant .ac-core-object { flex-basis: 54px; width: 54px; height: 54px; }
   .mechanical-assistant .ac-deck { gap: 16px; padding: 16px; }
-  .mechanical-assistant .ac-command-rail input, .mechanical-assistant .ac-command-rail textarea { font-size: 16px; }
+  .mechanical-assistant .ac-command-rail textarea { font-size: 16px; }
   .mechanical-assistant .ac-identity strong { font-size: 13px; }
-  .mechanical-assistant.ai-compact .ac-housing { min-height: 60px; padding-right: 4px; }
-  .mechanical-assistant.ai-compact .ac-core-control { gap: 5px; min-height: 48px; }
-  .mechanical-assistant.ai-compact .ac-core-object { flex-basis: 42px; width: 42px; height: 42px; }
-  .mechanical-assistant.ai-compact .ac-kicker { font-size: 8px; letter-spacing: .04em; }
-  .mechanical-assistant.ai-compact .ac-identity strong { font-size: 12px; }
   .workspace .mechanical-assistant.ai-fullscreen[data-state='fullscreen'] { inset: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left)); width: auto; }
   .mechanical-assistant.ai-fullscreen .ac-deck { display: flex; gap: 18px; padding: 18px; }
   .mechanical-assistant.ai-fullscreen .ac-workspace-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mechanical-assistant.ai-fullscreen .ac-response { max-height: 200px; }
 }
 
+/* Compact is one mechanical object with a label, never a command/log panel. */
+.workspace .ai-core.mechanical-assistant.ai-compact[data-state='compact'] {
+  display: block;
+  flex-direction: initial;
+  width: fit-content;
+  min-width: 0;
+  max-width: min(210px, calc(100% - 40px));
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-housing {
+  display: block;
+  min-height: 60px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-housing::after { content: none; }
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-core-control {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 6px;
+  min-width: 44px;
+  min-height: 60px;
+  padding: 0 4px 0 0;
+  border-radius: 6px;
+}
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-core-control:hover { background: transparent; }
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-core-object { flex: 0 0 60px; width: 60px; height: 60px; }
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-identity {
+  display: grid;
+  gap: 3px;
+  padding: 6px 0;
+}
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-identity strong { font-size: 12px; letter-spacing: -.01em; }
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-compact-status { color: var(--muted); font-size: 10px; line-height: 1.4; white-space: nowrap; }
+.workspace .ai-core.mechanical-assistant.ai-compact[data-activity='attention'] .ac-compact-status { color: var(--warning); }
+.workspace .ai-core.mechanical-assistant.ai-compact[data-activity='preview'] .ac-compact-status { color: var(--blue); }
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-expand-cue { display: grid; flex: 0 0 22px; place-items: center; width: 22px; height: 28px; margin-left: 1px; color: var(--muted); background: var(--surface-glass); border: 1px solid var(--border); border-radius: 4px; }
+.workspace .ai-core.mechanical-assistant.ai-compact .mechanical-core__module { animation: ac-core-dock 650ms var(--core-ease, ease-out) 1; }
+.workspace .ai-core.mechanical-assistant.ai-compact .ac-core-control:focus-visible .mechanical-core__module { transform: translate(calc(var(--module-x) * var(--core-travel-x) * .5), calc(var(--module-y) * var(--core-travel-y) * .5)); }
+@keyframes ac-core-dock {
+  from { transform: translate(calc(var(--module-x) * var(--core-travel-x)), calc(var(--module-y) * var(--core-travel-y))) rotate(calc(var(--module-turn) * var(--core-twist))); }
+  to { transform: translate(0, 0) rotate(0deg); }
+}
+@media (max-width: 760px) {
+  .workspace .ai-core.mechanical-assistant.ai-compact[data-state='compact'] { top: max(12px, env(safe-area-inset-top)); left: max(12px, env(safe-area-inset-left)); width: fit-content; max-width: min(198px, calc(100% - 24px)); }
+  .workspace .ai-core.mechanical-assistant.ai-compact .ac-housing, .workspace .ai-core.mechanical-assistant.ai-compact .ac-core-control { min-height: 54px; }
+  .workspace .ai-core.mechanical-assistant.ai-compact .ac-core-object { flex-basis: 54px; width: 54px; height: 54px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .workspace .mechanical-assistant, .workspace .mechanical-assistant *, .workspace .mechanical-assistant *::before, .workspace .mechanical-assistant *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .workspace .mechanical-assistant button:not(:disabled):active { transform: none; }
-}
-/* A single compact tool on the rail: object, command bubble, internal controls. */
-.workspace .mechanical-assistant.ai-compact[data-state='compact']{display:flex;flex-direction:row;align-items:flex-start;gap:5px;width:280px;overflow:visible;max-height:none}
-.workspace .mechanical-assistant.ai-compact .ac-housing{flex:0 0 98px;min-height:66px;padding:4px;gap:0}
-.workspace .mechanical-assistant.ai-compact .ac-core-control{min-width:44px;min-height:54px;padding:0;flex:0 0 44px}
-.workspace .mechanical-assistant.ai-compact .ac-core-object{width:44px;height:44px;flex-basis:44px}
-.workspace .mechanical-assistant.ai-compact .ac-identity{display:none}
-.workspace .mechanical-assistant.ai-compact .ac-compact-deck{flex:1;min-width:0;margin:0;padding:0 7px 3px;border-radius:2px 7px 7px 2px;box-shadow:0 3px 0 var(--ac-inset)}
-.workspace .mechanical-assistant.ai-compact .ac-context-strip{min-height:20px;font-size:8px}
-.workspace .mechanical-assistant.ai-compact .ac-command-rail{gap:2px}
-.workspace .mechanical-assistant.ai-compact .ac-command-rail input{font-size:12px;min-height:40px;padding:7px 0}
-.workspace .mechanical-assistant.ai-compact .ac-send{flex-basis:40px;width:40px;height:40px}
-@media(max-width:760px){
- .workspace .mechanical-assistant.ai-compact[data-state='compact']{width:230px}
- .workspace .mechanical-assistant.ai-compact .ac-housing{flex-basis:54px;min-height:66px}
- .workspace .mechanical-assistant.ai-compact .ac-mode-controls{display:none}
- .workspace .mechanical-assistant.ai-compact .ac-command-rail input{font-size:16px}
- .workspace .mechanical-assistant.ai-compact .ac-send{width:44px;height:44px;flex-basis:44px}
 }

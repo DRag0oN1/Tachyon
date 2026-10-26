@@ -6,8 +6,14 @@ function props(): AiCoreProps {
   return { size: 'compact', onSize: vi.fn(), draft: 'Explain the selected Pin intake', onDraft: vi.fn(), selection: null, loading: false,
     contextLabel: 'Pin intake · source reference', onComponents: vi.fn(), command: vi.fn().mockResolvedValue({ message: 'Selected Pin intake is reference geometry only.' }) };
 }
-it('submits from the compact input, exposes the result and delegates internal sizing', async () => {
-  const p = props(); render(<AiCore {...p} />);
+it('opens command entry from the compact object, submits and delegates internal sizing', async () => {
+  const p = props(); const view = render(<AiCore {...p} />);
+  expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Send request' })).not.toBeInTheDocument();
+  expect(screen.getAllByRole('button')).toHaveLength(1);
+  fireEvent.click(screen.getByRole('button', { name: 'Expand assistant' }));
+  expect(p.onSize).toHaveBeenCalledWith('expanded');
+  view.rerender(<AiCore {...p} size="expanded" />);
   expect(screen.getByRole('textbox', { name: 'Design request' })).toHaveValue(p.draft);
   fireEvent.click(screen.getByRole('button', { name: 'Send request' }));
   expect(await screen.findByRole('status')).toHaveTextContent('reference geometry only');
@@ -17,7 +23,7 @@ it('submits from the compact input, exposes the result and delegates internal si
   expect(p.onSize).toHaveBeenCalledWith('fullscreen');
 });
 it('retains a newer draft while a previous request completes and shows errors truthfully', async () => {
-  const p = props(); let finish!: (r: { message: string }) => void;
+  const p = props(); p.size = 'expanded'; let finish!: (r: { message: string }) => void;
   p.command = vi.fn().mockImplementation(() => new Promise(resolve => { finish = resolve; }));
   const view = render(<AiCore {...p} />);
   fireEvent.click(screen.getByRole('button', { name: 'Send request' }));
@@ -105,17 +111,77 @@ it('prevents a second command or revision action while a decision is pending', a
   expect(screen.getByRole('dialog')).toHaveAttribute('aria-busy', 'false');
 });
 
-it('keeps errors and the draft when moving between compact and expanded modes', async () => {
+it('hides errors on collapse and restores the response, context and draft on expansion', async () => {
   const p = props(); p.command = vi.fn().mockRejectedValue(new Error('Current source is unavailable'));
-  const view = render(<AiCore {...p} />);
+  const view = render(<AiCore {...p} size="expanded" />);
   fireEvent.click(screen.getByRole('button', { name: 'Send request' }));
   expect(await screen.findByRole('alert')).toHaveTextContent('Current source is unavailable');
+  fireEvent.click(screen.getByRole('button', { name: 'Close assistant' }));
+  expect(p.onSize).toHaveBeenCalledWith('compact');
+  view.rerender(<AiCore {...p} />);
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  expect(screen.queryByText('Current source is unavailable')).not.toBeInTheDocument();
+  expect(screen.getByText('Needs attention')).toBeVisible();
+  expect(screen.getAllByRole('button')).toHaveLength(1);
+  fireEvent.click(screen.getByRole('button', { name: 'Expand assistant' }));
   view.rerender(<AiCore {...p} size="expanded" />);
   expect(screen.getByRole('alert')).toHaveTextContent('Current source is unavailable');
+  expect(screen.getByText(p.contextLabel!)).toBeVisible();
   view.rerender(<AiCore {...p} size="fullscreen" />);
   expect(screen.getByRole('alert')).toHaveTextContent('Current source is unavailable');
   expect(screen.getByRole('textbox', { name: 'Design request' })).toHaveValue(p.draft);
   expect(p.onDraft).not.toHaveBeenCalled();
+});
+
+it('finishes a request while collapsed without opening a response panel or clearing a newer draft', async () => {
+  const p = props(); let finish!: (r: { message: string }) => void;
+  p.command = vi.fn().mockImplementation(() => new Promise(resolve => { finish = resolve; }));
+  const view = render(<AiCore {...p} size="expanded" />);
+  fireEvent.click(screen.getByRole('button', { name: 'Send request' }));
+  view.rerender(<AiCore {...p} draft="Keep this newer request" />);
+  expect(screen.getByTestId('ai-core')).toHaveAttribute('aria-busy', 'true');
+  expect(screen.getByText('Working…')).toBeVisible();
+  expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  await act(async () => finish({ message: 'The current server response' }));
+  expect(screen.getByText('Response ready')).toBeVisible();
+  expect(screen.queryByText('The current server response')).not.toBeInTheDocument();
+  expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  expect(p.onSize).not.toHaveBeenCalled();
+  view.rerender(<AiCore {...p} size="expanded" draft="Keep this newer request" />);
+  expect(screen.getByRole('status')).toHaveTextContent('The current server response');
+  expect(screen.getByRole('textbox', { name: 'Design request' })).toHaveValue('Keep this newer request');
+  expect(p.onDraft).not.toHaveBeenCalled();
+});
+
+it('keeps a pending preview behind a compact notification until opened', () => {
+  const p = props();
+  const controls = { canPreview: false, canApply: true, canDiscard: true, canUndo: false,
+    preview: vi.fn(), apply: vi.fn(), discard: vi.fn(), undo: vi.fn(), candidateLabel: 'Exact candidate revision abc123' };
+  const view = render(<AiCore {...p} controls={controls} />);
+  expect(screen.getByText('Preview available')).toBeVisible();
+  expect(screen.queryByText(controls.candidateLabel)).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Apply' })).not.toBeInTheDocument();
+  view.rerender(<AiCore {...p} size="expanded" controls={controls} />);
+  expect(screen.getByText(controls.candidateLabel)).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Apply' })).toBeEnabled();
+  expect(controls.apply).not.toHaveBeenCalled();
+});
+
+it.each(['snap', 'shift'])('uses the shared mechanical SVG in %s with an object-only compact state', theme => {
+  const p = props(); p.draft = '';
+  const view = render(<main className="workspace" data-theme={theme}><AiCore {...p} /></main>);
+  const core = screen.getByTestId('ai-core');
+  expect(core.querySelector('.mechanical-core')).toHaveAttribute('data-expanded', 'false');
+  expect(within(core).getByText('Tachyon')).toBeVisible();
+  expect(within(core).getByText('Open console')).toBeVisible();
+  expect(core.querySelector('form')).toBeNull();
+  expect(core.querySelector('.ac-response')).toBeNull();
+  view.rerender(<main className="workspace" data-theme={theme}><AiCore {...p} size="expanded" /></main>);
+  expect(core.querySelector('.mechanical-core')).toHaveAttribute('data-expanded', 'true');
+  fireEvent.change(screen.getByRole('textbox', { name: 'Design request' }), { target: { value: 'Explain this design' } });
+  expect(p.onDraft).toHaveBeenCalledWith('Explain this design');
 });
 
 it('delegates workspace actions and explains through the actual command callback', async () => {

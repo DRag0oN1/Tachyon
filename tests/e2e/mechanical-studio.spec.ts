@@ -1,5 +1,6 @@
 import {readFileSync,writeFileSync} from 'node:fs';
 import {test,expect} from '../../web/e2e-support';
+import type {DesignCatalog} from '../../web/src/api/designCatalog';
 
 // Opt-in: real saved PPO inference + local authored development STEP geometry.
 // No remote assets, mock robot, retraining or manufacturer-CAD claim.
@@ -36,15 +37,24 @@ test('@studio mechanical workbench, learned playbook and honest design switching
   await expect(page.getByTestId('design-canvas')).not.toBeVisible();await expect(page.locator('.concept-canvas')).toHaveAttribute('data-architecture-id',session.architectures[1].id);
   await screenshot('design-02-elevator-schematic');
   await page.locator('.design-choice').nth(0).click();await screenshot('design-01-four-bar-schematic');
-  const realizationReply=page.waitForResponse(r=>r.url().endsWith('/api/designs/realize')&&r.request().method()==='POST',{timeout:180_000});
-  console.log('assemble click');await page.getByRole('button',{name:'Assemble local recipe',exact:true}).click();console.log('assemble requested');const realization=await(await realizationReply).json();console.log('assembly received',realization.status);
+  const indexReply=await request.get('/api/designs/catalog',{headers});expect(indexReply.status()).toBe(200);
+  const index:DesignCatalog=await indexReply.json(),architecture=session.architectures[0];
+  const saved=index.saved.find(row=>row.architectureId===architecture.id&&row.strategyId===architecture.strategyId&&!!row.revisionId?.trim());
+  const realizationReply=page.waitForResponse(r=>new URL(r.url()).pathname===(saved?`/api/designs/${encodeURIComponent(saved.designId)}`:'/api/designs/realize')&&r.request().method()===(saved?'GET':'POST'),{timeout:180_000});
+  console.log(saved?'open saved CAD':'assemble authored recipe');
+  await page.getByRole('button',{name:saved?'Open development CAD':'Assemble local recipe',exact:true}).click();
+  const loaded=await realizationReply;expect(loaded.status()).toBe(200);
+  const realization=await loaded.json();console.log('assembly received',realization.status);
+  expect(realization.architectureId).toBe(architecture.id);
+  if(saved)expect(realization.designId).toBe(saved.designId);
+  await expect(page.getByRole('dialog',{name:'Design',exact:true})).toHaveCount(0);
+  await expect(page.locator('main')).toHaveAttribute('data-panel','none');
   const status=page.getByTestId('design-status');await expect(status).toHaveAttribute('data-state','ready',{timeout:120_000});
   const count=realization.accepted.assembly.instances.length;
   await expect(status).toHaveAttribute('data-loaded-instance-count',String(count));
   await expect(status).toHaveAttribute('data-resolved-instance-count',String(count));
   await expect(status).toContainText('PARTIAL ASSEMBLY');
-  await page.getByRole('button',{name:'Close Design',exact:true}).click();
-  await status.locator('summary').click();await expect(status).toContainText('NOT AUTHENTIC VEX');await status.locator('summary').click();
+  await status.locator('summary').click();await expect(status).toContainText('NOT AUTHENTIC VEX');await expect(status).toContainText('Constructed from an authored assembly recipe');await status.locator('summary').click();
   const canvas=page.locator('canvas');await expect(canvas).toHaveAttribute('data-revision-id',realization.revisionId);
   console.log('switch to B');await page.getByRole('button',{name:'Select Design 02',exact:true}).click();await expect(page.getByTestId('design-canvas')).not.toBeVisible();
   await expect(page.locator('.concept-canvas')).toHaveAttribute('data-architecture-id',session.architectures[1].id);

@@ -60,38 +60,39 @@ export function AiCore(props: AiCoreProps) {
     if (props.command && props.draft.trim()) void run(() => props.command!(props.draft.trim()), true);
   }
   const disabled = busy || !!props.controls?.busy;
+  const activity = disabled ? 'busy' : props.loading ? 'loading' : failed && reply ? 'attention'
+    : props.controls?.candidateLabel || props.controls?.canApply ? 'preview' : reply ? 'reply' : props.draft.trim() ? 'draft' : 'idle';
+  const compactStatus = { busy: 'Working…', loading: 'Loading…', attention: 'Needs attention',
+    preview: 'Preview available', reply: 'Response ready', draft: 'Draft saved', idle: 'Open console' }[activity];
   const reason = props.controls?.reason ?? props.unavailableReason ?? 'Editing requires a qualified assembly and a supported mechanism.';
   const context = props.contextLabel ?? `${props.component?.name ?? 'No source component loaded'}${props.selection?.meshName ? ` · ${props.selection.meshName}` : ''}`;
-  const composer = <form className={`ac-composer ${expanded ? 'ac-composer-open' : 'ac-composer-compact'}`} onSubmit={submit}>
-    <label htmlFor="assistant-command" className={expanded ? 'ac-field-label' : 'sr-only'}>Design request</label>
+  const composer = <form className="ac-composer ac-composer-open" onSubmit={submit}>
+    <label htmlFor="assistant-command" className="ac-field-label">Design request</label>
     <div className="ac-command-rail">
-      {expanded ? <textarea id="assistant-command" rows={2} value={props.draft} onChange={e => props.onDraft(e.target.value)} placeholder="Explain this selection or request a supported edit…" /> : <input id="assistant-command" value={props.draft} onChange={e => props.onDraft(e.target.value)} placeholder="Ask about this…" autoComplete="off" />}
+      <textarea id="assistant-command" rows={2} value={props.draft} onChange={e => props.onDraft(e.target.value)} placeholder="Explain this selection or request a supported edit…" />
       <button className="ac-send" disabled={disabled || !props.command || !props.draft.trim()} type="submit" aria-label="Send request" title="Send request"><Icon name="arrow" size={18} /><span className="sr-only">Send request</span></button>
     </div>
-    {expanded && <span className="ac-input-note">Selection included · draft kept in this tab</span>}
+    <span className="ac-input-note">Selection included · draft kept in this tab</span>
   </form>;
-  const response = (disabled || reply) && <div className={`ac-response ${expanded ? 'assistant-reply' : 'assistant-compact-reply'} ${failed ? 'ac-response-error' : ''}`} role={failed ? 'alert' : 'status'}>
+  const response = (disabled || reply) && <div className={`ac-response assistant-reply ${failed ? 'ac-response-error' : ''}`} role={failed ? 'alert' : 'status'}>
     <span className="ac-field-label">{disabled ? 'Request in progress' : failed ? 'Request failed' : 'Request result'}</span>
     <p>{disabled ? 'Working on your request…' : reply}</p>
   </div>;
-  return <aside ref={ref} className={`ai-core mechanical-assistant ai-${props.size}`} data-testid="ai-core" data-state={props.size}
+  return <aside ref={ref} className={`ai-core mechanical-assistant ai-${props.size}`} data-testid="ai-core" data-state={props.size} data-activity={activity}
     role={expanded ? 'dialog' : undefined} aria-modal={props.size === 'fullscreen' || undefined}
     aria-label="Tachyon assistant" aria-busy={disabled} tabIndex={-1}
     onKeyDown={e => { if (e.key === 'Escape' && expanded) { e.stopPropagation(); props.onSize('compact'); } }}>
     <header className="ac-housing">
       <button className="ac-core-control" aria-label={expanded ? 'Collapse assistant' : 'Expand assistant'} onClick={() => props.onSize(expanded ? 'compact' : 'expanded')} aria-expanded={expanded} title={expanded ? 'Collapse assistant' : 'Expand assistant'}>
         <span className="ac-core-object" aria-hidden="true"><MechanicalCore expanded={expanded} /></span>
-        <span className="ac-identity"><span className="ac-kicker">Tachyon / AI core</span><strong>{expanded ? 'Design console' : 'Design assistant'}</strong></span>
+        <span className="ac-identity">{expanded ? <><span className="ac-kicker">Tachyon / AI core</span><strong>Design console</strong></> : <><strong>Tachyon</strong><span className="ac-compact-status" aria-live="polite">{compactStatus}</span></>}</span>
+        {!expanded && <span className="ac-expand-cue" aria-hidden="true"><Icon name="chevron" size={14} /></span>}
       </button>
-      <div className="ac-mode-controls">
+      {expanded && <div className="ac-mode-controls">
         <button className="ac-icon-button" aria-label={props.size === 'fullscreen' ? 'Restore assistant panel' : 'Full-screen assistant'} title={props.size === 'fullscreen' ? 'Restore assistant panel' : 'Full-screen assistant'} onClick={() => props.onSize(props.size === 'fullscreen' ? 'expanded' : 'fullscreen')}><Icon name={props.size === 'fullscreen' ? 'collapse' : 'expand'} size={17} /></button>
-        {expanded && <button className="ac-icon-button" aria-label="Close assistant" title="Close assistant" onClick={() => props.onSize('compact')}><Icon name="close" size={17} /></button>}
-      </div>
+        <button className="ac-icon-button" aria-label="Close assistant" title="Close assistant" onClick={() => props.onSize('compact')}><Icon name="close" size={17} /></button>
+      </div>}
     </header>
-    {!expanded && <div className="ac-compact-deck">
-      <div className="ac-context-strip"><span className="ac-context-pin" aria-hidden="true" /><span title={context}>{props.loading ? 'Connecting workspace' : context}</span></div>
-      {composer}{response}
-    </div>}
     {expanded && <div className="ac-deck">
       <section className="ac-context" aria-label="Current design context">
         <div className="ac-section-heading"><h2>{props.selection ? 'Selection' : 'Current context'}</h2><span className="ac-context-kind">{props.loading ? 'Connecting workspace' : 'Workspace'}</span></div>

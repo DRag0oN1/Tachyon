@@ -13,6 +13,8 @@ export function Home({catalog,capabilities,strategyStatus,strategyLoading=false,
 }){
   const [competitionOpen,setCompetitionOpen]=useState(false);
   const available=strategyStatus?.available===true;
+  const savedBuilds=(designCatalog?.saved??[]).filter(s=>s.revisionId).slice(0,3);
+  const firstBuild=savedBuilds[0];
   const reason=strategyLoading?'Connecting to the saved strategy policy…':strategyStatus?.reason??'Connect the local strategy service to begin.';
   return <div className="home-studio">
     <div className="home-station-line"><span className="eyebrow">TACHYON / ROBOTICS CREATION STUDIO</span><span className="station-state"><i/>{catalog?.components.length?'LOCAL COMPONENTS CONNECTED':'LOCAL WORKSPACE'}</span></div>
@@ -22,7 +24,7 @@ export function Home({catalog,capabilities,strategyStatus,strategyLoading=false,
         <h2>Make your<br/><em>next move.</em></h2>
         <p className="studio-intro">Understand the game.<br/>Find the mechanism. Build the machine.</p>
         <div className="home-process" aria-label="Studio workflow"><span>STRATEGY</span><i/><span>DESIGN</span><i/><span>ASSEMBLY</span></div>
-        <p className="home-domain">Learned in abstract simulation.<br/>Engineered and verified separately.</p>
+        <p className="home-domain">Learned in abstract simulation.<br/>Engineered and verified separately.</p>{firstBuild&&<button className="home-open-cad" disabled={generating||!onOpenSavedDesign} onClick={()=>onOpenSavedDesign?.(firstBuild.designId)}><Icon name="parts"/><span><strong>Inspect the development assembly</strong><small>Saved CAD · rechecked on open · incomplete</small></span><Icon name="arrow"/></button>}
       </section>
       <div className="studio-entry-modules">
         <button className="entry-module entry-strategy" aria-label="Generate Strategy" disabled={!available||generating||!onGenerateStrategy} onClick={onGenerateStrategy}><div className="entry-module-copy"><span className="entry-module-index">01 / PLAYBOOK</span><h3>Generate<br/>Strategy</h3><p>Turn learned game decisions into a visual plan.</p><span className="module-action">OPEN THE PLAYBOOK <Icon name="arrow"/></span></div><BeamGraphic kind="strategy"/></button>
@@ -31,7 +33,7 @@ export function Home({catalog,capabilities,strategyStatus,strategyLoading=false,
       </div>
     </div>
     {strategyError&&<div role="alert" className="strategy-notice"><p>{strategyError}</p>{onRetryStrategy&&<button className="secondary-button" onClick={onRetryStrategy}>Retry strategy connection</button>}</div>}
-    <section className="saved-builds"><div className="saved-builds-heading"><span className="eyebrow">SAVED LOCAL BUILDS</span><span>{catalog?.components.length??0} catalog definitions</span></div>{designCatalog?.saved.length?<div className="saved-builds-rail">{designCatalog.saved.filter(s=>s.revisionId).slice(0,3).map(s=><button key={s.designId} onClick={()=>onOpenSavedDesign?.(s.designId)} disabled={!onOpenSavedDesign||generating}><Icon name="parts"/><span><strong>Design {designCatalog.architectures.find(a=>a.architectureId===s.architectureId)?.alternative==='B'?'02':'01'}</strong><small>Saved assembly{ s.hasCandidate?' · pending preview':''} · recheck on open</small></span><Icon name="arrow"/></button>)}</div>:<p className="empty-saved">Your saved assemblies will appear here after local construction.</p>}</section>
+    <section className="saved-builds"><div className="saved-builds-heading"><span className="eyebrow">SAVED LOCAL BUILDS</span><span>{catalog?.components.length??0} catalog definitions</span></div>{savedBuilds.length?<div className="saved-builds-rail">{savedBuilds.map(s=><button key={s.designId} onClick={()=>onOpenSavedDesign?.(s.designId)} disabled={!onOpenSavedDesign||generating}><Icon name="parts"/><span><strong>Design {designCatalog?.architectures.find(a=>a.architectureId===s.architectureId)?.alternative==='B'?'02':'01'}</strong><small>Saved assembly{ s.hasCandidate?' · pending preview':''} · recheck on open</small></span><Icon name="arrow"/></button>)}</div>:<p className="empty-saved">Your saved assemblies will appear here after local construction.</p>}</section>
     <details className="home-system-notes"><summary>Workspace availability</summary><p>Strategy runs the existing trained PPO policy. Design construction uses registered component recipes; it does not synthesize unrestricted new robot geometry.</p><p>{capabilities?.reasons.join(' ')||'Imported geometry and source permissions are checked by the local CAD pipeline.'}</p></details>
   </div>;
 }

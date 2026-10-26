@@ -23,17 +23,41 @@ async function openSource(page: Page, component: ComponentDefinition) {
 }
 test.beforeEach(async ({ request }) => {
   const health = await request.get('/api/health', { timeout: 5000 }).catch(() => null);
-  test.skip(!health?.ok(), 'Blocked: start the real local backend on port 8000.');
+  test.skip(!health?.ok(), 'Blocked: start the real local backend at the configured base URL.');
 });
 
 test('@cad-import missing owner session stays unavailable without replacement geometry', async ({ page, request }) => {
   expect((await request.get('/api/catalog')).status()).toBe(401);
+  let privateRequests = 0;
+  page.on('request', req => {
+    const path = new URL(req.url()).pathname;
+    if (path.startsWith('/api/') && path !== '/api/health') privateRequests++;
+  });
   await page.goto('/');
-  await expect(page.getByRole('alert')).toContainText('authorized launch URL');
+  const recovery = page.getByRole('main', { name: 'Connect to Tachyon', exact: true });
+  await expect(recovery).toHaveCount(1);
+  await expect(recovery.getByRole('heading', { name: 'Connect to your studio.', exact: true })).toBeVisible();
+  await expect(recovery).toContainText('Open Tachyon through its authorized launch link.');
+  await expect(recovery.getByText('.venv/bin/tachyon launch --port 8019', { exact: true })).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.locator('main.workspace')).toHaveCount(0);
+  await expect(page.getByTestId('ai-core')).toHaveCount(0);
   await expect(page.getByTestId('cad-canvas')).toHaveCount(0);
-  await expect(page.getByRole('button', { name: 'Generate Strategy' })).toBeDisabled();
-  await expect(page.getByRole('button', { name: 'Create Robot' })).toBeDisabled();
-  await page.getByRole('button', { name: 'Close Studio' }).click();
+  await expect(page.getByTestId('design-canvas')).toHaveCount(0);
+  await expect(page.getByTestId('concept-canvas')).toHaveCount(0);
+  await expect(page.locator('canvas')).toHaveCount(0);
+  await expect(page.getByTestId('cad-unavailable')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Generate Strategy', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Create Robot', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Close Studio', exact: true })).toHaveCount(0);
+  await expect(recovery.getByRole('button', { name: 'Check connection again', exact: true })).toBeVisible();
+  expect(privateRequests).toBe(0);
+  await recovery.getByRole('button', { name: 'Check connection again', exact: true }).click();
+  await expect(recovery).toHaveCount(1);
+  await expect(recovery.getByRole('heading', { name: 'Connect to your studio.', exact: true })).toBeVisible();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.locator('main.workspace, canvas')).toHaveCount(0);
+  expect(privateRequests).toBe(0);
   await page.screenshot({ path: test.info().outputPath(`${test.info().project.name}-missing-session-no-cad.png`) });
 });
 
@@ -159,6 +183,9 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     await page.getByRole('button', { name: 'Close Components' }).click();
     await page.getByRole('button', { name: 'Reset view' }).click();
     if (component.geometryClass === 'test_fixture') await page.screenshot({ path: test.info().outputPath(`${test.info().project.name}-shift-tachyon-authored-non-vex-converter-fixture.png`) });
+    const core = page.getByTestId('ai-core');
+    await expect(core).toHaveAttribute('data-state', 'compact');
+    await expect(core.getByRole('textbox')).toHaveCount(0);
     await page.getByRole('button', { name: 'Expand assistant', exact: true }).click();
     await page.getByLabel('Design request').fill('Keep this draft; editing is unavailable.');
     await page.getByRole('button', { name: 'Full-screen assistant' }).click();
@@ -166,6 +193,8 @@ test('@cad-import real authenticated GLB keeps identity, bounds, selection and w
     await expect(page.getByRole('button', { name: 'Preview raised',exact:true })).toBeDisabled();
     await expect(page.getByRole('button', { name: 'Apply',exact:true })).toBeDisabled();
     await page.getByRole('button', { name: 'Close assistant' }).click();
+    await expect(core).toHaveAttribute('data-state', 'compact');
+    await expect(core.getByRole('textbox')).toHaveCount(0);
     await page.getByRole('button', { name: 'Expand assistant', exact: true }).click();
     await expect(page.getByLabel('Design request')).toHaveValue('Keep this draft; editing is unavailable.');
     await page.getByRole('button', { name: 'Close assistant' }).click();

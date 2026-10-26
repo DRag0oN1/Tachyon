@@ -5,11 +5,22 @@ import { OVERRIDE_COMPETITION_ID, parseStrategySession, parseStrategyStatus } fr
 
 export const SESSION_KEY = 'tachyon.owner-session';
 let memorySession: string | null = null;
+export const SESSION_REQUIRED_EVENT = 'tachyon:session-required';
+export function clearOwnerSession(){memorySession=null;try{sessionStorage.removeItem(SESSION_KEY);}catch{/* tab memory only */}}
+function storeOwnerSession(value:string){memorySession=value;try{sessionStorage.setItem(SESSION_KEY,value);}catch{/* tab memory only */}}
+export function hasOwnerSession(){return !!session();}
+export function installLaunchUrl(value:string){
+  let url:URL;try{url=new URL(value);}catch{throw new Error('Use the authorized local launch URL.');}
+  const token=new URLSearchParams(url.hash.slice(1)).get('session');
+  if(url.origin!==location.origin||url.pathname!=='/'||url.username||url.password||url.search||!token||! /^[A-Za-z0-9_-]{1,256}$/.test(token))throw new Error('Use the authorized launch URL for this studio.');
+  storeOwnerSession(token);
+}
 
 export function captureSession(): void {
   const fragment = new URLSearchParams(window.location.hash.slice(1));
   if (!fragment.has('session')) return;
-  memorySession = fragment.get('session') || null;
+  const incoming=fragment.get('session');
+  memorySession = incoming&&/^[A-Za-z0-9_-]{1,256}$/.test(incoming)?incoming:null;
   fragment.delete('session');
   const rest = fragment.toString();
   window.history.replaceState(window.history.state, '', window.location.pathname + window.location.search + (rest ? `#${rest}` : ''));
@@ -30,6 +41,7 @@ export function errorMessage(error: unknown): string {
 async function request(path: string, init: RequestInit = {}, publicHealth = false): Promise<Response> {
   if (!path.startsWith('/api/') || path.includes('..') || path.includes('#') || path.includes('?')) throw new Error('Unsupported API resource.');
   const headers = new Headers(init.headers);
+  const attemptedSession=session();
   if (!publicHealth) {
     const token = session();
     if (!token) throw new ApiError(401, 'Open the authorized launch URL from the running Tachyon server to connect this tab.');
@@ -47,7 +59,10 @@ async function request(path: string, init: RequestInit = {}, publicHealth = fals
       if(failure&&typeof failure.code==='string'&&/^OPERATION_[A-Z_]+$/.test(failure.code)&&typeof failure.message==='string'&&failure.message.length<=1500)
         throw new ApiError(response.status,failure.message);
     }
-    if (response.status === 401 || response.status === 403) throw new ApiError(response.status, 'This session is missing, expired, or unauthorized. Open a new authorized launch URL from the running server.');
+    if (response.status === 401 || response.status === 403) {
+      if(response.status===401&&attemptedSession===session())window.dispatchEvent(new Event(SESSION_REQUIRED_EVENT));
+      throw new ApiError(response.status, 'This session is missing, expired, or unauthorized. Open a new authorized launch URL from the running server.');
+    }
     if (response.status === 404) throw new ApiError(404, 'The requested component or resource is unavailable. Refresh the local catalog.');
     throw new ApiError(response.status, `The server could not complete this request (${response.status}). Retry when it is available.`);
   }

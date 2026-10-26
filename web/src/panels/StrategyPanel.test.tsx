@@ -57,6 +57,9 @@ it('shows a concise phase rail whose actual action IDs drive selection, retainin
   expect(screen.getByText('Executed episode points')).toBeVisible();
   expect(screen.queryByRole('heading', { name: 'Policy and simulation evidence' })).toBeNull();
   buttons.forEach((button, i) => {
+    expect(button).toBeVisible();
+    expect(button).toHaveAttribute('data-phase-id', phases[i].id);
+    expect(button).toHaveAttribute('data-action-id', phases[i].primaryActionId);
     fireEvent.click(button);
     expect(onSelectAction).toHaveBeenLastCalledWith(phases[i].primaryActionId);
     expect(button).toHaveAttribute('aria-pressed', 'true');
@@ -133,6 +136,52 @@ it('offers concept inspection when no exact binding exists, without invoking rea
   expect(screen.queryByRole('button', { name: 'Ask about mechanism' })).toBeNull();
   expect(onInspectMechanism).not.toHaveBeenCalled();
   expect(onAskMechanism).not.toHaveBeenCalled();
+});
+
+it('explains the saved PPO objective, observed scoring cycle and drive requirements before opening analysis', () => {
+  const session = strategyFixture();
+  render(<StrategyPanel session={session} loading={false} selectedActionId={null} onSelectAction={vi.fn()} onGenerate={vi.fn()} onArchitectures={vi.fn()} />);
+  const objective = screen.getByRole('group', { name: 'Strategy objective' });
+  expect(within(objective).getByText('Alliance Pin scoring halves')).toBeVisible();
+  expect(within(objective).getByText('Finish at midfield')).toBeVisible();
+  expect(within(objective).queryByText('Owned yellow Pin scoring halves')).toBeNull();
+  expect(screen.getByText(/frozen PPO policy repeats the observed supply–goal cycle: acquire, travel, place, then repeat/)).toBeVisible();
+  const explanation = screen.getByRole('group', { name: 'Why these mechanisms' });
+  expect(within(explanation).getByText('Drive')).toBeVisible();
+  expect(within(explanation).getByText('Drive speed target · Turning time target')).toBeVisible();
+  expect(explanation).toHaveTextContent('Travel to supply 1');
+  expect(screen.queryByRole('list', { name: 'Simulated action sequence' })).toBeNull();
+  expect(screen.queryByRole('heading', { name: 'Policy and simulation evidence' })).toBeNull();
+});
+
+it('explains only requirements supplied for the selected action, including unfamiliar spec fields', () => {
+  const session = strategyFixture();
+  session.spec.mechanicalRequirements.find(r => r.id === 'intake')!.requirements = ['independent_cup', 'orientation_retention', 'reviewed_custom_requirement'];
+  const props = { session, loading: false, selectedActionId: 'acquire_cup', onSelectAction: vi.fn(), onGenerate: vi.fn(), onArchitectures: vi.fn() };
+  const view = render(<StrategyPanel {...props} />);
+  let explanation = screen.getByRole('group', { name: 'Why these mechanisms' });
+  expect(explanation).toHaveTextContent('Acquire a Cup independently');
+  expect(within(explanation).getByText('Intake')).toBeVisible();
+  expect(explanation).toHaveTextContent('Independent Cup handling · Retain object orientation · Reviewed custom requirement');
+  expect(explanation).not.toHaveTextContent('Capacity for one Pin');
+  expect(within(explanation).queryByText('Transfer')).toBeNull();
+  expect(within(explanation).queryByText('Scoring mechanism')).toBeNull();
+  view.rerender(<StrategyPanel {...props} selectedActionId="place_alliance" />);
+  explanation = screen.getByRole('group', { name: 'Why these mechanisms' });
+  expect(within(explanation).getByText('Transfer')).toBeVisible();
+  expect(within(explanation).getByText('Scoring mechanism')).toBeVisible();
+  expect(explanation).toHaveTextContent('Hand off one Pin at a time');
+  expect(explanation).toHaveTextContent('Grip the Pin');
+  expect(explanation).not.toHaveTextContent('Retain object orientation');
+});
+
+it('does not describe a repeat cycle or invent six phases for a short observed trace', () => {
+  const session = strategyFixture();
+  session.rollout.events = [{ ...session.rollout.events[0], action: 'acquire_cup' }];
+  render(<StrategyPanel session={session} loading={false} selectedActionId={null} onSelectAction={vi.fn()} onGenerate={vi.fn()} onArchitectures={vi.fn()} />);
+  expect(within(screen.getByRole('list', { name: 'Strategy phases' })).getAllByRole('button')).toHaveLength(1);
+  expect(screen.getByText(/decisions observed in this frozen PPO policy rollout/)).toBeVisible();
+  expect(screen.queryByText(/repeats the observed supply–goal cycle/)).toBeNull();
 });
 
 it('commits the selected phase action before asking the parent to inspect its actual binding', () => {

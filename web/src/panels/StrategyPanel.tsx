@@ -66,6 +66,30 @@ function ProposedMechanisms({ session, phase, actionId, architectureId }: { sess
   </div>;
 }
 
+// Plain-language labels for requirement fields, never claims about achieved capability.
+const requirementLabels: Record<string, string> = {
+  speed_target: 'Drive speed target', turn_time_target: 'Turning time target',
+  one_pin: 'Capacity for one Pin', independent_cup: 'Independent Cup handling',
+  orientation_retention: 'Retain object orientation', acquisition_latency: 'Acquisition timing',
+  acquisition_reliability: 'Acquisition reliability', single_pin_handoff: 'Hand off one Pin at a time',
+  independent_cup_path: 'Independent Cup path', avoid_double_possession: 'Avoid double possession',
+  reach_floor: 'Tool reach requirement', pin_grip: 'Grip the Pin',
+  cup_interface_preparation: 'Prepare the Cup interface', placement_latency: 'Placement timing',
+  placement_reliability: 'Placement reliability',
+};
+
+function MechanismRequirements({ session, phase, actionId }: { session: StrategySession; phase: PlaybookPhase; actionId: string }) {
+  const requirements = phaseRequirements(session.spec, phase).filter(r => r.supports.includes(actionId));
+  return <div className="playbook-phase-explanation" role="group" aria-label="Why these mechanisms">
+    <h4>Why these mechanisms</h4>
+    <p>Required by the strategy spec for <strong>{readable(actionId)}</strong>.</p>
+    {requirements.length ? <dl>{requirements.map(requirement => <div key={requirement.id}>
+      <dt>{readable(requirement.id)}</dt>
+      <dd>{requirement.requirements.length ? requirement.requirements.map(id => requirementLabels[id] ?? readable(id)).join(' · ') : 'No detailed requirement fields supplied.'}</dd>
+    </div>)}</dl> : <p>No mechanism requirement was declared for this action.</p>}
+  </div>;
+}
+
 const record = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
 function EvidenceValues({ value }: { value: unknown }) {
   if (Array.isArray(value)) return <ul className="playbook-data-list">{value.map((item, i) => <li key={i}><EvidenceValues value={item} /></li>)}</ul>;
@@ -135,9 +159,9 @@ function LoadedStrategyPanel({ session, loading, error, mode = 'simple', selecte
   }
   return <div className="strategy-content strategy-playbook">
     <header className="playbook-heading"><span className="eyebrow">STRATEGY PLAYBOOK / FROZEN PPO</span><h2>{readable(session.strategyFamily)}</h2>
-      <p className="playbook-overview">{phases.some(p => p.kind === 'repeat') ? 'Collect objects, return to the scoring location, and repeat the observed cycle.' : 'Follow the decisions observed in this policy rollout.'} Select a phase to connect the plan to its mechanisms.</p>
+      <p className="playbook-overview">{phases.some(p => p.kind === 'repeat') ? 'The frozen PPO policy repeats the observed supply–goal cycle: acquire, travel, place, then repeat.' : 'These phases summarize the decisions observed in this frozen PPO policy rollout.'} Select a phase to see its mechanism requirements and inspect linked CAD.</p>
       <p className="strategy-domain playbook-model-status">Abstract simulation only · default Override v2.1 · one learned family · {linked ? 'Revision-linked assembly; task capability unverified' : 'Proposed mechanisms; no verified CAD link for this action'}</p>
-      <div className="playbook-priorities"><span>Prioritize</span>{spec.scoringPriorities.filter(o => o.meanModeledPoints > 0).map(o => <strong key={o.objective}>{readable(o.objective)}</strong>)}</div>
+      <div className="playbook-priorities" role="group" aria-label="Strategy objective"><span>Objective</span>{spec.scoringPriorities.filter(o => o.meanModeledPoints > 0).map(o => <strong key={o.objective}>{readable(o.objective)}</strong>)}</div>
     </header>
     {loading && <p role="status">Generating another session. Your current result remains available.</p>}
     {error && <div className="strategy-notice" role="alert"><p>{error}</p><button className="secondary-button" disabled={loading} onClick={onGenerate}>Retry generation</button></div>}
@@ -152,6 +176,11 @@ function LoadedStrategyPanel({ session, loading, error, mode = 'simple', selecte
         </li>)}</ol>
         <div id="selected-strategy-phase" className="playbook-selected-phase" data-phase-id={phase.id} aria-label="Selected strategy phase">
           <div className="playbook-phase-heading"><span className="eyebrow">PHASE {phases.indexOf(phase) + 1} / {phases.length}</span><h3>{phase.title}</h3><p>{phase.events.length} observed decisions · {phase.failures} failed attempts · {formatNumber(phase.scoreChange)} episode point change</p></div>
+          <MechanismRequirements session={session} phase={phase} actionId={actionId} />
+          <div className="playbook-mechanism-actions">
+            {linked ? <>{onInspectMechanism && <button className="secondary-button" onClick={() => requestMechanism('inspect')}>Inspect mechanism</button>}{onAskMechanism && <button className="text-action" onClick={() => requestMechanism('ask')}>Ask about mechanism</button>}</>
+              : <><button className="secondary-button" onClick={onArchitectures}>Inspect Design</button><span>Architecture concept · assembly not linked for this action</span></>}
+          </div>
           {phase.events.some(e => /^(acquire|place)_/.test(e.action)) && <div className="phase-object-key" aria-label="Objects involved in this phase">
             {phase.events.some(e => /^(acquire|place)_(alliance|yellow)$/.test(e.action)) && <span><svg viewBox="0 0 48 30" role="img" aria-label="Pin illustration"><path d="M7 9H34V21H7ZM34 6H40V24H34M7 12H2V18H7" fill="none" stroke="currentColor" strokeWidth="1.5"/><path d="M12 13H30M12 17H30" stroke="currentColor"/></svg>Pin</span>}
             {phase.events.some(e => /^(acquire|place)_cup$/.test(e.action)) && <span><svg viewBox="0 0 36 30" role="img" aria-label="Cup illustration"><path d="M4 4H32L27 26H9ZM7 8H29M12 11V22M24 11V22" fill="none" stroke="currentColor" strokeWidth="1.5"/></svg>Cup</span>}
@@ -160,10 +189,6 @@ function LoadedStrategyPanel({ session, loading, error, mode = 'simple', selecte
           <div className={`playbook-drawings${linked?' has-cad-link':''}`}><Playbook events={events} phase={phase} actionId={actionId} />
             {linked && assembly ? <div className="phase-mechanisms"><div className="phase-mechanism-heading"><span className="playbook-tag">Revision-linked geometry</span><h4>Mechanism in the displayed assembly</h4></div><AssemblySketch session={assembly} actionId={actionId} /><p className="playbook-binding-basis">{linked.action.instanceIds.length} linked instances · {linked.candidate ? 'candidate preview' : 'accepted revision'} · {linked.action.capabilityStatus === 'unsupported' ? linked.action.capabilityReason : 'Physical task capability remains unverified.'}</p></div>
               : <ProposedMechanisms session={session} phase={phase} actionId={actionId} architectureId={architectureId} />}
-          </div>
-          <div className="playbook-mechanism-actions">
-            {linked ? <>{onInspectMechanism && <button className="secondary-button" onClick={() => requestMechanism('inspect')}>Inspect mechanism</button>}{onAskMechanism && <button className="text-action" onClick={() => requestMechanism('ask')}>Ask about mechanism</button>}</>
-              : <><button className="secondary-button" onClick={onArchitectures}>Inspect Design</button><span>Architecture concept · assembly not linked for this action</span></>}
           </div>
           <div className="playbook-phase-actions" aria-label="Inspect actions in this phase">{phase.actionIds.map(id => <button key={id} data-action-id={id} className="text-action" aria-pressed={selectedActionId === id} onClick={() => onSelectAction(id)}>{readable(id)}<span aria-hidden="true">↗</span></button>)}</div>
         </div>
