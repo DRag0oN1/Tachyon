@@ -3,6 +3,14 @@
 Status: partial-demo preparation; formal build and shipping completion pending.
 Updated 2026-10-26 against Git snapshot `143d6b5`.
 
+The reviewed application is preserved at `667fd90` under local tag
+`submission-baseline-2026-10-26`, with a verified private Git bundle. The learner's
+favorable demo review and fixed-two-design concern are recorded in the build
+checklist. Following the explicit deadline fallback, [additional design generation
+and management](../docs/next-design-generation.md) is the first post-hackathon
+milestone, not a feature claimed in the existing recording. Publication/submission
+authorization remains pending; the application and review video are unchanged.
+
 This is a factual technical checklist, not learner-authored submission copy.
 The learner authorized honest partial-demo preparation while the approved full
 build is unfinished. Scope, acceptance requirements and existing review checkboxes

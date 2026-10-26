@@ -256,6 +256,7 @@ storage and Git. The independent PPO path needs no provider credential.
 
 ## Project documents
 
+- [Immediate next milestone: scalable design generation](docs/next-design-generation.md)
 - [Product vision](docs/product-vision.md)
 - [Devpost progress](devpost/README.md)
 - [Approved scope](devpost/scope.md), [PRD](devpost/prd.md), [specification](devpost/spec.md)

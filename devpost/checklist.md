@@ -120,6 +120,15 @@ The desktop generated-development regression also passes with 494 resolved and
 rendered placements, 925 meshes, 631 relationships, 14 strategy bindings, full
 33-sample modeled Cup playback and exact revision/matrix restoration.
 
+Learner feedback on 2026-10-26: the current application is visually strong and the
+demonstration was reviewed favorably. The remaining product concern is the fixed
+pair of architectures. The learner authorized deferral if a fully tested generation
+workflow would threaten the deadline. Inspection found pinned two-proposal runtime
+and realization contracts, so the working demo is preserved and the requested
+generation/management experience is the immediate post-hackathon milestone.
+This feedback does not declare the unfinished full robot criteria complete or
+authorize public release/submission.
+
 Deployment/publication/submission are outside this build authorization. Any
 eventual CAD imagery in a public demo needs separately qualified publication
 rights. `6-ship` follows only the completed build, reviews and learning wrap-up.
@@ -147,6 +156,8 @@ Activity mode: Planned focused investigation for the learner's existing technica
 experience; use the finished app and real code, not a redundant introductory tour.
 
 ## Revisions
+
+- **2026-10-26 deadline-safe design-generation decision, learner-directed:** preserved verified commit `667fd90` with local annotated tag `submission-baseline-2026-10-26` and a verified private Git bundle before changes. At 15:47 Eastern, approximately 73 minutes remained before the 17:00 deadline. The current strategy DTO requires exactly two proposals, saved-artifact checks pin their identities/hashes, and realization resolves only the verified A/B handoff. A preference-driven, named, persistent collection and genuinely novel proposals would require coordinated contract changes and fresh runtime/browser verification. Used the learner's explicit fallback: document [the immediate next milestone](../docs/next-design-generation.md), retain the two-design application and existing demo unchanged, add no nonfunctional generation button, and preserve all engineering/rights limitations. No publication or submission is authorized by this revision.
 
 - **2026-10-26 final demo stabilization, learner-directed:** the learner explicitly requested a stable, honestly bounded partial demonstration and submission preparation rather than completing new robot engineering. Preserve the original unfinished engineering criteria and do not promote development CAD into authentic/complete-robot evidence. Implemented a single authorization gate, private per-port launch handoff/CLI, recovery and refresh checks, direct saved-CAD access, collapsed core and six-phase overview. Prepared the actual private 2:05 recording, factual reproduction/readiness documentation and a rendered technical reference map. Formal full-build completion, learner readiness, learner-authored submission/exit survey, public repository/video authorization and submission remain separate. The learner's reported expired-session failure is recorded feedback; automated repair verification passes without inferring learner-approved readiness.
 
